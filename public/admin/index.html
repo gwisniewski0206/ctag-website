@@ -6,7 +6,74 @@
   <meta name="robots" content="noindex">
   <title>CTAG – Redaktion</title>
   <!-- Sveltia CMS, feste Version. Konfiguration: config.yml im selben Ordner. Anleitung: README.md im Repository. -->
-  <script src="https://unpkg.com/@sveltia/cms@0.220.0/dist/sveltia-cms.js"></script>
+  <style>
+    .mk { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; background: #DCE8F5;
+          font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #0E2238; }
+    .mk form { width: min(380px, 100%); display: flex; flex-direction: column; gap: 14px; padding: 28px;
+               background: #fff; border: 2px solid #00305D; border-radius: 8px; }
+    .mk h1 { margin: 0; font-size: 22px; color: #00305D; }
+    .mk p { margin: 0; font-size: 15px; line-height: 1.45; }
+    .mk input { height: 46px; padding: 0 14px; font: inherit; font-size: 17px; border: 2px solid #00305D; border-radius: 4px; }
+    .mk button { height: 46px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer;
+                 background: #00305D; color: #fff; border: 0; border-radius: 4px; }
+    .mk button:disabled { opacity: 0.6; cursor: wait; }
+    .mk .err { color: #C2261B; font-weight: 600; min-height: 1.4em; }
+    .mk a { color: #1D5AA8; font-size: 14px; }
+  </style>
 </head>
-<body></body>
+<body>
+  <script>
+    // Master-Kennwort: Ist ein verschlüsselter Zugang (vault.json) hinterlegt und niemand angemeldet, wird erst das
+    // Kennwort abgefragt. Es entschlüsselt im Browser einen GitHub-Token, der dann wie eine Token-Anmeldung
+    // gespeichert wird (localStorage "sveltia-cms.user"). Eingerichtet wird das mit `npm run admin:kennwort`.
+    (async () => {
+      const startCms = () => {
+        const s = document.createElement('script');
+        s.src = 'https://unpkg.com/@sveltia/cms@0.220.0/dist/sveltia-cms.js';
+        document.body.appendChild(s);
+      };
+      let stored = null;
+      try { stored = JSON.parse(localStorage.getItem('sveltia-cms.user') || 'null'); } catch {}
+      if (stored && stored.token) return startCms();
+      let vault = null;
+      try { const r = await fetch('vault.json', { cache: 'no-store' }); if (r.ok) vault = await r.json(); } catch {}
+      if (!vault) return startCms();
+
+      const box = document.createElement('div');
+      box.className = 'mk';
+      box.innerHTML = `<form>
+        <h1>CTAG – Redaktion</h1>
+        <p>Master-Kennwort eingeben.</p>
+        <input type="password" autocomplete="current-password" aria-label="Master-Kennwort" required>
+        <button type="submit">Anmelden</button>
+        <p class="err" role="alert"></p>
+        <a href="#" data-other>Anders anmelden (GitHub oder Zugriffstoken)</a>
+      </form>`;
+      document.body.appendChild(box);
+      const form = box.querySelector('form'), input = box.querySelector('input'), btn = box.querySelector('button'), err = box.querySelector('.err');
+      input.focus();
+      box.querySelector('[data-other]').addEventListener('click', (e) => { e.preventDefault(); box.remove(); startCms(); });
+
+      const bytes = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btn.disabled = true; btn.textContent = 'Prüfe …'; err.textContent = '';
+        try {
+          const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(input.value), 'PBKDF2', false, ['deriveKey']);
+          const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: bytes(vault.salt), iterations: vault.iterations, hash: 'SHA-256' },
+            base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+          const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes(vault.iv) }, key, bytes(vault.data));
+          const { token } = JSON.parse(new TextDecoder().decode(plain));
+          localStorage.setItem('sveltia-cms.user', JSON.stringify({ backendName: 'github', token }));
+          box.remove();
+          startCms();
+        } catch {
+          err.textContent = 'Kennwort falsch.';
+          btn.disabled = false; btn.textContent = 'Anmelden';
+          input.select();
+        }
+      });
+    })();
+  </script>
+</body>
 </html>

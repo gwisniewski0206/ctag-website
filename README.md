@@ -27,6 +27,24 @@ Ihr braucht kein Git und keinen Code. Jede Änderung in der Redaktion wird gespe
 > Sobald der Anmeldedienst eingerichtet ist (siehe [Anmeldung per GitHub-Knopf](#anmeldung-per-github-knopf-einmalig-einrichten)),
 > reicht ein Klick auf **„Mit GitHub anmelden“** – ohne Token.
 
+### Anmelden mit Master-Kennwort
+
+Ist ein Master-Kennwort eingerichtet, fragt `/admin` zuerst danach – ohne GitHub-Konto und ohne eigenen Token.
+Alle Änderungen erscheinen dann unter dem Namen der Person, deren Token hinterlegt ist.
+
+**Einrichten (einmalig, durch eine verantwortliche Person):**
+1. Auf GitHub einen *Fine-grained token* erzeugen: *Repository access* = nur dieses Repository,
+   *Permissions → Contents* = **Read and write**, Ablaufdatum z. B. 1 Jahr.
+2. Im **eigenen Terminal** (nicht in Chats oder Logs) im Projektordner: `npm run admin:kennwort`.
+   Das Skript prüft den Token, fragt das Kennwort verdeckt ab (mindestens 16 Zeichen, am besten 4–5 zufällige Wörter)
+   und schreibt `public/admin/vault.json`.
+3. `public/admin/vault.json` committen und pushen.
+
+**Sicherheit:** `vault.json` ist öffentlich, enthält den Token aber nur verschlüsselt (AES-256, Schlüssel aus dem Kennwort
+mit 600 000 PBKDF2-Runden). Ein langes Kennwort ist deshalb wichtig. **Zugang sperren:** den Token auf GitHub löschen.
+**Kennwort ändern:** Skript erneut ausführen. Wer das Kennwort kennt, kann die Seite ändern – jede Änderung bleibt aber in der
+Versionsgeschichte und lässt sich rückgängig machen.
+
 ### Neues Projekt anlegen
 
 1. *Projekte → Neues Projekt*.

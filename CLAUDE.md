@@ -96,6 +96,12 @@ npm run dev                # http://localhost:4321
 solange das Repo persönlich ist). **Offen:** GitHub-Knopf braucht `sveltia-cms-auth` als Cloudflare Worker + OAuth App der Organisation
 → dann `base_url` in `config.yml`. Ohne `base_url` führt „Mit GitHub anmelden“ ins Leere.
 
+**Master-Kennwort (08.10.2026):** `/admin` fragt ein Kennwort ab, wenn `public/admin/vault.json` existiert. Darin liegt ein GitHub-Token
+(Fine-grained, nur dieses Repo, Contents RW) verschlüsselt (PBKDF2-SHA256 600k → AES-256-GCM); das Kennwort entschlüsselt ihn im Browser,
+danach wird er als Sveltia-Token-Anmeldung gespeichert (`localStorage['sveltia-cms.user']`). Einrichten: `npm run admin:kennwort` im
+eigenen Terminal. **Noch nicht eingerichtet** – Nutzer muss Token erzeugen und das Skript ausführen. Mechanik mit Test-Tresor geprüft
+(falsches Kennwort abgelehnt, richtiges → Sveltia ruft GET /user mit dem Token). Ohne vault.json startet /admin wie bisher.
+
 **Projektbeiträge (Analyse 08.10.2026):** kein einheitliches Format – 14 von 42 ohne Überschrift, Ebenen wild gemischt (h1–h5),
 Länge 26–4001 Wörter (Median 503), 32 Englisch / 10 Deutsch, „Author“ als Abschnitt in 7 Beiträgen. Daraus:
 - Neue optionale Felder `summary`, `team`, `supervisor`, `tags`, `cover`, `links` (Schema + CMS). **Für die 42 Altbeiträge nachgepflegt**

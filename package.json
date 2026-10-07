@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "scrape": "node scripts/scrape.mjs",
-    "import": "node scripts/import.mjs"
+    "import": "node scripts/import.mjs",
+    "admin:kennwort": "node scripts/admin-kennwort.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "0.4.1",
