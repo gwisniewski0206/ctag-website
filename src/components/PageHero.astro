@@ -1,0 +1,14 @@
+---
+// Titelbereich einer Unterseite: Titel links, gezeichnete Wellen rechts. color: amber | sky | red | white
+import Waves from './Waves.astro';
+const { title, color = 'sky' } = Astro.props;
+const long = title.length > 24;
+---
+<section class={`hero bg-${color}`}>
+  <div class="wrap">
+    <h1 class:list={['display', { long }]} lang={Astro.props.lang}>{title}</h1>
+    {Astro.slots.has('meta')
+      ? <div class="hero-meta"><slot name="meta" /></div>
+      : <div class="hero-art"><Waves /></div>}
+  </div>
+</section>

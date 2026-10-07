@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Arrow from '../components/Arrow.astro';
+
+const partners = (await getCollection('partners')).sort((a, b) => a.data.order - b.data.order);
+const backgrounds = ['var(--amber)', '#fff', 'var(--sky)', '#fff'];
+const domain = (url) => new URL(url).hostname.replace(/^www\./, '');
+---
+<Base title="Partners">
+  <PageHero title="Partners" color="red" />
+  <main class="wrap partners-main">
+    <div class="grid partners-grid">
+      {partners.map(({ data: p }, i) => (
+        <a href={p.url} class="card-link partner" style={`background: ${backgrounds[i % 4]}`}>
+          {p.logo && <span class="partner-logo"><img src={p.logo} alt="" loading="lazy"></span>}
+          <span class="partner-name">{p.name}</span>
+          <span class="partner-foot">
+            <span>{p.label ?? domain(p.url)}</span>
+            <Arrow />
+          </span>
+        </a>
+      ))}
+    </div>
+  </main>
+</Base>
+
+<style>
+  .partners-main { padding-top: 48px; padding-bottom: 80px; }
+  .partners-grid { grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+  .partner { padding: 20px; }
+  .partner:hover { outline: 4px solid var(--blue); outline-offset: -6px; background: inherit; }
+  .partner-logo { display: flex; align-items: center; justify-content: center; height: 120px; padding: 14px; background: #fff; border: var(--line); border-radius: var(--r-tag); }
+  .partner-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .partner-name { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 20px; line-height: 1.15; color: var(--blue); overflow-wrap: break-word; }
+  .partner-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 700; font-size: 16px; color: var(--blue); }
+  .partner-foot span { min-width: 0; overflow-wrap: anywhere; }
+</style>

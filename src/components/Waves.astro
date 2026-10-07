@@ -1,0 +1,10 @@
+---
+// Drei gezeichnete Signalformen (Sinus, Sägezahn, Rechteck) aus dem Design.
+// Beim Scrollen laufen sie unterschiedlich schnell und modulieren ihre Form (src/lib/waves.ts).
+const { class: cls } = Astro.props;
+---
+<svg viewBox="0 0 370 180" aria-hidden="true" class={cls} data-waves><g fill="none" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path class="wave-sine" d="M10 40 q25 -50 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" stroke="#F5B700"></path><path class="wave-saw" d="M10 110 l50 -40 v40 l50 -40 v40 l50 -40 v40 l50 -40 v40 l50 -40 v40 l50 -40 v40 l50 -40 v40" stroke="#DCE8F5"></path><path class="wave-square" d="M10 170 v-30 h25 v30 h25 v-30 h25 v30 h25 v-30 h25 v30 h25 v-30 h25 v30 h25 v-30 h25 v30 h25 v-30 h25 v30 h25 v-30 h25 v30 h25" stroke="#E8452C"></path></g></svg>
+
+<script>
+  import '../lib/waves';
+</script>

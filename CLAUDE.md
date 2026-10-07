@@ -29,15 +29,16 @@ mit richtigem Login pflegen – wie WordPress, aber ohne Plugins/Themes/Ballast.
 
 ## Befund aus dem Scrape (07.10.2026)
 
-- **Space Game** (`/procedural-generation`, id 128) gibt beim Rendern ein p5.js-Demo direkt aus. Es steht vor dem JSON der API
-  und wird nach `content/raw/leak-pages-p1.html` gesichert. Das Demo existiert **nur dort**, nicht in `content.rendered`.
+- **Interaktive Demos:** Das eigene WP-Plugin `ctag-processing` gibt auf drei Projektseiten Demos direkt beim Rendern aus
+  (`ki-for-space-game`: Raumschiffe mit jQuery; `flock`, `ants`: Processing.js-Sketches mit Bildern). Sie fehlen in `content.rendered`
+  und stehen in der API-Antwort vor dem JSON. `scrape.mjs` sichert die gerenderten Seiten, die Plugin-Skripte und die Sketch-Bilder
+  nach `content/raw/demos/`; `import.mjs` baut daraus `public/demos/<slug>/`. Alle drei laufen lokal (geprüft 07.10.2026).
 - **Startseite** ist die WP-Seite `landing` (id 1307, Text DE+EN), zuletzt geändert am 14.04.2026.
 - **Nicht verlinkte Seiten** (veröffentlicht, aber kein Link aus Menü/Startseite/Projektliste): ein angefangener Makerspace-Bereich von 2016 –
   `makerspace` → `lasercutter-start` → `lasercutter-basics-von-der-idee-an-die-wand` (Anleitung, 257 Wörter), dazu fast leer `basics`, `service`,
   leer `inspiration`, `calendar` (nur Google-Kalender-iframe). **Entschieden 07.10.2026:** `makerspace`, `lasercutter-start` und die
   Lasercutter-Anleitung werden übernommen; `basics`, `service`, `inspiration`, `calendar` fallen weg (alte URLs per Redirect auf `makerspace`).
-- **Space-Game-Demo bleibt erhalten.** Es ist Processing.js-Code (`type="application/processing"`); die Bibliothek hat ein WP-Plugin geladen
-  und fehlt im Scrape. Umsetzung: eigene HTML-Datei mit lokaler processing.js, per iframe in die Projektseite.
+- **Die Demos bleiben erhalten** und werden per iframe oben auf der Projektseite eingebunden (Feld `demo` im Projekt).
 - **Embeds:** 28 YouTube, 2 Google Docs, 1 Google Calendar. `space-game-refactoring` bettet 4 eigene Seiten per WP-Embed ein → beim Import zu Links machen.
   `midifox` enthält 2 tote `[icon …]`-Shortcodes als Text.
 - **Downloads:** 14 PDF, 13 WAV, 6 MP4, 1 MOV, 1 ZIP, 1 RAR.
@@ -48,7 +49,42 @@ mit richtigem Login pflegen – wie WordPress, aber ohne Plugins/Themes/Ballast.
   muss eine kurze, vollständige Anleitung sein (genaue DNS-Einträge; MX/Mail-Einträge nicht anfassen). Der GitHub-Login
   fürs CMS darf nicht von etwas abhängen, das nur er einrichten kann.
 
-## Erster Schritt
+## Stand der Umsetzung (07.10.2026)
+
+Astro-Grundgerüst steht, alle Inhalte sind importiert, `npm run build` erzeugt 93 Seiten ohne kaputte interne Links.
+**Node 22 nötig** (`.nvmrc`; Astro 7 läuft nicht mit Node 20).
+
+```
+nvm use                    # Node 22
+npm install
+npm run scrape             # Live-Seite → content/raw/   (nur nötig, wenn content/raw/ fehlt)
+npm run import             # content/raw/ → src/content/, public/uploads/, public/demos/   (überschreibt!)
+npm run dev                # http://localhost:4321
+```
+
+- **Inhalte:** `src/content/projects/*.md` (42), `pages/**/*.md` (Impressum, Datenschutz, Makerspace + 2 Lasercutter-Seiten),
+  `partners/*.json` (14), `settings/home.json` (Texte der Startseite), `settings/projects.json` (Opportunities). Schema: `src/content.config.ts`.
+- **Nach dem Livegang wird `import.mjs` nicht mehr ausgeführt** – dann sind `src/content/` und `public/uploads/` die Quelle, gepflegt über das CMS.
+- **Einbettungen:** Eine URL allein in einer Zeile wird zum Player (`src/lib/embeds.mjs`, Sätteri-Plugin): YouTube und Google Docs als
+  Platzhalter, der erst nach Klick lädt (keine Daten an Google ohne Zustimmung → kein Cookie-Banner nötig), `.wav/.mp3` als Audio, `.mp4/.mov` als Video.
+- **Schriften** lokal über `@fontsource-variable` (Archivo mit Breitenachse, Source Sans 3) – keine Google Fonts mehr.
+- **Bilder:** Der Import nimmt das Original statt der WP-Verkleinerung und verkleinert Fotos über 2000 px Breite. `public/uploads/` hat 271 MB
+  (größte Dateien: `Appendix.zip` 61 MB, `final_ki_visualisierung.mp4` 46 MB) – unter den GitHub-Grenzen (100 MB je Datei), aber spürbar.
+- **Partner:** Karten zeigen jetzt zusätzlich das echte Logo (Abweichung vom Entwurf, der dafür Platzhalter hatte).
+- **Projekt-Detailseite, freie Seiten:** eigener Entwurf im Stil der vier Hauptseiten (Hellblau-Titel mit Nummer/Jahr, Fließtext max. 820 px,
+  vorheriges/nächstes Projekt). Nicht abgenommen.
+- **Projektfeld `year`** stammt aus dem WP-Veröffentlichungsdatum, nicht aus dem Projekt selbst. `semester` ist leer und kann im CMS gesetzt werden.
+- 77 Bilder haben keinen Alternativtext (schon im Original), 3 Projekte enthalten HTML-Tabellen (Layout-Tabellen ohne Kopfzeile).
+- **Vorschau auf GitHub Pages** unter `https://gwisniewski0206.github.io/ctag-website/` (Repository `gwisniewski0206/ctag-website`, öffentlich,
+  angelegt 07.10.2026; später in die CTAG-Organisation übertragen). `.github/workflows/deploy.yml` baut bei jedem Push auf `main`.
+  Vorlagen und Inhalte verlinken absolut (`/projects/…`); `src/lib/rebase.mjs` setzt nach dem Build den Unterpfad davor (`BASE_PATH`).
+  Mit eigener Domain liefert `configure-pages` einen leeren Unterpfad, dann greift das nicht mehr.
+
+**Effekte:** Patchkabel mit Seilphysik zum Umstecken (`src/lib/synth.ts`), Potis/Fader/Wellen bewegen sich beim Scrollen (`scroll-motion.ts`, `waves.ts`).
+
+**Nächste Schritte:** CMS unter `/admin` (Sveltia/Decap + GitHub-Login), README für Redakteure.
+
+## Erster Schritt (erledigt)
 
 ```
 node scripts/scrape.mjs

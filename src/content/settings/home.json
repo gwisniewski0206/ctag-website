@@ -1,0 +1,20 @@
+{
+  "introEn": "Creative Technologies (CTAG) is an academic working group of Kiel University of Applied Sciences as well as external collaborators. Our mission is to bring together people with a passion for technology in the context of creativity. We focus on Audio, that is music technology and production, sound synthesis and design and adjacent areas such as electronics, computer graphics, algorithms, related hard- and software, maker technologies, human machine interaction, immersive art and media, game technology and so on.",
+  "introDe": "Creative Technologies (CTAG) ist eine Arbeitsgruppe getragen von Studierenden und Personal der HAW Kiel, sowie externen Freunden. Wir sind daran interessiert, Menschen mit einer Passion für Technologien im Kreativbereich zusammenzubringen oder diese zu erwecken.",
+  "cards": [
+    {
+      "title": "Im Fokus",
+      "text": "Im Fokus liegt bei uns Audio, d.h. Musikproduktion und Musiktechnologie zusammen mit Klangsynthese, Sounddesign und daran angrenzenden Kreativbereichen wie z.B. Elektronik, Computergrafik, kreatives Programmieren, Algorithmen, entsprechende Hard- und Software, Makertechnologien, Mensch-Maschine-Interaktion, immersive Kunstinstallationen, Spieletechnologie und vieles mehr…"
+    },
+    {
+      "title": "Mitmachen",
+      "text": "Ausgehend hiervon sind alle Interessenten herzlich eingeladen sich als Gruppe oder einzeln einzubringen und technische sowie gestalterische Unterstützung bei individuellen Projekten zu erhalten. Studenten aller Semester und aller Fachbereiche sind willkommen, entweder zur freiwilligen Durchführung individueller Projekte und Produktionen oder auch zum Erwerb von Credit Points, z.B. durch Belegung als Wahlmodul."
+    },
+    {
+      "title": "Klanglabor",
+      "text": "In unserem Klanglabor befinden sich große und kleine Synthesizer-Modularsysteme mit komerziellen Modulen (Doepfer, Erica Synth, Mutable instruments, uvm.) und teilweise auch mit selbst entwickelten Modulen. Weiterhin finden Sie ein vielfältiges Angebot an Hard- und Software zur individuellen Musikproduktion und zum Sounddesign (Ableton Live, Push, NI Reaktor, Adobe CC Suite, USB-Keyboards, …)."
+    }
+  ],
+  "highlight": "Viele Studierende haben im Rahmen der CTAG bereits sehr erfolgreich technische und gestalterische Projekte durchgeführt und sogar externe Preise und Auszeichnungen erhalten (Medienpreis TU Ilmenau, Google Summer of Code, …).",
+  "motto": "Anspruchsvolle Projekte, angenehme Community, den Unterschied machen…!"
+}

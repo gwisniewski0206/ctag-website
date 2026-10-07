@@ -2,3 +2,6 @@
 content/raw/
 node_modules/
 .DS_Store
+dist/
+.astro/
+.playwright-mcp/

@@ -1,0 +1,47 @@
+---
+// Freie Seiten (Impressum, Datenschutz, Makerspace …) und Umleitungsseiten für alte WordPress-Adressen.
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  const projects = await getCollection('projects', (p) => !p.data.draft);
+  const routes = pages.map((page) => ({ params: { path: page.id }, props: { page } }));
+  const taken = new Set(routes.map((r) => `/${r.params.path}/`));
+  const targets = [
+    ...pages.map((p) => [`/${p.id}/`, p.data.legacyPaths]),
+    ...projects.map((p) => [`/projects/${p.id}/`, p.data.legacyPaths]),
+  ];
+  for (const [target, olds] of targets) {
+    for (const old of olds) {
+      if (taken.has(old)) throw new Error(`Umleitung ${old} kollidiert mit einer bestehenden Seite`);
+      taken.add(old);
+      routes.push({ params: { path: old.replace(/^\/|\/$/g, '') }, props: { redirect: target } });
+    }
+  }
+  return routes;
+}
+
+const { page, redirect } = Astro.props;
+const rendered = page && (await render(page));
+---
+{redirect ? (
+  <html lang="de">
+    <head>
+      <meta charset="utf-8">
+      <title>Weiterleitung</title>
+      <meta http-equiv="refresh" content={`0; url=${redirect}`}>
+      <link rel="canonical" href={new URL(redirect, Astro.site)}>
+      <meta name="robots" content="noindex">
+    </head>
+    <body><p>Diese Seite ist umgezogen: <a href={redirect}>{redirect}</a></p></body>
+  </html>
+) : (
+  <Base title={page.data.title}>
+    <PageHero title={page.data.title} color="white" />
+    <main class="wrap" style="padding-top: clamp(32px, 5vw, 56px); padding-bottom: 80px">
+      <article class="prose"><rendered.Content /></article>
+    </main>
+  </Base>
+)}

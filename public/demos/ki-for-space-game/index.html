@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ki-for-space-game – Demo</title>
+<style>html,body{margin:0;background:#000;color:#fff;font-family:sans-serif}canvas{display:block;max-width:100%;height:auto}</style>
+<script src="jquery.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="Entities.js"></script>
+<script src="Movement.js"></script>
+<script src="Sensor.js"></script>
+<script src="ArtificialIntelligence.js"></script>
+</head>
+<body>
+<div style="overflow:auto;position: relative; max-width:800px; max-height:500px;">
+    <div style="min-width:5000px; min-height:5000px; background:black;" id="spaceDiv">
+    </div>
+</div>
+
+<p id="demo"></p>
+
+
+<script>
+    //check for ES6
+    function check()
+    {
+        "use strict";
+
+        if (typeof Symbol == "undefined") return false;
+        try {
+            var supportEs6 = true;
+            try { eval('"use strict"; class foo {}'); } catch (e) { supportEs6 = false; }
+
+            if(!supportEs6){
+                return false;
+            }
+
+        } catch (e) { return false; }
+
+        return true;
+    }
+
+    $=jQuery; //quick fix
+
+    $(document).ready(function()
+    {
+
+
+        if (check())
+        {
+/*            var Ent = document.createElement('script');
+            Ent.src = "js/Entities.js";
+            document.head.appendChild(Ent);
+
+            var Mov = document.createElement('script');
+            Mov.src = "js/Movement.js";
+            document.head.appendChild(Mov);
+
+            var Sen = document.createElement('script');
+            Sen.src = "js/Sensor.js";
+            document.head.appendChild(Sen);*/
+
+/*            var Art = document.createElement('script');
+            Art.src = "js/ArtificialIntelligence.js";
+            document.head.appendChild(Art);*/
+
+            //create star background
+            for (var i = 0; i < 2000; i++)
+            {
+                var x = Math.floor((Math.random() * $("#spaceDiv").width()) + 1);
+                var y = Math.floor((Math.random() * $("#spaceDiv").height()) + 1);
+                var size = Math.floor((Math.random() * 3) + 1);
+                var div = document.createElement('div');
+                $(div).css("position", "absolute");
+                $(div).css("width", size + "px");
+                $(div).css("height", size + "px");
+                $(div).css("left", x + "px");
+                $(div).css("top", y + "px");
+                $(div).css("background", "white");
+                $(div).appendTo($("#spaceDiv"));
+            };
+
+            var handleInt = new HandleObjects($("#spaceDiv").width(), $("#spaceDiv").height());
+
+            //create asteroids
+            for (var i = 0; i < 150; i++)
+            {
+                var x = Math.floor((Math.random() * $("#spaceDiv").width()) + 1);
+                var y = Math.floor((Math.random() * $("#spaceDiv").height()) + 1);
+                var size = Math.floor((Math.random() * 50) + 10);
+                var div = document.createElement('div');
+                $(div).css("position", "absolute");
+                $(div).css("width", size + "px");
+                $(div).css("height", size + "px");
+                $(div).css("left", x + "px");
+                $(div).css("top", y + "px");
+                $(div).css("background", "green");
+                $(div).appendTo($("#spaceDiv"));
+                handleInt.AddAsteroid(new Asteroid(i, new Rect(x, y, size, size), size*1000000));
+            };
+
+
+
+            //create cargo ships
+            for (var i = 0; i < 40; i++)
+            {
+                var x = Math.floor((Math.random() * $("#spaceDiv").width()) + 1);
+                var y = Math.floor((Math.random() * $("#spaceDiv").height()) + 1);
+                var size = 30;
+                var div = document.createElement('div');
+                $(div).css("position", "absolute");
+                $(div).css("width", size + "px");
+                $(div).css("height", size + "px");
+                $(div).css("left", x + "px");
+                $(div).css("top", y + "px");
+                $(div).css("background", "blue");
+                $(div).attr("id","cargoShip" + i);
+                $(div).appendTo($("#spaceDiv"));
+                //$(div).tooltip();
+
+                handleInt.AddCargoShip(0, 2000, i, new Rect(x, y, size, size), "#0000FF", handleInt)
+
+            };
+
+            //create pirate ships
+            for (var i = 0; i < 20; i++)
+            {
+                var x = Math.floor((Math.random() * $("#spaceDiv").width()) + 1);
+                var y = Math.floor((Math.random() * $("#spaceDiv").height()) + 1);
+                var size = 20;
+                var div = document.createElement('div');
+                $(div).css("position", "absolute");
+                $(div).css("width", size + "px");
+                $(div).css("height", size + "px");
+                $(div).css("left", x + "px");
+                $(div).css("top", y + "px");
+                $(div).css("background", "red");
+                $(div).attr("id","pirateShip" + i);
+                $(div).appendTo($("#spaceDiv"));
+                //$(div).tooltip();
+
+                handleInt.AddPirateShip(0, 2000, i, new Rect(x, y, size, size), "#0000FF", handleInt)
+
+            };
+
+
+
+            setInterval(function()
+            {
+                handleInt.ComputeNextStep();
+                var cargoShips = handleInt.GetAllCargoShips();
+
+                cargoShips.forEach(function (element, index)
+                {
+                    $('#cargoShip' + element.GetId()).css("left", element.GetBodyRect().GetX() + "px");
+                    $('#cargoShip' + element.GetId()).css("top", element.GetBodyRect().GetY() + "px");
+                    $('#cargoShip' + element.GetId()).prop('title', element.GetAiActivity());
+                    //$('#ship' + element.GetId()).tooltip();
+                });
+
+                var pirateShips = handleInt.GetAllPirateShips();
+
+                pirateShips.forEach(function (element, index)
+                {
+                    $('#pirateShip' + element.GetId()).css("left", element.GetBodyRect().GetX() + "px");
+                    $('#pirateShip' + element.GetId()).css("top", element.GetBodyRect().GetY() + "px");
+                    var masterString = (element.IsMaster()) ? '-=MasterShip=-\n' : '';
+                    $('#pirateShip' + element.GetId()).prop('title', masterString + element.GetAiActivity() + '\nx: ' + Math.round(element.GetCoordinateCenter().GetX())  + '\ny: ' + Math.round(element.GetCoordinateCenter().GetY()));
+                });
+
+                $( "#spaceDiv" ).tooltip();
+            }, 50);
+        } else
+        {
+            $("#spaceDiv").text('Not supported by your browser');
+            $("#spaceDiv").css("textcolor", "red");
+            //Alert('Not supported from your browser');
+        }
+
+
+    });
+</script>
+
+<p>In dieser einfachen grafischen Ausgabe stellt grün die Asteroiden, blau die Ressourcenschiffe und rot die Piraten dar.</p>
+<p>An eine künstliche Intelligenz in einem Multiplayer-Spiel werden hohe Anforderungen gestellt. Sie sollte sich moeglichst wie ein realer Mitspieler verhalten und sich der entprechenden Rolle anpassen.<br />
+Im Rahmen dieses Projektes wurden die Grundlagen für eine einfache Erweiterung der KI geschaffen. Des Weiteren wurden 2 Beispielintelligenzen entwickelt.</p>
+<p><strong>Intelligenz Ressourcenschiff</strong></p>
+<p>Ein Ressourcenschiff sammelt verschiedene Ressourcen auf Asteroiden und verkauft diese in einer nahen Raumstation. Mit dem verdienten Geld kann das eigene Schiff aufgerüstet werden, oder es werden Bewacher angeheuert.<br />
+Die jetzige Intelligenz wird sich einen Asteroiden suchen und mit dem Abbau von Ressourcen beginnen. Sollte ein Piratenschiff auftauchen wird jede andere Aktion Unterbrochen und die Flucht wird angetreten.</p>
+<p><strong>Intelligenz Piratenschiff</strong></p>
+<p>Ein Piratenschiff lauert anderen Schiffen auf und versucht diese außer Gefecht zu setzen, um dessen<br />
+Ressourcen zu stehlen. Die Schiffe von Piraten sind gewöhnlicherweise veraltet, klein und langsam. Dies<br />
+zwingt sie in Rudeln zu operieren, um stärkere Gegner außer gefecht zu setzen.<br />
+Im Rahmen dieses Projektes gehen die Piratenintelligenzen auf die Jagd nach den Ressourcenschiffen. Sie können sich dafür in Gruppen zusammenschliessen, die jeweils einen Anführer haben. Dieser Anführer, oder auch Bossintelligenz genannt, kümmert sich darum neue Gruppenmitglieder anzuheuern und die nächsten Aktionen zu bestimmen.</p>
+<p><strong>Grafische Ausgabe</strong></p>
+<p>Da es noch keine Grafikausgabe für dieses Spiel gibt, es aber Wünschenswert war die KI zu beobachten,<br />
+wurde eine sehr simple Grafikausgabe mit Div-Elementen realisiert. Selbst die Sterne die auf dem<br />
+Bild zu sehen sind, sind nur sehr kleine Div-Elemente. Auch hier wurde großen Wert auf spätere einfache Änderung der Grafikengine gelegt. Alle Elemente werden in der Index.html realisiert, setzt man hier stattdessen eine Grafikengine mit den richtigen Parametern ein wird die KI auch dort funktionieren.</p>
+<p><strong>Klassen in Javascript</strong></p>
+<p>ECMAScript 2015, auch bekannt als ES6, bietet eine Reihe neuer interessanter Funktionen, wovon dieses Projekt von der neuen Unterstützung für Klassen Gebrauch macht. Die Schreibweise ist dabei von den klassischen objektorientierten Programmiersprachen wie Java oder C# übernommen worden. Besonders nützlich waren die Klassen dabei eine sogenannte Super-KI zu erstellen die nur sehr allgemeine Methoden und Variablen enthält. Die Piraten-KI und die Ressourcen-KI können sich dann von dieser dann mit dem Extend Schlüsselwort ableiten.</p>
+<p><strong>Weitere Funktionalitäten</strong></p>
+<p>Um diese einfache Simulation der KIs zu ermöglichen wurden zwei weitere Hilfsklassen erstellt, die später wahrscheinlich durch Funktionalitäten der Spiele-Engine übernommen werden können. Es handelt sich dabei einmal um die Klasse Movement, die verschiedene Funktionen enthält um sich im System zu bewegen. Die zweite Klasse heisst Sensor und kümmert sich um die sichtbaren Objekte für jedes Schiff.</p>
+<p><strong>Ausblick</strong></p>
+<p>Viele weitere KIs sind denkbar, die sich dann auch wieder von der Super-KI ableiten und im Laufe dieses<br />
+Entwicklungsprozesses könnten dieser dann auch weitere Kernfunktionalitäten zur Verfügung gestellt werden. Als sehr wichtige nächste Rollen wären Bewacherschiffe und Händler denkbar. Es wäre dabei interessant zu sehen wie die Händlerschiffe sich mit den Funktionen des Auktionshauses integrieren lassen.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><em>Kai Luenstaeden 2015</em></p>
+					</div>
+</body>
+</html>

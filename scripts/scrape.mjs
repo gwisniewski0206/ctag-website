@@ -74,6 +74,38 @@ for (const type of ['pages', 'posts', 'media']) {
 // Logo und Header-Bilder der Startseite (liegen im Theme/Slider, nicht im Seiteninhalt)
 for (const f of ['2017/06/ctag-logo-horizontal1.png', '2013/12/header2.jpg', '2016/02/CloseUp1_lr.jpg', '2013/12/header1.jpg', '2016/02/face24-1.jpg'])
   urls.add(`${SITE}/wp-content/uploads/${f}`);
+// Interaktive Demos: Das CTAG-Plugin „ctag-processing“ gibt sie beim Rendern direkt aus, sie fehlen in content.rendered.
+// Darum die fertig gerenderten Seiten und die Skripte des Plugins sichern.
+await mkdir(path.join(OUT, 'demos'), { recursive: true });
+const pluginJs = new Set();
+const pluginImages = new Set();
+for (const slug of ['ki-for-space-game', 'flock', 'ants']) {
+  const res = await fetch(`${SITE}/${slug}/`);
+  if (!res.ok) { console.warn(`! ${res.status} Demo-Seite ${slug}`); continue; }
+  const html = await res.text();
+  await writeFile(path.join(OUT, 'demos', `${slug}.html`), html);
+  for (const m of html.matchAll(/src=['"]([^'"]*\/plugins\/ctag-processing\/[^'"?]+)/g)) pluginJs.add(m[1]);
+  // Bilder, die die Processing-Sketches zur Laufzeit laden: loadImage(CTAG_PATH+"Bee up.png")
+  for (const m of html.matchAll(/CTAG_PATH\s*\+\s*"([^"]+)"/g)) pluginImages.add(m[1]);
+  console.log(`Demo-Seite ${slug} gesichert`);
+}
+// Sensor.js wird nur im auskommentierten Code geladen, liegt aber im Plugin
+pluginJs.add(`${SITE}/wp-content/plugins/ctag-processing/public/js/Sensor.js`);
+pluginJs.add(`${SITE}/wp-includes/js/jquery/jquery.min.js`);
+await mkdir(path.join(OUT, 'demos', 'images'), { recursive: true });
+for (const name of pluginImages) {
+  const res = await fetch(`${SITE}/wp-content/plugins/ctag-processing/public/images/${encodeURIComponent(name)}`);
+  if (!res.ok) { console.warn(`! ${res.status} Demo-Bild ${name}`); continue; }
+  await writeFile(path.join(OUT, 'demos', 'images', name), Buffer.from(await res.arrayBuffer()));
+  console.log('  ↓ images/' + name);
+}
+for (const u of pluginJs) {
+  const res = await fetch(u);
+  if (!res.ok) { console.warn(`! ${res.status} ${u}`); continue; }
+  await writeFile(path.join(OUT, 'demos', path.basename(u)), Buffer.from(await res.arrayBuffer()));
+  console.log('  ↓ ' + path.basename(u));
+}
+
 console.log(`\n${urls.size} Dateien werden geladen …`);
 for (const u of urls) {
   try { await download(u); } catch (e) { console.warn(`! ${e.message} ${u}`); }

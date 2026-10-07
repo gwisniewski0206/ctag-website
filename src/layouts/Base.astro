@@ -1,0 +1,72 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/source-sans-3';
+import '../styles/global.css';
+
+const { title, description } = Astro.props;
+const fullTitle = title ? `${title} – Creative Technologies` : 'Creative Technologies (CTAG)';
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/partners/', label: 'Partners' },
+  { href: '/contact/', label: 'Contact' },
+];
+// Pfad ohne Unterpfad (GitHub-Pages-Vorschau), damit der aktive Menüpunkt stimmt
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const here = Astro.url.pathname.slice(base.length) || '/';
+const isCurrent = (href) => (href === '/' ? here === '/' : here.startsWith(href));
+---
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{fullTitle}</title>
+  {description && <meta name="description" content={description}>}
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)}>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <slot name="head" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="/" class="brand">
+        <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#00305D"></rect><circle cx="24" cy="24" r="14" fill="#F5B700"></circle><line x1="24" y1="24" x2="32" y2="14" stroke="#00305D" stroke-width="4" stroke-linecap="round"></line></svg>
+        <span class="brand-text"><span class="brand-name">CTAG</span><span class="brand-sub">Creative Technologies</span></span>
+      </a>
+      <nav class="nav" aria-label="Hauptmenü">
+        {nav.map((n) => <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>{n.label}</a>)}
+      </nav>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer class="site-footer">
+    <div class="stripes"><span class="bg-amber"></span><span class="bg-red"></span><span class="bg-sky"></span><span style="background:#1D5AA8"></span></div>
+    <div class="wrap">
+      <span>Creative Technologies (CTAG)</span>
+      <span class="footer-links">
+        <a href="/impressum/">Impressum</a>
+        <span aria-hidden="true">|</span>
+        <a href="/datenschutzerklarung/">Datenschutzerklärung</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    // Eingebettete Videos/Dokumente erst nach Klick laden (siehe src/lib/embeds.mjs)
+    document.addEventListener('click', (e) => {
+      const btn = e.target instanceof Element && e.target.closest('.embed-load');
+      if (!btn) return;
+      const box = btn.closest('.embed-consent');
+      const frame = document.createElement('iframe');
+      frame.src = box.dataset.src;
+      frame.className = 'embed-frame';
+      frame.allow = 'autoplay; fullscreen; picture-in-picture';
+      frame.allowFullscreen = true;
+      box.replaceWith(frame);
+    });
+  </script>
+</body>
+</html>
