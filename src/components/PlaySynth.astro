@@ -1,0 +1,143 @@
+---
+// Spielbarer Mini-Synth mit einfachem Signalweg: OSC → FILTER → VCA (mit Hüllkurve) → OUT, LFO moduliert das Filter.
+// Klang entsteht im Browser (Web Audio), erst nach dem ersten Tastendruck (src/lib/playsynth.ts).
+import Knob from './Knob.astro';
+
+const waves = [
+  { type: 'sine', label: 'Sinus', d: 'M4 16 C 9 2, 13 2, 18 16 S 27 30, 32 16' },
+  { type: 'triangle', label: 'Dreieck', d: 'M4 16 L11 5 L25 27 L32 16' },
+  { type: 'sawtooth', label: 'Sägezahn', d: 'M4 26 L18 6 L18 26 L32 6' },
+  { type: 'square', label: 'Rechteck', d: 'M4 26 L4 6 L18 6 L18 26 L32 26 L32 6' },
+];
+// Zwei Oktaven ab C (MIDI 48 = C3)
+const BASE = 48;
+const names = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'H'];
+const keys = Array.from({ length: 25 }, (_, i) => ({ note: BASE + i, black: [1, 3, 6, 8, 10].includes(i % 12), name: names[i % 12] + (3 + Math.floor(i / 12)) }));
+const whites = keys.filter((k) => !k.black);
+---
+<section class="psy" data-playsynth aria-label="Spielbarer Mini-Synthesizer">
+  <div class="psy-head">
+    <span class="psy-tag">Mini-Synth</span>
+    <p>Patch einstellen, Tasten spielen – auch mit der Computertastatur <kbd>A</kbd> <kbd>W</kbd> <kbd>S</kbd> … <kbd>K</kbd>.</p>
+  </div>
+
+  <div class="psy-rack">
+    <div class="psy-mod bg-amber">
+      <span class="psy-mod-name">OSC</span>
+      <div class="psy-waves" role="radiogroup" aria-label="Wellenform">
+        {waves.map((w, i) => (
+          <button type="button" class="psy-wave" role="radio" aria-checked={i === 2 ? 'true' : 'false'} data-wave={w.type} aria-label={w.label} title={w.label}>
+            <svg viewBox="0 0 36 32" aria-hidden="true"><path d={w.d} fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </button>
+        ))}
+      </div>
+      <Knob param="octave" label="Oktave" min={-2} max={1} value={0} />
+    </div>
+    <span class="psy-patch" aria-hidden="true"></span>
+    <div class="psy-mod bg-white">
+      <span class="psy-mod-name">Filter</span>
+      <div class="psy-knobs">
+        <Knob param="cutoff" label="Cutoff" value={0.55} />
+        <Knob param="resonance" label="Resonanz" value={0.3} />
+      </div>
+    </div>
+    <span class="psy-patch" aria-hidden="true"></span>
+    <div class="psy-mod bg-sky">
+      <span class="psy-mod-name">Hüllkurve</span>
+      <div class="psy-knobs">
+        <Knob param="attack" label="Attack" value={0.1} />
+        <Knob param="release" label="Release" value={0.35} />
+      </div>
+    </div>
+    <span class="psy-patch" aria-hidden="true"></span>
+    <div class="psy-mod psy-out">
+      <span class="psy-mod-name">Out</span>
+      <svg class="psy-scope" viewBox="0 0 120 64" aria-hidden="true"><path class="psy-scope-line" fill="none" stroke="#F5B700" stroke-width="2.5" stroke-linejoin="round"></path></svg>
+      <Knob param="volume" label="Lautst." value={0.6} color="#E8452C" />
+    </div>
+    <div class="psy-mod bg-red psy-lfo">
+      <span class="psy-mod-name">LFO <small>→ Cutoff</small></span>
+      <div class="psy-knobs">
+        <Knob param="lfoRate" label="Rate" value={0.3} />
+        <Knob param="lfoDepth" label="Tiefe" value={0.2} />
+      </div>
+    </div>
+  </div>
+
+  <div class="psy-keys" role="group" aria-label="Klaviatur" style={`--whites: ${whites.length}`}>
+    {whites.map((k) => <button type="button" class="key white" data-note={k.note} aria-label={k.name} data-hide-mobile={k.note > BASE + 12 ? "" : undefined}></button>)}
+    {keys.filter((k) => k.black).map((k) => {
+      // Schwarze Taste mittig über der Grenze zwischen zwei weißen Tasten
+      const left = whites.findIndex((w) => w.note === k.note + 1);
+      return <button type="button" class="key black" data-note={k.note} aria-label={k.name} style={`--at: ${left}`} data-hide-mobile={k.note > BASE + 12 ? "" : undefined}></button>;
+    })}
+  </div>
+</section>
+
+<script>
+  import '../lib/playsynth';
+</script>
+
+<style>
+  .psy {
+    grid-column: 1 / -1;
+    background: var(--blue); border: var(--line); border-radius: var(--r-card);
+    padding: clamp(20px, 3vw, 36px); display: flex; flex-direction: column; gap: 22px; color: #fff;
+  }
+  .psy-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+  .psy-head p { flex: 1 1 280px; margin: 0; font-size: 17px; }
+  .psy-head kbd { font: inherit; font-weight: 700; padding: 0 6px; border: 2px solid var(--sky); border-radius: 4px; }
+  .psy-tag {
+    font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 22px;
+    padding: 2px 14px; background: var(--amber); color: var(--blue); border-radius: var(--r-tag);
+  }
+  .psy-rack { display: flex; flex-wrap: wrap; align-items: stretch; gap: 14px 0; }
+  .psy-mod {
+    flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 14px 16px 16px; border-radius: var(--r-card); color: var(--blue);
+  }
+  .psy-mod-name { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 16px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .psy-mod-name small { font-family: var(--text); font-stretch: 100%; text-transform: none; font-size: 13px; letter-spacing: 0; }
+  .psy-knobs { display: flex; gap: 14px; }
+  /* Gezeichnetes Patchkabel zwischen zwei Modulen = Signalweg */
+  .psy-patch { align-self: center; width: 26px; height: 9px; background: var(--amber); border: 3px solid var(--blue); border-left: 0; border-right: 0; position: relative; }
+  .psy-patch::before, .psy-patch::after { content: ''; position: absolute; top: -6px; width: 9px; height: 9px; border-radius: 50%; background: #fff; border: 3px solid var(--blue); }
+  .psy-patch::before { left: -6px; }
+  .psy-patch::after { right: -6px; }
+  .psy-waves { display: grid; grid-template-columns: repeat(2, 44px); gap: 6px; }
+  .psy-wave {
+    height: 40px; padding: 4px; cursor: pointer; color: var(--blue);
+    background: #fff; border: 2px solid var(--blue); border-radius: var(--r-tag);
+  }
+  .psy-wave svg { width: 100%; height: 100%; display: block; }
+  .psy-wave[aria-checked='true'] { background: var(--blue); color: var(--amber); }
+  .psy-out { background: #001d3a; color: #fff; }
+  .psy-out :global(.knob-label) { color: #fff; }
+  .psy-scope { width: 120px; height: 64px; background: var(--blue); border: 2px solid var(--mid); border-radius: 6px; }
+  .psy-lfo { margin-left: 24px; }
+
+  .psy-keys { position: relative; display: flex; height: 150px; user-select: none; -webkit-user-select: none; touch-action: none; }
+  .key { padding: 0; cursor: pointer; border: 2px solid var(--blue); }
+  .key.white { flex: 1 1 0; min-width: 0; background: #fff; border-radius: 0 0 6px 6px; margin-right: -2px; }
+  .key.black {
+    position: absolute; top: 0; z-index: 1; height: 60%;
+    width: calc(100% / var(--whites) * 0.62); left: calc(100% / var(--whites) * var(--at) - 100% / var(--whites) * 0.31);
+    background: var(--ink); border-radius: 0 0 5px 5px;
+  }
+  .key.on.white { background: var(--amber); }
+  .key.on.black { background: var(--red); }
+  @media (max-width: 760px) {
+    .psy-patch { display: none; }
+    /* Zwei Spalten: OSC | Filter, Hüllkurve | LFO, Out über die ganze Breite */
+    .psy-rack { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .psy-mod { padding: 12px 8px 14px; }
+    .psy-lfo { margin-left: 0; }
+    .psy-out { grid-column: 1 / -1; order: 1; flex-direction: row; justify-content: center; gap: 20px; }
+    .psy-knobs { gap: 8px; }
+    .psy-rack :global(.ctl-knob) { width: 46px; height: 46px; }
+    .psy-rack :global(.knob-label) { font-size: 13px; }
+    /* Auf dem Handy eine Oktave plus C */
+    .psy-keys { --whites: 8 !important; height: 130px; }
+    .key[data-hide-mobile] { display: none; }
+  }
+</style>

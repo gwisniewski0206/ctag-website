@@ -16,7 +16,7 @@
 <use href="#kb" class="knob" data-x="200" data-y="165" data-s="0.7" data-r="-120" transform="translate(200 165) scale(0.7) rotate(-120)"></use>
 <use href="#kb" class="knob" data-x="260" data-y="165" data-s="0.7" data-r="20" transform="translate(260 165) scale(0.7) rotate(20)"></use>
 <use href="#jk" class="jack" x="200" y="235"></use><use href="#jk" class="jack" x="260" y="235"></use><use href="#jk" class="jack" x="200" y="290"></use><use href="#jk" class="jack" x="260" y="290"></use>
-<rect x="336" y="58" width="8" height="120" rx="4" fill="#00305D"></rect><rect x="366" y="58" width="8" height="120" rx="4" fill="#00305D"></rect><rect x="396" y="58" width="8" height="120" rx="4" fill="#00305D"></rect>
+<rect class="fader-track" x="336" y="58" width="8" height="120" rx="4" fill="#00305D"></rect><rect class="fader-track" x="366" y="58" width="8" height="120" rx="4" fill="#00305D"></rect><rect class="fader-track" x="396" y="58" width="8" height="120" rx="4" fill="#00305D"></rect>
 <rect class="fader" x="328" y="80" width="24" height="16" rx="4" fill="#E8452C" stroke="#00305D" stroke-width="3"></rect><rect class="fader" x="358" y="135" width="24" height="16" rx="4" fill="#F5B700" stroke="#00305D" stroke-width="3"></rect><rect class="fader" x="388" y="105" width="24" height="16" rx="4" fill="#FFFFFF" stroke="#00305D" stroke-width="3"></rect>
 <circle class="led" cx="340" cy="205" r="6" fill="#E8452C" stroke="#00305D" stroke-width="3"></circle><circle class="led" cx="370" cy="205" r="6" fill="#F5B700" stroke="#00305D" stroke-width="3"></circle><circle class="led" cx="400" cy="205" r="6" fill="#FFFFFF" stroke="#00305D" stroke-width="3"></circle>
 <use href="#jk" class="jack" x="340" y="245"></use><use href="#jk" class="jack" x="400" y="245"></use><use href="#jk" class="jack" x="340" y="295"></use><use href="#jk" class="jack" x="400" y="295"></use>
@@ -39,5 +39,6 @@
 <style>
   .synth { overflow: visible; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
   .synth :global(.cable), .synth :global(.plug) { cursor: grab; }
+  .synth :global(.knob), .synth :global(.fader), .synth :global(.fader-track) { cursor: ns-resize; }
   .synth:global(.dragging), .synth:global(.dragging) :global(*) { cursor: grabbing; }
 </style>

@@ -3,9 +3,12 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Arrow from '../components/Arrow.astro';
+import PlaySynth from '../components/PlaySynth.astro';
 
 const partners = (await getCollection('partners')).sort((a, b) => a.data.order - b.data.order);
 const backgrounds = ['var(--amber)', '#fff', 'var(--sky)', '#fff'];
+// Der Synth steht nach der zweiten Reihe (bei 4 Spalten) – bei 2 Spalten nach der vierten
+const SYNTH_AFTER = 8;
 const domain = (url) => new URL(url).hostname.replace(/^www\./, '');
 ---
 <Base title="Partners">
@@ -13,6 +16,8 @@ const domain = (url) => new URL(url).hostname.replace(/^www\./, '');
   <main class="wrap partners-main">
     <div class="grid partners-grid">
       {partners.map(({ data: p }, i) => (
+        <>
+        {i === SYNTH_AFTER && <PlaySynth />}
         <a href={p.url} class="card-link partner" style={`background: ${backgrounds[i % 4]}`}>
           {p.logo && <span class="partner-logo"><img src={p.logo} alt="" loading="lazy"></span>}
           <span class="partner-name">{p.name}</span>
@@ -21,6 +26,7 @@ const domain = (url) => new URL(url).hostname.replace(/^www\./, '');
             <Arrow />
           </span>
         </a>
+        </>
       ))}
     </div>
   </main>

@@ -1,0 +1,62 @@
+---
+// Gezeichnetes Oszilloskop im X/Y-Betrieb: zeigt Lissajous-Figuren. Zwei Potis stellen die Frequenzen von X und Y ein,
+// beim Scrollen dreht sich die Phase und die Figur verformt sich (src/lib/lissajous.ts).
+---
+<section class="liss" data-lissajous aria-label="Oszilloskop mit Lissajous-Figur">
+  <div class="liss-screen">
+    <svg viewBox="-110 -110 220 220" aria-hidden="true">
+      <g class="liss-grid" stroke="#1D5AA8" stroke-width="0.8">
+        {[-80, -40, 0, 40, 80].map((v) => <><line x1={v} y1="-100" x2={v} y2="100"></line><line x1="-100" y1={v} x2="100" y2={v}></line></>)}
+      </g>
+      <path class="liss-glow" fill="none" stroke="#F5B700" stroke-width="7" stroke-opacity="0.25" stroke-linejoin="round"></path>
+      <path class="liss-trace" fill="none" stroke="#F5B700" stroke-width="2.6" stroke-linejoin="round"
+        d="M80 0 C 80 80 -80 80 -80 0 C -80 -80 80 -80 80 0"></path>
+    </svg>
+  </div>
+  <div class="liss-panel">
+    <span class="liss-tag">X / Y</span>
+    <p>Zwei Schwingungen gegeneinander gezeichnet. Potis ziehen, scrollen dreht die Phase.</p>
+    <div class="liss-knobs">
+      {['X', 'Y'].map((axis) => (
+        <div class="liss-knob-wrap">
+          <svg class="liss-knob" data-axis={axis} viewBox="0 0 64 64" role="slider" tabindex="0" aria-label={`Frequenz ${axis}`} aria-valuemin="1" aria-valuemax="6">
+            <circle cx="32" cy="32" r="28" fill="#00305D"></circle>
+            <circle cx="32" cy="32" r="18" fill="#1D5AA8"></circle>
+            <line class="liss-knob-mark" x1="32" y1="32" x2="32" y2="10" stroke="#fff" stroke-width="5" stroke-linecap="round"></line>
+          </svg>
+          <span class="liss-label">Freq {axis} <output class="liss-value" data-axis={axis}>1</output></span>
+        </div>
+      ))}
+    </div>
+    <p class="liss-ratio">Verhältnis <output class="liss-ratio-value">3 : 2</output></p>
+  </div>
+</section>
+
+<script>
+  import '../lib/lissajous';
+</script>
+
+<style>
+  .liss {
+    margin-top: 28px; display: flex; flex-wrap: wrap; gap: 28px; align-items: stretch;
+    padding: clamp(20px, 3vw, 36px); background: var(--sky); border: var(--line); border-radius: var(--r-card);
+  }
+  .liss-screen {
+    flex: 1 1 320px; max-width: 460px; aspect-ratio: 1; padding: 14px;
+    background: var(--blue); border-radius: 24px; border: 6px solid var(--mid);
+  }
+  .liss-screen svg { display: block; width: 100%; height: 100%; }
+  .liss-panel { flex: 1 1 260px; display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+  .liss-panel p { margin: 0; }
+  .liss-tag {
+    align-self: flex-start; font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 22px;
+    padding: 2px 14px; background: var(--blue); color: var(--amber); border-radius: var(--r-tag);
+  }
+  .liss-knobs { display: flex; gap: 32px; flex-wrap: wrap; }
+  .liss-knob-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .liss-knob { width: 84px; height: 84px; cursor: ns-resize; touch-action: none; }
+  .liss-knob-mark { transform-origin: 32px 32px; }
+  .liss-knob:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; border-radius: 50%; }
+  .liss-label { font-weight: 700; color: var(--blue); }
+  .liss-ratio { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 26px; color: var(--blue); }
+</style>

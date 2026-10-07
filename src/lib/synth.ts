@@ -2,6 +2,7 @@
 // - Patchkabel hängen physikalisch durch, schwingen und lassen sich umstecken (Stecker ziehen) oder in der Mitte anzupfen.
 // - Beim Scrollen drehen sich die Potis, Fader fahren, das Oszilloskop läuft und der Sequencer schaltet weiter.
 import { onScrollMotion, reducedMotion } from './scroll-motion';
+import { onDrag } from './drag';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const SEGMENTS = 16;
@@ -223,39 +224,48 @@ function initCables(svg: SVGSVGElement) {
   }
 }
 
-function initScrollParts(svg: SVGSVGElement) {
+// Potis und Fader: bewegen sich beim Scrollen und lassen sich ziehen. Was man einstellt, bleibt als Versatz erhalten,
+// das Scrollen bewegt von dort aus weiter. Die beiden Potis im weißen Modul steuern das Oszilloskop.
+function initControls(svg: SVGSVGElement) {
   const knobs = [...svg.querySelectorAll<SVGUseElement>('.knob')].map((el, i) => ({
     el, x: el.dataset.x, y: el.dataset.y, s: Number(el.dataset.s), r: Number(el.dataset.r),
-    speed: [0.35, -0.5, 0.22, 0.6, -0.3, -0.42][i % 6],
+    speed: [0.35, -0.5, 0.22, 0.6, -0.3, -0.42][i % 6], user: 0, angle: 0,
   }));
+  // Fader als Phase einer Sinusbewegung: y = Mitte + Hub · sin(Phase); Ziehen verschiebt die Phase
+  const TOP = 60, BOTTOM = 160, MID = (TOP + BOTTOM) / 2, AMP = (BOTTOM - TOP) / 2;
   const faders = [...svg.querySelectorAll<SVGRectElement>('.fader')].map((el, i) => ({
-    el, y0: Number(el.getAttribute('y')), freq: [0.011, 0.007, 0.016][i % 3], phase: i * 1.7,
+    el, freq: [0.011, 0.007, 0.016][i % 3],
+    phase: Math.asin(Math.max(-1, Math.min(1, (Number(el.getAttribute('y')) - MID) / AMP))),
   }));
+  const tracks = [...svg.querySelectorAll<SVGRectElement>('.fader-track')];
   const leds = [...svg.querySelectorAll<SVGCircleElement>('.led')];
   const steps = [...svg.querySelectorAll<SVGRectElement>('.step')];
   const scope = svg.querySelector<SVGPathElement>('.scope')!;
-  // Fader-Schiene: y 58–178, Kappe 16 hoch
-  const TOP = 60, BOTTOM = 160;
+  // Potis im weißen Modul (x 200 und 260) steuern Frequenz und Ausschlag des Oszilloskops
+  const scopeFreqKnob = knobs.find((k) => k.x === '200');
+  const scopeAmpKnob = knobs.find((k) => k.x === '260');
+  let pos = 0;
 
-  onScrollMotion(svg, (pos) => {
+  const norm = (deg: number) => (Math.sin((deg * Math.PI) / 180) + 1) / 2;   // Winkel → 0…1, stetig
+
+  function render() {
     for (const k of knobs) {
+      k.angle = k.r + k.user + pos * k.speed;
       const scale = k.s !== 1 ? ` scale(${k.s})` : '';
-      k.el.setAttribute('transform', `translate(${k.x} ${k.y})${scale} rotate(${(k.r + pos * k.speed).toFixed(1)})`);
+      k.el.setAttribute('transform', `translate(${k.x} ${k.y})${scale} rotate(${k.angle.toFixed(1)})`);
     }
     faders.forEach((f, i) => {
-      const mid = (TOP + BOTTOM) / 2, amp = (BOTTOM - TOP) / 2;
-      const start = Math.asin(Math.max(-1, Math.min(1, (f.y0 - mid) / amp)));
-      const y = mid + amp * Math.sin(start + pos * f.freq);
+      const y = MID + AMP * Math.sin(f.phase + pos * f.freq);
       f.el.setAttribute('y', y.toFixed(1));
       // LED darunter leuchtet mit der Fader-Höhe
       leds[i]?.setAttribute('opacity', (0.35 + 0.65 * (1 - (y - TOP) / (BOTTOM - TOP))).toFixed(2));
     });
-    // Oszilloskop: Sinus im Fenster x 190–278, läuft und ändert die Frequenz leicht
-    const freq = 2 * Math.PI / (44 + 10 * Math.sin(pos * 0.004));
+    const period = 26 + 40 * norm(scopeFreqKnob ? scopeFreqKnob.angle : pos * 0.2);
+    const amp = 4 + 18 * norm(scopeAmpKnob ? scopeAmpKnob.angle + 90 : 0);
     let d = '';
     for (let x = 190; x <= 278; x += 2) {
-      const y = 85 - 15 * Math.sin((x - 190) * freq + pos * 0.05);
-      d += `${d ? ' L' : 'M'}${x} ${y.toFixed(1)}`;
+      const y = 85 - amp * Math.sin(((x - 190) / period) * 2 * Math.PI + pos * 0.05);
+      d += `${d ? ' L' : 'M'}${x} ${Math.max(60, Math.min(110, y)).toFixed(1)}`;
     }
     scope.setAttribute('d', d);
     // Sequencer: das Lauflicht wandert über die vier Spalten
@@ -265,10 +275,26 @@ function initScrollParts(svg: SVGSVGElement) {
       s.setAttribute('stroke', on ? '#FFFFFF' : 'none');
       s.setAttribute('stroke-width', on ? '4' : '0');
     });
+  }
+
+  for (const k of knobs) onDrag(k.el, (_dx, dy) => { k.user -= dy * 1.8; render(); });
+
+  // Fader auf Zeigerhöhe setzen (beim Antippen der Schiene und beim Ziehen)
+  const setFader = (f: (typeof faders)[number], e: PointerEvent) => {
+    const y = svgPoint(svg, e).y - 8;
+    const v = Math.max(-1, Math.min(1, (y - MID) / AMP));
+    f.phase = Math.asin(v) - pos * f.freq;
+    render();
+  };
+  faders.forEach((f, i) => {
+    for (const el of [f.el, tracks[i]]) onDrag(el, (_dx, _dy, e) => setFader(f, e), (e) => setFader(f, e));
   });
+
+  if (reducedMotion) render();
+  else onScrollMotion(svg, (p) => { pos = p; render(); });
 }
 
 for (const svg of document.querySelectorAll<SVGSVGElement>('svg[data-synth]')) {
   initCables(svg);
-  if (!reducedMotion) initScrollParts(svg);
+  initControls(svg);
 }
