@@ -3,7 +3,7 @@
 import Arrow from './Arrow.astro';
 import { thumbPath } from '../lib/thumbs.mjs';
 
-const { project, number } = Astro.props;
+const { project, number, withSummary = false } = Astro.props;
 const d = project.data;
 // Akzentfarbe und Wellenform reihum: Bernstein/Sinus, Blau/Sägezahn, Zinnober/Rechteck
 const style = [
@@ -23,6 +23,7 @@ const search = [d.title, d.summary, ...d.tags, ...d.team].filter(Boolean).join('
   </span>
   <span class="pcard-body">
     <span class="pcard-title">{d.title}</span>
+    {withSummary && d.summary && <span class="pcard-summary">{d.summary}</span>}
     {d.tags.length > 0 && <span class="pcard-tags">{d.tags.slice(0, 3).map((t) => <span>{t}</span>)}</span>}
     <span class="pcard-arrow"><Arrow /></span>
   </span>
@@ -45,6 +46,7 @@ const search = [d.title, d.summary, ...d.tags, ...d.team].filter(Boolean).join('
   }
   .pcard-body { flex: 1; position: relative; display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; transition: background 120ms; }
   .pcard-title { font-size: 18px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; padding-right: 26px; }
+  .pcard-summary { font-size: 16px; line-height: 1.45; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .pcard-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
   .pcard-tags span { padding: 0 8px; border: 2px solid var(--blue); border-radius: var(--r-tag); font-size: 13px; font-weight: 600; background: #fff; }
   .pcard-arrow { position: absolute; top: 14px; right: 12px; }

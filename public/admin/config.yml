@@ -98,6 +98,7 @@ collections:
 
           Was fehlt noch, was würdet ihr als Nächstes bauen?
       - { name: order, label: Position in der Liste, widget: number, value_type: int, hint: '1 = ganz oben. Neue Projekte: nächste freie Nummer.' }
+      - { name: featured, label: Auf der Startseite zeigen, widget: boolean, default: false, required: false, hint: 'Erscheint im Projekt-Slider der Startseite (braucht ein Titelbild). Ist bei keinem Projekt gesetzt, zeigt der Slider alle mit Titelbild.' }
       - { name: draft, label: Entwurf (nicht veröffentlichen), widget: boolean, default: false, required: false }
       - { name: demo, label: Interaktive Demo (Pfad), widget: string, required: false, hint: 'Nur für eingebaute Demos, z. B. /demos/flock/. Normalerweise leer lassen.' }
       - name: legacyPaths

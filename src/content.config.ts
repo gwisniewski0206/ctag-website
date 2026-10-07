@@ -20,6 +20,7 @@ const projects = defineCollection({
     tags: z.array(z.string()).default([]),      // Themen, z. B. Eurorack, DSP, Game
     cover: z.string().optional(),               // Titelbild unter /uploads/…
     links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),   // Code, Video, Bericht …
+    featured: z.boolean().default(false),       // im Slider auf der Startseite zeigen
     demo: z.string().optional(),    // Pfad zu einer interaktiven Demo unter public/demos/
     draft: z.boolean().default(false),
     legacyPaths,

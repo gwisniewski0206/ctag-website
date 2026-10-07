@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import SynthArt from '../components/SynthArt.astro';
 import Waves from '../components/Waves.astro';
+import ProjectSlider from '../components/ProjectSlider.astro';
 import legacyIds from '../lib/legacy-ids.json';
 
 const home = (await getEntry('home', 'home')).data;
@@ -54,6 +55,8 @@ const cardIcons = [
       <svg width="88" height="88" viewBox="0 0 88 88" aria-hidden="true"><path d="M44 6 L54 32 L82 34 L60 51 L68 78 L44 62 L20 78 L28 51 L6 34 L34 32 Z" fill="#F5B700" stroke="#00305D" stroke-width="5" stroke-linejoin="round"></path></svg>
       <p>{home.highlight}</p>
     </section>
+
+    <ProjectSlider />
   </main>
 
   <section class="home-motto">

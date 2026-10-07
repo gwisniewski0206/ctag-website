@@ -104,6 +104,8 @@ Länge 26–4001 Wörter (Median 503), 32 Englisch / 10 Deutsch, „Author“ al
   (eigene Repos + PDFs; fremde Bibliotheken ausgeschlossen, Liste `FOREIGN_REPOS`). Betreuung überall leer (steht nirgends).
 - Projektliste: Kacheln mit Titelbild (sonst gezeichnete Welle in der Akzentfarbe), Themen, Themenfilter (ab 2 Projekten je Thema),
   Suche auch in Kurzfassung/Themen/Team. Vorschaubilder erzeugt `src/lib/thumbs.mjs` beim Build (WebP 640 px unter /thumbs/).
+- Startseite: Projekt-Slider „Aus den Projekten“ unter dem roten Hinweis (`ProjectSlider.astro`), wischbar + Pfeilknöpfe, kein Autoplay.
+  Auswahl über das Feld `featured` („Auf der Startseite zeigen“); ist keins gesetzt, die ersten 12 Projekte mit Titelbild.
 - Projektseite mit Seitenleiste: Infobox aus den Feldern + Inhaltsverzeichnis aus den zwei obersten vorhandenen Überschriftsebenen,
   aktueller Abschnitt markiert; auf dem Handy zugeklappt oben.
 - **Projekt-Blueprint** für Studierende im `README.md`; dieselbe Gliederung ist im CMS als Vorlage für neue Projekte vorausgefüllt.

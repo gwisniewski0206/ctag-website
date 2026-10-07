@@ -1,0 +1,79 @@
+---
+// Projekt-Slider für die Startseite: wischbar (Scroll-Snap), Pfeilknöpfe, kein automatisches Weiterlaufen.
+// Auswahl: Projekte mit „Auf der Startseite zeigen“; ist keins markiert, alle mit Titelbild.
+import { getCollection } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+import Arrow from './Arrow.astro';
+
+const all = (await getCollection('projects', (p) => !p.data.draft)).sort((a, b) => a.data.order - b.data.order);
+const number = new Map(all.map((p, i) => [p.id, i + 1]));
+const featured = all.filter((p) => p.data.featured);
+const slides = (featured.length ? featured : all.filter((p) => p.data.cover)).slice(0, 12);
+---
+{slides.length > 0 && (
+  <section class="pslider" aria-labelledby="pslider-title" data-slider>
+    <div class="pslider-head">
+      <h2 id="pslider-title" class="display">Aus den Projekten</h2>
+      <div class="pslider-nav">
+        <button type="button" class="pslider-btn" data-dir="-1" aria-label="Vorherige Projekte">
+          <svg width="22" height="22" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3 L5 9 L11 15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <button type="button" class="pslider-btn" data-dir="1" aria-label="Nächste Projekte">
+          <svg width="22" height="22" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3 L13 9 L7 15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <a href="/projects/" class="pslider-all">Alle Projekte <Arrow /></a>
+      </div>
+    </div>
+    <ul class="pslider-track" tabindex="0" aria-label="Projekte, seitlich scrollbar">
+      {slides.map((p) => <li><ProjectCard project={p} number={number.get(p.id)} withSummary /></li>)}
+    </ul>
+  </section>
+)}
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-slider]')) {
+    const track = root.querySelector<HTMLElement>('.pslider-track')!;
+    const [prev, next] = [...root.querySelectorAll<HTMLButtonElement>('.pslider-btn')];
+    // Um eine Kachelbreite (inkl. Abstand) weiter
+    const step = () => (track.querySelector('li')?.getBoundingClientRect().width ?? 300) + 20;
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    const sync = () => {
+      prev.disabled = track.scrollLeft < 4;
+      next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+    };
+    track.addEventListener('scroll', sync, { passive: true });
+    addEventListener('resize', sync);
+    sync();
+  }
+</script>
+
+<style>
+  .pslider { display: flex; flex-direction: column; gap: 22px; }
+  .pslider-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+  .pslider-head h2 { font-size: clamp(28px, 4vw, 48px); line-height: 1; }
+  .pslider-nav { display: flex; align-items: center; gap: 8px; }
+  .pslider-btn {
+    display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; cursor: pointer; padding: 0;
+    background: #fff; color: var(--blue); border: var(--line); border-radius: var(--r-tag);
+  }
+  .pslider-btn:hover:not(:disabled) { background: var(--sky); }
+  .pslider-btn:disabled { opacity: 0.35; cursor: default; }
+  .pslider-all {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 16px; margin-left: 8px;
+    background: var(--blue); color: #fff; border-radius: var(--r-tag); font-weight: 700; text-decoration: none;
+  }
+  .pslider-all:hover { color: #fff; background: var(--mid); }
+  .pslider-track {
+    list-style: none; margin: 0; padding: 0 0 12px; display: grid; grid-auto-flow: column;
+    grid-auto-columns: min(340px, 82%); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    scrollbar-width: thin; scrollbar-color: var(--blue) var(--sky);
+  }
+  .pslider-track > li { scroll-snap-align: start; display: flex; }
+  .pslider-track > li > :global(a) { width: 100%; }
+  .pslider-track:focus-visible { outline: 3px solid var(--mid); outline-offset: 4px; }
+  @media (max-width: 640px) {
+    .pslider-btn { display: none; }
+    .pslider-all { margin-left: 0; }
+  }
+</style>
