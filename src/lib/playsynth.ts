@@ -19,7 +19,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
   const base = Math.min(...keyEls.keys());
 
   // Patch: alle Regler 0…1 außer Oktave
-  const p = { wave: 'sawtooth' as OscillatorType, octave: 0, cutoff: 0.55, resonance: 0.3, attack: 0.1, release: 0.35, volume: 0.6, lfoRate: 0.3, lfoDepth: 0.2 };
+  const p = { wave: 'sawtooth' as OscillatorType, octave: 0, cutoff: 0.55, resonance: 0.3, attack: 0.1, release: 0.35, volume: 0.6, lfoRate: 0.3, lfoDepth: 0.2, arpRate: 0.45, arpOct: 1 };
   const cutoffHz = () => expMap(p.cutoff, 80, 12000);
   const q = () => 0.5 + p.resonance * 18;
   const attackSec = () => expMap(p.attack, 0.003, 1.5);
@@ -31,7 +31,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     const key = el.dataset.param as keyof typeof p;
     const min = Number(el.dataset.min), max = Number(el.dataset.max);
     const mark = el.querySelector<SVGLineElement>('.ctl-knob-mark')!;
-    const stepped = key === 'octave';
+    const stepped = key === 'octave' || key === 'arpOct';
     let raw = Number(el.dataset.value);
     const set = (v: number) => {
       raw = clamp(v, min, max);
@@ -88,12 +88,13 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     }
   }
 
-  function noteOn(note: number) {
+  // Stimme ein/aus = nur Klang. Tasten-Markierung und Arpeggiator stecken in press()/release().
+  function voiceOn(note: number) {
     if (!ctx) setupAudio();
     // Nicht auf resume() warten: sonst kann das Loslassen vor dem Anschlag ankommen und die Note hängt
     if (ctx!.state === 'suspended') void ctx!.resume();
     if (voices.has(note)) return;
-    if (voices.size >= 8) noteOff(voices.keys().next().value!);
+    if (voices.size >= 8) voiceOff(voices.keys().next().value!);
     const t = ctx!.currentTime;
     const osc = ctx!.createOscillator();
     osc.type = p.wave;
@@ -109,13 +110,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     osc.connect(filter).connect(vca).connect(master);
     osc.start(t);
     voices.set(note, { osc, filter, vca });
-    keyEls.get(note)?.classList.add('on');
     startScope();
   }
 
-  function noteOff(note: number) {
+  function voiceOff(note: number) {
     const v = voices.get(note);
-    keyEls.get(note)?.classList.remove('on');
     if (!v || !ctx) return;
     voices.delete(note);
     const t = ctx.currentTime;
@@ -125,6 +124,89 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     v.osc.stop(t + releaseSec() + 0.05);
     v.osc.onended = () => { lfoAmount.disconnect(v.filter.detune); v.vca.disconnect(); };
   }
+
+  // ---- Arpeggiator: spielt die gehaltenen Tasten nacheinander, über 1–3 Oktaven ----
+  const arp = { on: false, mode: 'up' as 'up' | 'down' | 'updown' | 'random' };
+  const held = new Set<number>();
+  let arpTimer = 0, arpIndex = -1, arpDir = 1;
+  let arpCurrent: number | null = null;
+  const arpToggle = root.querySelector<HTMLButtonElement>('.psy-arp-toggle')!;
+  const arpModeBtn = root.querySelector<HTMLButtonElement>('.psy-arp-mode')!;
+  const MODES = [
+    { id: 'up', label: '↑ Hoch' }, { id: 'down', label: '↓ Runter' },
+    { id: 'updown', label: '↕ Hoch-runter' }, { id: 'random', label: '? Zufall' },
+  ] as const;
+
+  const arpSequence = () => {
+    const notes = [...held].sort((a, b) => a - b);
+    const seq: number[] = [];
+    for (let o = 0; o < p.arpOct; o++) for (const n of notes) seq.push(n + 12 * o);
+    return seq;
+  };
+  const unmarkArp = (n: number) => keyEls.get(n)?.classList.remove('arp');
+  function arpStep() {
+    const seq = arpSequence();
+    if (!seq.length) { stopArp(); return; }
+    const len = seq.length;
+    if (arp.mode === 'up') arpIndex = (arpIndex + 1) % len;
+    else if (arp.mode === 'down') arpIndex = (arpIndex - 1 + len) % len;
+    else if (arp.mode === 'random') arpIndex = Math.floor(Math.random() * len);
+    else if (len === 1) arpIndex = 0;
+    else {
+      if (arpIndex + arpDir >= len || arpIndex + arpDir < 0) arpDir = -arpDir;
+      arpIndex = clamp(arpIndex + arpDir, 0, len - 1);
+    }
+    if (arpCurrent !== null) { voiceOff(arpCurrent); unmarkArp(arpCurrent); }
+    const note = seq[arpIndex];
+    voiceOn(note);
+    keyEls.get(note)?.classList.add('arp');
+    arpCurrent = note;
+    const interval = 1000 / expMap(p.arpRate, 2, 16);   // 2–16 Noten pro Sekunde
+    // Gate 60 %: Note klingt kurz an, dann Pause bis zum nächsten Schritt
+    window.setTimeout(() => {
+      if (arpCurrent === note) { voiceOff(note); unmarkArp(note); arpCurrent = null; }
+    }, interval * 0.6);
+    arpTimer = window.setTimeout(arpStep, interval);
+  }
+  function startArp() {
+    if (arpTimer) return;
+    arpIndex = arp.mode === 'down' ? 0 : -1;
+    arpDir = 1;
+    arpStep();
+  }
+  function stopArp() {
+    clearTimeout(arpTimer);
+    arpTimer = 0;
+    if (arpCurrent !== null) { voiceOff(arpCurrent); unmarkArp(arpCurrent); arpCurrent = null; }
+  }
+
+  function press(note: number) {
+    keyEls.get(note)?.classList.add('on');
+    if (arp.on) { held.add(note); startArp(); }
+    else voiceOn(note);
+  }
+  function release(note: number) {
+    keyEls.get(note)?.classList.remove('on');
+    if (arp.on) { held.delete(note); if (!held.size) stopArp(); }
+    else voiceOff(note);
+  }
+  function releaseAll() {
+    [...held].forEach(release);
+    for (const n of [...voices.keys()]) { keyEls.get(n)?.classList.remove('on'); voiceOff(n); }
+    stopArp();
+  }
+
+  arpToggle.addEventListener('click', () => {
+    releaseAll();
+    arp.on = !arp.on;
+    arpToggle.setAttribute('aria-pressed', String(arp.on));
+    arpToggle.textContent = arp.on ? 'An' : 'Aus';
+  });
+  arpModeBtn.addEventListener('click', () => {
+    const i = (MODES.findIndex((m) => m.id === arp.mode) + 1) % MODES.length;
+    arp.mode = MODES[i].id;
+    arpModeBtn.textContent = MODES[i].label;
+  });
 
   // ---- Klaviatur: Maus/Finger, mit Gleiten über die Tasten ----
   const pressed = new Map<number, number>();   // pointerId → Note
@@ -139,45 +221,45 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     e.preventDefault();
     keysBox.setPointerCapture(e.pointerId);
     pressed.set(e.pointerId, n);
-    noteOn(n);
+    press(n);
   });
   keysBox.addEventListener('pointermove', (e) => {
     if (!pressed.has(e.pointerId)) return;
     const n = noteAt(e.clientX, e.clientY);
     const was = pressed.get(e.pointerId)!;
     if (n === null || n === was) return;
-    noteOff(was);
+    release(was);
     pressed.set(e.pointerId, n);
-    noteOn(n);
+    press(n);
   });
   const lift = (e: PointerEvent) => {
     const n = pressed.get(e.pointerId);
     if (n === undefined) return;
     pressed.delete(e.pointerId);
-    noteOff(n);
+    release(n);
   };
   keysBox.addEventListener('pointerup', lift);
   keysBox.addEventListener('pointercancel', lift);
   // Tastatur-Bedienung der Tasten (Fokus + Leertaste/Enter)
   for (const [note, el] of keyEls) {
-    el.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); noteOn(note); } });
-    el.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') noteOff(note); });
+    el.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); press(note); } });
+    el.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') release(note); });
   }
 
   // ---- Computertastatur, nur solange der Synth zu sehen ist ----
   let visible = false;
-  new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (!visible) [...voices.keys()].forEach(noteOff); }).observe(root);
+  new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (!visible) releaseAll(); }).observe(root);
   const typing = (t: EventTarget | null) => t instanceof HTMLElement && (t.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName));
   window.addEventListener('keydown', (e) => {
     const off = KEYMAP[e.key.toLowerCase()];
     if (!visible || off === undefined || e.repeat || e.metaKey || e.ctrlKey || e.altKey || typing(e.target)) return;
-    noteOn(base + off);
+    press(base + off);
   });
   window.addEventListener('keyup', (e) => {
     const off = KEYMAP[e.key.toLowerCase()];
-    if (off !== undefined) noteOff(base + off);
+    if (off !== undefined) release(base + off);
   });
-  window.addEventListener('blur', () => [...voices.keys()].forEach(noteOff));
+  window.addEventListener('blur', releaseAll);
 
   // ---- Oszilloskop: echtes Ausgangssignal, im Ruhezustand die gewählte Wellenform ----
   // ---- Spektrum: 24 Bänder, logarithmisch von 40 Hz bis 16 kHz ----
