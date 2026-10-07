@@ -1,0 +1,168 @@
+# Redaktion der CTAG-Website (Sveltia CMS). Jede Änderung wird als Commit im Repository gespeichert;
+# GitHub Actions baut die Seite danach neu (1–2 Minuten bis live).
+backend:
+  name: github
+  repo: gwisniewski0206/ctag-website
+  branch: main
+  # GitHub-Login per Knopf braucht einen kleinen Anmeldedienst (siehe README, Abschnitt "Anmeldung").
+  # Bis dahin: "Mit Zugangstoken anmelden" (persönlicher GitHub-Token).
+  # base_url: https://ctag-cms-auth.<konto>.workers.dev
+  commit_messages:
+    create: 'Neu: {{collection}} „{{slug}}“'
+    update: 'Geändert: {{collection}} „{{slug}}“'
+    delete: 'Gelöscht: {{collection}} „{{slug}}“'
+    uploadMedia: 'Datei hochgeladen: {{path}}'
+    deleteMedia: 'Datei gelöscht: {{path}}'
+
+site_url: https://gwisniewski0206.github.io/ctag-website/
+display_url: https://gwisniewski0206.github.io/ctag-website/
+logo_url: ../favicon.svg
+
+# Bilder und Dateien landen in public/uploads/ und werden auf der Seite als /uploads/… eingebunden
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  # ---------------------------------------------------------------- Projekte
+  - name: projects
+    label: Projekte
+    label_singular: Projekt
+    description: >-
+      Ein Projekt = eine Seite unter /projects/…. Aufbau und Tipps: README → „Projekt-Blueprint“.
+    folder: src/content/projects
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{order}} · {{title}}'
+    sortable_fields: [order, title, year]
+    view_filters:
+      - { label: Entwürfe, field: draft, pattern: true }
+    fields:
+      - { name: title, label: Titel, widget: string, hint: 'Kurz und sprechend, z. B. „MidiFox Eurorack Module“.' }
+      - name: summary
+        label: Kurzfassung
+        widget: text
+        required: false
+        hint: '1–2 Sätze: Was ist das, was kann es? Erscheint groß über dem Text und in Suchmaschinen.'
+      - { name: semester, label: Semester, widget: string, required: false, hint: 'z. B. „WiSe 2025/26“ oder „SoSe 2026“.' }
+      - { name: year, label: Jahr, widget: number, value_type: int, required: false }
+      - name: team
+        label: Team
+        widget: list
+        required: false
+        hint: 'Ein Name pro Eintrag.'
+        field: { name: name, label: Name, widget: string }
+      - { name: supervisor, label: Betreuung, widget: string, required: false }
+      - name: tags
+        label: Themen
+        widget: list
+        required: false
+        hint: 'Stichworte, z. B. Eurorack, DSP, Embedded, Game, KI, Web.'
+        field: { name: tag, label: Thema, widget: string }
+      - { name: cover, label: Titelbild, widget: image, required: false, hint: 'Querformat, mind. 1600 px breit.' }
+      - name: links
+        label: Links
+        widget: list
+        required: false
+        hint: 'Code (GitHub/GitLab), Video, Bericht als PDF, Projektseite …'
+        fields:
+          - { name: label, label: Beschriftung, widget: string, hint: 'z. B. „Code auf GitHub“' }
+          - { name: url, label: Adresse, widget: string }
+      - name: body
+        label: Beschreibung
+        widget: markdown
+        hint: >-
+          Abschnitte mit Überschrift 2 (##), Unterabschnitte mit Überschrift 3 (###) – daraus entsteht das
+          Inhaltsverzeichnis. Ein YouTube-Link oder eine Audio-/Videodatei allein in einer Zeile wird als Player eingebettet.
+        default: |
+          ## Idee
+
+          Worum geht es, und warum? Welches Problem löst das Projekt, was hat euch daran gereizt?
+
+          ## Umsetzung
+
+          ### Hardware
+
+          Aufbau, Bauteile, Schaltplan (als Bild).
+
+          ### Software
+
+          Sprachen, Frameworks, Architektur – kurz, mit Link zum Code.
+
+          ## Ergebnis
+
+          Was ist herausgekommen? Hier Fotos und das Demo-Video (YouTube-Link allein in eine Zeile).
+
+          ## Ausblick
+
+          Was fehlt noch, was würdet ihr als Nächstes bauen?
+      - { name: order, label: Position in der Liste, widget: number, value_type: int, hint: '1 = ganz oben. Neue Projekte: nächste freie Nummer.' }
+      - { name: draft, label: Entwurf (nicht veröffentlichen), widget: boolean, default: false, required: false }
+      - { name: demo, label: Interaktive Demo (Pfad), widget: string, required: false, hint: 'Nur für eingebaute Demos, z. B. /demos/flock/. Normalerweise leer lassen.' }
+      - name: legacyPaths
+        label: Alte Adressen (Umleitungen)
+        widget: list
+        required: false
+        hint: 'Technisch: alte WordPress-Adressen, die hierher umleiten. Nicht ändern.'
+        field: { name: path, label: Pfad, widget: string }
+
+  # ---------------------------------------------------------------- Partner
+  - name: partners
+    label: Partner
+    label_singular: Partner
+    folder: src/content/partners
+    create: true
+    extension: json
+    format: json
+    slug: '{{slug}}'
+    identifier_field: name
+    summary: '{{order}} · {{name}}'
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Name, widget: string }
+      - { name: url, label: Website, widget: string }
+      - { name: label, label: Beschriftung, widget: string, required: false, hint: 'Leer = die Domain der Website.' }
+      - { name: logo, label: Logo, widget: image, required: false }
+      - { name: order, label: Position, widget: number, value_type: int }
+
+  # ---------------------------------------------------------------- Seiten
+  - name: pages
+    label: Seiten
+    files:
+      - { name: impressum, label: Impressum, file: src/content/pages/impressum.md, fields: &pagefields [ { name: title, label: Titel, widget: string }, { name: body, label: Inhalt, widget: markdown }, { name: legacyPaths, label: Alte Adressen, widget: list, required: false, field: { name: path, label: Pfad, widget: string } } ] }
+      - { name: datenschutz, label: Datenschutzerklärung, file: src/content/pages/datenschutzerklarung.md, fields: *pagefields }
+      - { name: makerspace, label: Makerspace, file: src/content/pages/makerspace.md, fields: *pagefields }
+      - { name: lasercutter, label: 'Makerspace › Lasercutter', file: src/content/pages/makerspace/lasercutter-start.md, fields: *pagefields }
+      - { name: lasercutter-basics, label: 'Makerspace › Lasercutter › Basics', file: src/content/pages/makerspace/lasercutter-start/lasercutter-basics-von-der-idee-an-die-wand.md, fields: *pagefields }
+
+  # ---------------------------------------------------------------- Einstellungen
+  - name: settings
+    label: Startseite & Listen
+    files:
+      - name: home
+        label: Startseite
+        file: src/content/settings/home.json
+        format: json
+        fields:
+          - { name: introDe, label: Einleitung (Deutsch), widget: text }
+          - { name: introEn, label: Einleitung (Englisch), widget: text }
+          - name: cards
+            label: Karten
+            widget: list
+            fields:
+              - { name: title, label: Titel, widget: string }
+              - { name: text, label: Text, widget: text }
+          - { name: highlight, label: Roter Hinweis, widget: text }
+          - { name: motto, label: Motto, widget: string }
+      - name: projects
+        label: Projektliste – Opportunities
+        file: src/content/settings/projects.json
+        format: json
+        fields:
+          - { name: opportunitiesTitle, label: Überschrift, widget: string }
+          - name: opportunities
+            label: Themen
+            widget: list
+            field: { name: item, label: Thema, widget: string }
+          - { name: opportunitiesCta, label: Letztes Feld (rot), widget: string }

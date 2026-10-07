@@ -13,7 +13,13 @@ const projects = defineCollection({
     title: z.string(),
     order: z.number(),              // Reihenfolge in der Liste, 1 = oben
     year: z.number().optional(),    // Jahr, aus dem WordPress-Datum übernommen
-    semester: z.string().optional(),
+    semester: z.string().optional(),            // z. B. "WiSe 2025/26"
+    summary: z.string().optional(),             // Kurzfassung in 1–2 Sätzen (Liste, Suche, Vorschau)
+    team: z.array(z.string()).default([]),      // Namen der Studierenden
+    supervisor: z.string().optional(),          // Betreuung
+    tags: z.array(z.string()).default([]),      // Themen, z. B. Eurorack, DSP, Game
+    cover: z.string().optional(),               // Titelbild unter /uploads/…
+    links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),   // Code, Video, Bericht …
     demo: z.string().optional(),    // Pfad zu einer interaktiven Demo unter public/demos/
     draft: z.boolean().default(false),
     legacyPaths,

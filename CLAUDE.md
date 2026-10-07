@@ -91,7 +91,19 @@ npm run dev                # http://localhost:4321
   Freigabe bei jeder Berührung (touchend/click), `navigator.audioSession.type = 'playback'` gegen den Lautlos-Schalter (Safari ≥ 17),
   stummes `<audio>` für ältere iOS. Am echten iPhone noch nicht bestätigt (Stand 08.10.2026).
 
-**Nächste Schritte:** CMS unter `/admin` (Sveltia/Decap + GitHub-Login), README für Redakteure.
+**Redaktion (08.10.2026):** Sveltia CMS 0.220.0 unter `/admin` (`public/admin/index.html`, `config.yml`) – gewählt statt Decap
+(106 vs. 4 Releases in 60 Tagen, gleiches Config-Format). Anmeldung derzeit per Zugriffstoken (klassischer Token mit `repo`,
+solange das Repo persönlich ist). **Offen:** GitHub-Knopf braucht `sveltia-cms-auth` als Cloudflare Worker + OAuth App der Organisation
+→ dann `base_url` in `config.yml`. Ohne `base_url` führt „Mit GitHub anmelden“ ins Leere.
+
+**Projektbeiträge (Analyse 08.10.2026):** kein einheitliches Format – 14 von 42 ohne Überschrift, Ebenen wild gemischt (h1–h5),
+Länge 26–4001 Wörter (Median 503), 32 Englisch / 10 Deutsch, „Author“ als Abschnitt in 7 Beiträgen. Daraus:
+- Neue optionale Felder `summary`, `team`, `supervisor`, `tags`, `cover`, `links` (Schema + CMS); bei den 42 Altbeiträgen noch leer.
+- Projektseite mit Seitenleiste: Infobox aus den Feldern + Inhaltsverzeichnis aus den zwei obersten vorhandenen Überschriftsebenen,
+  aktueller Abschnitt markiert; auf dem Handy zugeklappt oben.
+- **Projekt-Blueprint** für Studierende im `README.md`; dieselbe Gliederung ist im CMS als Vorlage für neue Projekte vorausgefüllt.
+
+**Nächste Schritte:** Anmeldedienst einrichten, Altbeiträge mit Kurzfassung/Team/Links nachpflegen.
 
 ## Erster Schritt (erledigt)
 
