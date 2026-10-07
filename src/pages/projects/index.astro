@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Arrow from '../../components/Arrow.astro';
 import Sequencer from '../../components/Sequencer.astro';
+import Playground from '../../components/Playground.astro';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort((a, b) => a.data.order - b.data.order);
 const page = (await getEntry('projectsPage', 'projects')).data;
@@ -14,18 +15,16 @@ const halves = [projects.slice(0, half), projects.slice(half)];
 ---
 <Base title="Projects">
   <PageHero title="Projects" color="sky" />
-  <main class="wrap projects-main">
-    <div class="filter">
-      <label for="q">Filter projects (<span id="q-count">{projects.length}</span> of {projects.length})</label>
-      <input id="q" type="search" placeholder="e.g. Eurorack, JUCE, Space Game" autocomplete="off">
-    </div>
-
-    {halves.map((list, h) => (
-      <>
-        <div class="grid projects-grid">
-          {list.map((p, j) => {
-            const i = h * half + j;
-            return (
+  <main class="projects-main">
+    <div class="wrap projects-part">
+      <div class="filter">
+        <label for="q">Filter projects (<span id="q-count">{projects.length}</span> of {projects.length})</label>
+        <input id="q" type="search" placeholder="e.g. Eurorack, JUCE, Space Game" autocomplete="off">
+      </div>
+    <div class="grid projects-grid">
+      {halves[0].map((p, j) => {
+        const i = j;
+        return (
               <a href={`/projects/${p.id}/`} class="card-link" style={`box-shadow: inset 0 8px 0 ${accents[i % 3]}; padding-top: 26px`} data-title={p.data.title.toLowerCase()}>
                 <span class="card-top">
                   <span class="num">{String(i + 1).padStart(2, '0')}</span>
@@ -33,21 +32,38 @@ const halves = [projects.slice(0, half), projects.slice(half)];
                 </span>
                 <span class="card-title">{p.data.title}</span>
               </a>
-            );
-          })}
-        </div>
-        {h === 0 && <Sequencer />}
-      </>
-    ))}
-    <p id="q-empty" hidden>Kein Projekt passt zu diesem Filter.</p>
+        );
+      })}
+    </div>
+    </div>
 
-    <section class="opportunities">
-      <h2 class="display">{page.opportunitiesTitle}</h2>
-      <ul>
-        {page.opportunities.map((o) => <li>{o}</li>)}
-        <li class="cta">{page.opportunitiesCta}</li>
-      </ul>
-    </section>
+    <Playground><Sequencer /></Playground>
+
+    <div class="wrap projects-part">
+    <div class="grid projects-grid">
+      {halves[1].map((p, j) => {
+        const i = half + j;
+        return (
+              <a href={`/projects/${p.id}/`} class="card-link" style={`box-shadow: inset 0 8px 0 ${accents[i % 3]}; padding-top: 26px`} data-title={p.data.title.toLowerCase()}>
+                <span class="card-top">
+                  <span class="num">{String(i + 1).padStart(2, '0')}</span>
+                  <Arrow />
+                </span>
+                <span class="card-title">{p.data.title}</span>
+              </a>
+        );
+      })}
+    </div>
+      <p id="q-empty" hidden>Kein Projekt passt zu diesem Filter.</p>
+
+      <section class="opportunities">
+        <h2 class="display">{page.opportunitiesTitle}</h2>
+        <ul>
+          {page.opportunities.map((o) => <li>{o}</li>)}
+          <li class="cta">{page.opportunitiesCta}</li>
+        </ul>
+      </section>
+    </div>
   </main>
 </Base>
 
@@ -70,7 +86,8 @@ const halves = [projects.slice(0, half), projects.slice(half)];
 </script>
 
 <style>
-  .projects-main { padding-top: 40px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 32px; }
+  .projects-part { padding-top: 40px; padding-bottom: 48px; display: flex; flex-direction: column; gap: 32px; }
+  .projects-part:last-child { padding-top: 48px; padding-bottom: 80px; }
   .filter { display: flex; flex-direction: column; gap: 6px; max-width: 420px; }
   .filter label { font-weight: 700; color: var(--blue); }
   .filter input {

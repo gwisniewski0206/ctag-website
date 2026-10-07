@@ -1,6 +1,8 @@
 // Mini-Synth auf der Partnerseite. Signalweg je Note: Oszillator → Tiefpassfilter → VCA (Hüllkurve) → Lautstärke → Ausgang.
 // Ein gemeinsamer LFO bewegt die Filterfrequenz aller Stimmen. Polyfon (bis 8 Stimmen), Web Audio, keine Audiodateien.
+// Beim Scrollen wird nach und nach ein neuer Patch gewürfelt.
 import { onDrag, onKeyTurn } from './drag';
+import { onScrollMotion, reducedMotion } from './scroll-motion';
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const expMap = (v: number, lo: number, hi: number) => lo * Math.pow(hi / lo, v);   // 0…1 → logarithmisch lo…hi
@@ -24,6 +26,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
   const releaseSec = () => expMap(p.release, 0.03, 3);
 
   // ---- Bedienelemente ----
+  const controls: Record<string, { get: () => number; set: (v: number) => void }> = {};
   for (const el of root.querySelectorAll<SVGSVGElement>('.ctl-knob')) {
     const key = el.dataset.param as keyof typeof p;
     const min = Number(el.dataset.min), max = Number(el.dataset.max);
@@ -38,17 +41,18 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
       el.setAttribute('aria-valuenow', String(Math.round(value * 100) / 100));
       applyLive();
     };
+    controls[key] = { get: () => raw, set };
     onDrag(el, (_dx, dy) => set(raw - (dy / 160) * (max - min)));
     onKeyTurn(el, (s) => set(stepped ? Math.round(raw) + s : raw + s * 0.05 * (max - min)));
   }
-  for (const btn of root.querySelectorAll<HTMLButtonElement>('.psy-wave')) {
-    btn.addEventListener('click', () => {
-      root.querySelectorAll('.psy-wave').forEach((b) => b.setAttribute('aria-checked', String(b === btn)));
-      p.wave = btn.dataset.wave as OscillatorType;
-      applyLive();
-      drawIdealScope();
-    });
+  const waveButtons = [...root.querySelectorAll<HTMLButtonElement>('.psy-wave')];
+  function selectWave(btn: HTMLButtonElement) {
+    waveButtons.forEach((b) => b.setAttribute('aria-checked', String(b === btn)));
+    p.wave = btn.dataset.wave as OscillatorType;
+    applyLive();
+    if (!scopeRunning) drawIdealScope();
   }
+  for (const btn of waveButtons) btn.addEventListener('click', () => selectWave(btn));
 
   // ---- Klang ----
   let ctx: AudioContext | null = null;
@@ -208,4 +212,32 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
   function startScope() { if (!scopeRunning) { scopeRunning = true; quiet = 0; requestAnimationFrame(scopeFrame); } }
 
   drawIdealScope();
+
+  // ---- Scrollen würfelt einen neuen Patch ----
+  // Die Regler gleiten mit der Scrollgeschwindigkeit zu zufälligen Zielwerten; etwa alle 500 px wird neu gewürfelt,
+  // manchmal auch die Wellenform. Lautstärke bleibt, wie sie ist. Selbst Eingestelltes ist einfach der neue Ausgangspunkt.
+  if (!reducedMotion) {
+    const RANGES: Record<string, [number, number]> = {
+      octave: [-1, 0.4], cutoff: [0.25, 0.9], resonance: [0, 0.7], attack: [0, 0.45],
+      release: [0.1, 0.7], lfoRate: [0, 0.85], lfoDepth: [0, 0.55],
+    };
+    const roll = () => Object.fromEntries(Object.entries(RANGES).map(([k, [lo, hi]]) => [k, lo + Math.random() * (hi - lo)]));
+    let targets = roll();
+    let travelled = 0;
+    onScrollMotion(root, (_pos, v) => {
+      const speed = Math.abs(v);
+      if (speed < 0.05) return;
+      travelled += speed;
+      if (travelled > 500) {
+        travelled = 0;
+        targets = roll();
+        if (Math.random() < 0.5) selectWave(waveButtons[Math.floor(Math.random() * waveButtons.length)]);
+      }
+      const step = Math.min(1, speed * 0.012);
+      for (const [k, target] of Object.entries(targets)) {
+        const c = controls[k];
+        if (c) c.set(c.get() + (target - c.get()) * step);
+      }
+    });
+  }
 }

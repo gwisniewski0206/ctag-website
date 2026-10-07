@@ -1,0 +1,29 @@
+---
+// Breiter Streifen für die Spielereien (Sequencer, Synth, Oszilloskop): über die ganze Bildschirmbreite, farblich abgesetzt
+// und mit Etikett, damit klar ist, dass das kein Projekt/Partner ist. Steht außerhalb des .wrap-Containers.
+const { hint } = Astro.props;
+---
+<section class="playground">
+  <div class="wrap playground-inner">
+    <p class="playground-label"><span>Zum Ausprobieren</span>{hint && <span class="playground-hint">{hint}</span>}</p>
+    <div class="playground-device"><slot /></div>
+  </div>
+</section>
+
+<style>
+  .playground {
+    border-top: var(--line); border-bottom: var(--line);
+    /* Lochrasterplatine: feines Punktraster auf Hellblau */
+    background-color: var(--sky);
+    background-image: radial-gradient(circle, rgba(0, 48, 93, 0.16) 1.6px, transparent 1.8px);
+    background-size: 18px 18px;
+  }
+  .playground-inner { padding-top: clamp(28px, 4vw, 48px); padding-bottom: clamp(32px, 5vw, 56px); display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .playground-label { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 14px; text-align: center; }
+  .playground-label > span:first-child {
+    padding: 4px 14px; background: var(--blue); color: #fff; border-radius: var(--r-tag); font-weight: 700; font-size: 15px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .playground-hint { font-weight: 600; color: var(--blue); font-size: 16px; }
+  .playground-device { width: 100%; max-width: 860px; }
+</style>

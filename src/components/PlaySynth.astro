@@ -18,7 +18,7 @@ const whites = keys.filter((k) => !k.black);
 <section class="psy" data-playsynth aria-label="Spielbarer Mini-Synthesizer">
   <div class="psy-head">
     <span class="psy-tag">Mini-Synth</span>
-    <p>Patch einstellen, Tasten spielen – auch mit der Computertastatur <kbd>A</kbd> <kbd>W</kbd> <kbd>S</kbd> … <kbd>K</kbd>.</p>
+    <p>Patch einstellen, Tasten spielen – auch per Tastatur <kbd>A</kbd>–<kbd>K</kbd>. Scrollen würfelt einen neuen Patch.</p>
   </div>
 
   <div class="psy-rack">
@@ -31,36 +31,36 @@ const whites = keys.filter((k) => !k.black);
           </button>
         ))}
       </div>
-      <Knob param="octave" label="Oktave" min={-2} max={1} value={0} />
+      <Knob size={48} param="octave" label="Oktave" min={-2} max={1} value={0} />
     </div>
     <span class="psy-patch" aria-hidden="true"></span>
     <div class="psy-mod bg-white">
       <span class="psy-mod-name">Filter</span>
       <div class="psy-knobs">
-        <Knob param="cutoff" label="Cutoff" value={0.55} />
-        <Knob param="resonance" label="Resonanz" value={0.3} />
+        <Knob size={48} param="cutoff" label="Cutoff" value={0.55} />
+        <Knob size={48} param="resonance" label="Resonanz" value={0.3} />
+      </div>
+      <div class="psy-lfo">
+        <span class="psy-mod-name">LFO <small>→ Cutoff</small></span>
+        <div class="psy-knobs">
+          <Knob size={40} param="lfoRate" label="Rate" value={0.3} color="#E8452C" />
+          <Knob size={40} param="lfoDepth" label="Tiefe" value={0.2} color="#E8452C" />
+        </div>
       </div>
     </div>
     <span class="psy-patch" aria-hidden="true"></span>
     <div class="psy-mod bg-sky">
       <span class="psy-mod-name">Hüllkurve</span>
       <div class="psy-knobs">
-        <Knob param="attack" label="Attack" value={0.1} />
-        <Knob param="release" label="Release" value={0.35} />
+        <Knob size={48} param="attack" label="Attack" value={0.1} />
+        <Knob size={48} param="release" label="Release" value={0.35} />
       </div>
     </div>
     <span class="psy-patch" aria-hidden="true"></span>
     <div class="psy-mod psy-out">
       <span class="psy-mod-name">Out</span>
       <svg class="psy-scope" viewBox="0 0 120 64" aria-hidden="true"><path class="psy-scope-line" fill="none" stroke="#F5B700" stroke-width="2.5" stroke-linejoin="round"></path></svg>
-      <Knob param="volume" label="Lautst." value={0.6} color="#E8452C" />
-    </div>
-    <div class="psy-mod bg-red psy-lfo">
-      <span class="psy-mod-name">LFO <small>→ Cutoff</small></span>
-      <div class="psy-knobs">
-        <Knob param="lfoRate" label="Rate" value={0.3} />
-        <Knob param="lfoDepth" label="Tiefe" value={0.2} />
-      </div>
+      <Knob size={48} param="volume" label="Lautst." value={0.6} color="#E8452C" />
     </div>
   </div>
 
@@ -100,7 +100,7 @@ const whites = keys.filter((k) => !k.black);
   .psy-mod-name small { font-family: var(--text); font-stretch: 100%; text-transform: none; font-size: 13px; letter-spacing: 0; }
   .psy-knobs { display: flex; gap: 14px; }
   /* Gezeichnetes Patchkabel zwischen zwei Modulen = Signalweg */
-  .psy-patch { align-self: center; width: 26px; height: 9px; background: var(--amber); border: 3px solid var(--blue); border-left: 0; border-right: 0; position: relative; }
+  .psy-patch { align-self: center; width: 20px; height: 9px; background: var(--amber); border: 3px solid var(--blue); border-left: 0; border-right: 0; position: relative; }
   .psy-patch::before, .psy-patch::after { content: ''; position: absolute; top: -6px; width: 9px; height: 9px; border-radius: 50%; background: #fff; border: 3px solid var(--blue); }
   .psy-patch::before { left: -6px; }
   .psy-patch::after { right: -6px; }
@@ -114,9 +114,9 @@ const whites = keys.filter((k) => !k.black);
   .psy-out { background: #001d3a; color: #fff; }
   .psy-out :global(.knob-label) { color: #fff; }
   .psy-scope { width: 120px; height: 64px; background: var(--blue); border: 2px solid var(--mid); border-radius: 6px; }
-  .psy-lfo { margin-left: 24px; }
+  .psy-lfo { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 12px 10px; border-radius: var(--r-tag); background: var(--red); }
 
-  .psy-keys { position: relative; display: flex; height: 150px; user-select: none; -webkit-user-select: none; touch-action: none; }
+  .psy-keys { position: relative; display: flex; height: 120px; user-select: none; -webkit-user-select: none; touch-action: none; }
   .key { padding: 0; cursor: pointer; border: 2px solid var(--blue); }
   .key.white { flex: 1 1 0; min-width: 0; background: #fff; border-radius: 0 0 6px 6px; margin-right: -2px; }
   .key.black {
@@ -128,11 +128,11 @@ const whites = keys.filter((k) => !k.black);
   .key.on.black { background: var(--red); }
   @media (max-width: 760px) {
     .psy-patch { display: none; }
-    /* Zwei Spalten: OSC | Filter, Hüllkurve | LFO, Out über die ganze Breite */
+    /* Zwei Spalten: OSC | Filter (mit LFO), Hüllkurve | Out */
     .psy-rack { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .psy-mod { padding: 12px 8px 14px; }
-    .psy-lfo { margin-left: 0; }
-    .psy-out { grid-column: 1 / -1; order: 1; flex-direction: row; justify-content: center; gap: 20px; }
+    .psy-lfo { padding: 8px 6px 10px; }
+    .psy-scope { width: 100%; max-width: 120px; }
     .psy-knobs { gap: 8px; }
     .psy-rack :global(.ctl-knob) { width: 46px; height: 46px; }
     .psy-rack :global(.knob-label) { font-size: 13px; }

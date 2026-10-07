@@ -84,7 +84,8 @@ npm run dev                # http://localhost:4321
 - Startseite: Patchkabel mit Seilphysik zum Umstecken, Potis/Fader ziehbar und beim Scrollen bewegt, weiße Potis steuern das Oszilloskop (`synth.ts`); Kartensymbole laufen mit.
 - Unterseiten: Wellen im Titel laufen und modulieren beim Scrollen (`waves.ts`, Antrieb `scroll-motion.ts`).
 - Projects: spielbarer 16-Step-Drumcomputer nach 24 Projekten (`Sequencer.astro`, `sequencer.ts`).
-- Partners: Mini-Synth mit Klaviatur nach 8 Partnern – OSC → Filter → VCA/Hüllkurve, LFO → Cutoff, echtes Oszilloskop (`PlaySynth.astro`, `playsynth.ts`). Ein Mischpult wurde ausprobiert und verworfen.
+- Partners: Mini-Synth mit Klaviatur nach 8 Partnern – OSC → Filter (mit LFO → Cutoff) → VCA/Hüllkurve → Out mit echtem Oszilloskop; Scrollen würfelt einen neuen Patch (`PlaySynth.astro`, `playsynth.ts`). Ein Mischpult wurde ausprobiert und verworfen.
+- Alle Spielereien stehen in einem Streifen über die volle Breite (Hellblau mit Punktraster, Etikett „Zum Ausprobieren“, Gerät max. 860 px), damit sie nicht als Projekt/Partner gelesen werden (`Playground.astro`).
 - Contact: Lissajous-Oszilloskop mit zwei Frequenz-Potis (`Lissajous.astro`, `lissajous.ts`).
 - Klang nur nach Klick/Tastendruck (Web Audio, keine Dateien).
 

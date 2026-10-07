@@ -3,14 +3,15 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Arrow from '../components/Arrow.astro';
 import Lissajous from '../components/Lissajous.astro';
+import Playground from '../components/Playground.astro';
 ---
 <Base title="Contact">
   <PageHero title="Contact" color="amber" />
   <main class="wrap contact-main">
     <a href="/impressum/" class="contact-card bg-sky"><span class="display">Impressum</span><Arrow size={36} /></a>
     <a href="/datenschutzerklarung/" class="contact-card bg-red"><span class="display">Datenschutz&shy;erklärung</span><Arrow size={36} /></a>
-    <Lissajous />
   </main>
+  <Playground><Lissajous /></Playground>
 </Base>
 
 <style>
