@@ -2,11 +2,13 @@
 // Ohne Play folgt das Lauflicht der Scrollposition. Mit Play läuft es im Takt (120 BPM, Sechzehntel)
 // und spielt Kick, Snare, Hat und Clap – erzeugt mit der Web Audio API, ohne Audiodateien.
 import { onScrollMotion, reducedMotion } from './scroll-motion';
+import { audio, armAudioUnlock } from './audio';
 
 const BPM = 120;
 const STEP_SEC = 60 / BPM / 4;
 
 for (const root of document.querySelectorAll<HTMLElement>('[data-sequencer]')) {
+  armAudioUnlock(root);
   const pads = [...root.querySelectorAll<HTMLButtonElement>('.seq-pad')];
   const leds = [...root.querySelectorAll<HTMLElement>('.seq-led')];
   const play = root.querySelector<HTMLButtonElement>('.seq-play')!;
@@ -45,7 +47,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-sequencer]')) {
 
 
   function setupAudio() {
-    ctx = new AudioContext();
+    ctx = audio();
     out = ctx.createGain();
     out.gain.value = 0.6;
     out.connect(ctx.destination);
@@ -107,7 +109,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-sequencer]')) {
 
   play.addEventListener('click', async () => {
     if (!ctx) setupAudio();
-    if (ctx!.state === 'suspended') await ctx!.resume();
+    audio();   // startet den Context bei Bedarf neu (iOS)
     playing = !playing;
     play.setAttribute('aria-pressed', String(playing));
     playLabel.textContent = playing ? 'Stop' : 'Play';

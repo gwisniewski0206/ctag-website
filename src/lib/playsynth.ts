@@ -3,6 +3,7 @@
 // Beim Scrollen wird nach und nach ein neuer Patch gewürfelt.
 import { onDrag, onKeyTurn } from './drag';
 import { onScrollMotion, reducedMotion } from './scroll-motion';
+import { audio, armAudioUnlock } from './audio';
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const expMap = (v: number, lo: number, hi: number) => lo * Math.pow(hi / lo, v);   // 0…1 → logarithmisch lo…hi
@@ -14,6 +15,7 @@ const KEYMAP: Record<string, number> = { a: 0, w: 1, s: 2, e: 3, d: 4, f: 5, t: 
 type Voice = { osc: OscillatorNode; filter: BiquadFilterNode; vca: GainNode };
 
 for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
+  armAudioUnlock(root);
   const scopeLine = root.querySelector<SVGPathElement>('.psy-scope-line')!;
   const keyEls = new Map([...root.querySelectorAll<HTMLButtonElement>('.key')].map((k) => [Number(k.dataset.note), k]));
   const base = Math.min(...keyEls.keys());
@@ -61,7 +63,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
   const voices = new Map<number, Voice>();
 
   function setupAudio() {
-    ctx = new AudioContext();
+    ctx = audio();
     master = ctx.createGain();
     analyser = ctx.createAnalyser();
     analyser.fftSize = 4096;            // feine Auflösung auch bei tiefen Frequenzen
@@ -91,8 +93,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
   // Stimme ein/aus = nur Klang. Tasten-Markierung und Arpeggiator stecken in press()/release().
   function voiceOn(note: number) {
     if (!ctx) setupAudio();
-    // Nicht auf resume() warten: sonst kann das Loslassen vor dem Anschlag ankommen und die Note hängt
-    if (ctx!.state === 'suspended') void ctx!.resume();
+    audio();   // startet den Context bei Bedarf neu (iOS); nicht warten, sonst kann eine Note hängen bleiben
     if (voices.has(note)) return;
     if (voices.size >= 8) voiceOff(voices.keys().next().value!);
     const t = ctx!.currentTime;
