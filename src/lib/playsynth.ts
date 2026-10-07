@@ -40,6 +40,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
       mark.style.transform = `rotate(${(-135 + ((value - min) / (max - min)) * 270).toFixed(1)}deg)`;
       el.setAttribute('aria-valuenow', String(Math.round(value * 100) / 100));
       applyLive();
+      if (stepped && !scopeRunning) drawIdealSpectrum();
     };
     controls[key] = { get: () => raw, set };
     onDrag(el, (_dx, dy) => set(raw - (dy / 160) * (max - min)));
@@ -63,7 +64,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     ctx = new AudioContext();
     master = ctx.createGain();
     analyser = ctx.createAnalyser();
-    analyser.fftSize = 1024;
+    analyser.fftSize = 4096;            // feine Auflösung auch bei tiefen Frequenzen
+    analyser.smoothingTimeConstant = 0.6;
     master.connect(analyser).connect(ctx.destination);
     lfo = ctx.createOscillator();
     lfoAmount = ctx.createGain();   // Tiefe in Cent, wirkt auf filter.detune
@@ -178,7 +180,50 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
   window.addEventListener('blur', () => [...voices.keys()].forEach(noteOff));
 
   // ---- Oszilloskop: echtes Ausgangssignal, im Ruhezustand die gewählte Wellenform ----
+  // ---- Spektrum: 24 Bänder, logarithmisch von 40 Hz bis 16 kHz ----
+  const specBars = [...root.querySelectorAll<SVGRectElement>('.psy-spec-bar')];
+  const F_LO = 40, F_HI = 16000;
+  const bandOf = (f: number) => Math.floor((Math.log(f / F_LO) / Math.log(F_HI / F_LO)) * specBars.length);
+  function drawSpectrum(levels: number[]) {
+    specBars.forEach((bar, i) => {
+      const h = Math.round(clamp(levels[i] ?? 0, 0, 1) * 58);
+      bar.setAttribute('y', String(62 - h));
+      bar.setAttribute('height', String(h));
+    });
+  }
+  // Ruhezustand: Obertöne der gewählten Wellenform auf A3 (220 Hz)
+  function drawIdealSpectrum() {
+    const levels = new Array(specBars.length).fill(0);
+    const f0 = 220 * Math.pow(2, p.octave);
+    for (let n = 1; f0 * n < F_HI; n++) {
+      let a = 0;
+      if (p.wave === 'sine') a = n === 1 ? 1 : 0;
+      else if (p.wave === 'sawtooth') a = 1 / n;
+      else if (p.wave === 'square') a = n % 2 ? 1 / n : 0;
+      else a = n % 2 ? 1 / (n * n) : 0;
+      if (!a) continue;
+      const b = bandOf(f0 * n);
+      if (b >= 0 && b < levels.length) levels[b] = Math.max(levels[b], clamp((20 * Math.log10(a) + 48) / 48, 0, 1));
+    }
+    drawSpectrum(levels);
+  }
+  // Live: höchster Pegel je Band aus der FFT des Analysers
+  let fbuf: Float32Array | null = null;
+  function drawLiveSpectrum() {
+    if (!fbuf) fbuf = new Float32Array(analyser.frequencyBinCount);
+    analyser.getFloatFrequencyData(fbuf);
+    const binHz = ctx!.sampleRate / analyser.fftSize;
+    const levels = new Array(specBars.length).fill(0);
+    for (let i = 1; i < fbuf.length; i++) {
+      const b = bandOf(i * binHz);
+      if (b < 0 || b >= levels.length) continue;
+      levels[b] = Math.max(levels[b], clamp((fbuf[i] + 95) / 75, 0, 1));
+    }
+    drawSpectrum(levels);
+  }
+
   function drawIdealScope() {
+    drawIdealSpectrum();
     const shape = (t: number) => {
       const f = t - Math.floor(t);
       if (p.wave === 'sine') return Math.sin(t * 2 * Math.PI);
@@ -194,6 +239,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
   let quiet = 0;
   const buf = new Float32Array(1024);
   function scopeFrame() {
+    drawLiveSpectrum();
     analyser.getFloatTimeDomainData(buf);
     // An einer steigenden Nullstelle beginnen, damit das Bild steht
     let start = 0;

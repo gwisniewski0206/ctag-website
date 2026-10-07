@@ -59,6 +59,9 @@ const whites = keys.filter((k) => !k.black);
     <span class="psy-patch" aria-hidden="true"></span>
     <div class="psy-mod psy-out">
       <span class="psy-mod-name">Out</span>
+      <svg class="psy-scope psy-spec" viewBox="0 0 120 64" aria-hidden="true">
+        {Array.from({ length: 24 }, (_, i) => <rect class="psy-spec-bar" x={i * 5 + 1} y="62" width="3.6" height="0" rx="1" fill="#F5B700"></rect>)}
+      </svg>
       <svg class="psy-scope" viewBox="0 0 120 64" aria-hidden="true"><path class="psy-scope-line" fill="none" stroke="#F5B700" stroke-width="2.5" stroke-linejoin="round"></path></svg>
       <Knob size={48} param="volume" label="Lautst." value={0.6} color="#E8452C" />
     </div>
@@ -113,6 +116,7 @@ const whites = keys.filter((k) => !k.black);
   .psy-wave[aria-checked='true'] { background: var(--blue); color: var(--amber); }
   .psy-out { background: #001d3a; color: #fff; }
   .psy-out :global(.knob-label) { color: #fff; }
+  .psy-out { gap: 8px; }
   .psy-scope { width: 120px; height: 64px; background: var(--blue); border: 2px solid var(--mid); border-radius: 6px; }
   .psy-lfo { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 12px 10px; border-radius: var(--r-tag); background: var(--red); }
 
