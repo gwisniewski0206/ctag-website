@@ -1,5 +1,8 @@
 // Die gezeichnete Modularsynth auf der Startseite wird lebendig:
 // - Patchkabel hängen physikalisch durch, schwingen und lassen sich umstecken (Stecker ziehen) oder in der Mitte anzupfen.
+//   Ein gegriffenes Kabel wird "angehoben" (nach vorn, mit Schatten) – echte Kabel hängen in verschiedenen Tiefen und
+//   überkreuzen sich in der Vorderansicht. (Kabel-gegen-Kabel-Kollision in 2D wurde ausprobiert und verworfen: sie
+//   erzwingt bei sich überkreuzenden Kabeln straff gespannte, unnatürliche Knoten.)
 // - Beim Scrollen drehen sich die Potis, Fader fahren, das Oszilloskop läuft und der Sequencer schaltet weiter.
 import { onScrollMotion, reducedMotion } from './scroll-motion';
 import { onDrag } from './drag';
@@ -11,6 +14,7 @@ const DAMPING = 0.96;     // kleiner = schwingt schneller aus
 const ITERATIONS = 24;    // mehr = Kabel dehnt sich weniger
 const BEND = 0.35;        // Biegesteifigkeit 0–1: wie stark sich das Kabel gegen Knicke wehrt
 const BEND_MIN = 1.7;     // Abstand übernächster Punkte mindestens BEND_MIN × Segmentlänge (2 = ganz gerade)
+const GLIDE = 14;         // so schnell gleitet ein losgelassener Stecker in seine Buchse (Einheiten pro Bild)
 
 type Pt = { x: number; y: number; px: number; py: number };
 type Jack = { x: number; y: number };
@@ -18,7 +22,9 @@ type Cable = {
   outline: SVGPathElement;
   core: SVGPathElement;
   plugs: [SVGCircleElement, SVGCircleElement];
-  ends: [Jack, Jack];
+  ends: [Jack, Jack];                 // aktuelle Lage der Stecker
+  home: [Jack | null, Jack | null];   // Buchse, in der der Stecker steckt bzw. in die er gleitet; null = in der Hand
+  group: SVGGElement;
   pts: Pt[];
   seg: number;
 };
@@ -69,16 +75,26 @@ function initCables(svg: SVGSVGElement) {
       g.appendChild(c);
       return c;
     }) as [SVGCircleElement, SVGCircleElement];
-    return { outline, core, plugs, ends, pts, seg: length / SEGMENTS };
+    return { outline, core, plugs, ends: [{ ...ends[0] }, { ...ends[1] }], home: ends, group: g, pts, seg: length / SEGMENTS };
   });
 
   const occupied = (j: Jack, except?: { cable: Cable; end: number }) =>
-    cables.some((c) => c.ends.some((e, i) => e === j && !(except && except.cable === c && except.end === i)));
+    cables.some((c) => c.home.some((e, i) => e === j && !(except && except.cable === c && except.end === i)));
 
   // Ziehen: entweder ein Stecker (Ende) oder ein Punkt in der Mitte des Kabels
   let drag: { cable: Cable; index: number; x: number; y: number; pointer: number } | null = null;
 
+  const gliding = () => cables.some((c) => c.home.some((h, e) => h && (c.ends[e].x !== h.x || c.ends[e].y !== h.y)));
   function step() {
+    // Losgelassene Stecker gleiten in ihre Buchse
+    for (const c of cables) {
+      c.home.forEach((h, e) => {
+        if (!h) return;
+        const dx = h.x - c.ends[e].x, dy = h.y - c.ends[e].y, d = Math.hypot(dx, dy);
+        if (d === 0) return;
+        c.ends[e] = d <= GLIDE ? { x: h.x, y: h.y } : { x: c.ends[e].x + (dx / d) * GLIDE, y: c.ends[e].y + (dy / d) * GLIDE };
+      });
+    }
     for (const c of cables) {
       const n = c.pts.length - 1;
       for (let i = 1; i < n; i++) {
@@ -138,7 +154,7 @@ function initCables(svg: SVGSVGElement) {
   function loop() {
     step(); draw();
     const energy = cables.reduce((s, c) => s + c.pts.reduce((t, p) => t + Math.abs(p.x - p.px) + Math.abs(p.y - p.py), 0), 0);
-    calm = energy < 0.05 && !drag ? calm + 1 : 0;
+    calm = energy < 0.05 && !drag && !gliding() ? calm + 1 : 0;
     if (calm > 30) { running = false; return; }
     requestAnimationFrame(loop);
   }
@@ -171,10 +187,14 @@ function initCables(svg: SVGSVGElement) {
     svg.setPointerCapture(e.pointerId);
     drag = { ...(hit as { cable: Cable; index: number }), x: p.x, y: p.y, pointer: e.pointerId };
     if (drag.index === 0 || drag.index === drag.cable.pts.length - 1) {
-      // Stecker gezogen: Ende folgt dem Finger
+      // Stecker gezogen: gehört keiner Buchse mehr, das Ende folgt dem Finger
       const end = drag.index === 0 ? 0 : 1;
+      drag.cable.home[end] = null;
       drag.cable.ends[end] = { x: p.x, y: p.y };
     }
+    // Kabel anheben: nach vorn holen, Schatten an
+    drag.cable.group.parentElement!.appendChild(drag.cable.group);
+    drag.cable.group.classList.add('lifted');
     svg.classList.add('dragging');
     wake();
   });
@@ -200,10 +220,11 @@ function initCables(svg: SVGSVGElement) {
     if (index === 0 || index === n) {
       const end = index === 0 ? 0 : 1;
       // In die nächste freie Buchse stecken
-      const free = jacks.filter((j) => !occupied(j, { cable, end }) && j !== cable.ends[1 - end]);
+      const free = jacks.filter((j) => !occupied(j, { cable, end }) && j !== cable.home[1 - end]);
       const target = free.reduce((b, j) => (Math.hypot(j.x - drag!.x, j.y - drag!.y) < Math.hypot(b.x - drag!.x, b.y - drag!.y) ? j : b));
-      cable.ends[end] = target;
+      cable.home[end] = target;   // der Stecker gleitet hinein (step)
     }
+    cable.group.classList.remove('lifted');
     drag = null;
     svg.classList.remove('dragging');
     wake();
