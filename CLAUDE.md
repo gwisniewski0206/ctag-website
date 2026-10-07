@@ -42,7 +42,11 @@ mit richtigem Login pflegen – wie WordPress, aber ohne Plugins/Themes/Ballast.
   `midifox` enthält 2 tote `[icon …]`-Shortcodes als Text.
 - **Downloads:** 14 PDF, 13 WAV, 6 MP4, 1 MOV, 1 ZIP, 1 RAR.
 - Die Startseite (14.04.) und das Impressum (21.04.2026) wurden dieses Jahr noch geändert – also hat noch jemand Zugriff. Wer, ist unbekannt.
-  Nicht blockierend. Für den Umzug zählt, wer **Domain/DNS** von creative-technologies.de verwaltet – das muss vor dem Livegang geklärt sein.
+  Nicht blockierend.
+- **Domain/DNS** verwaltet ein Professor des Nutzers. Er bekommt **nur das fertige Übergabepaket**, keine Zwischenstände.
+  Daraus folgt: Alles muss vorher ohne die Domain laufen und testbar sein (GitHub-Pages-Adresse). Der Schritt auf seiner Seite
+  muss eine kurze, vollständige Anleitung sein (genaue DNS-Einträge; MX/Mail-Einträge nicht anfassen). Der GitHub-Login
+  fürs CMS darf nicht von etwas abhängen, das nur er einrichten kann.
 
 ## Erster Schritt
 
@@ -73,6 +77,9 @@ Ein CMS mit eigenem Server (Directus, Payload) wurde verworfen, weil es dauerhaf
   `pages` (Home, Contact, Impressum, Datenschutz), `opportunities` (Text, Reihenfolge), `settings` (Motto, Header-Bilder, Logo).
 - **Import:** Skript, das `content/raw/` in die Markdown-Dateien überführt. Alte URLs als Redirects erhalten (Projektseiten liegen teils unter
   `/slug/`, teils unter `/projects/slug/`, eine unter `/?p=128`).
+  **Entschieden 07.10.2026:** Alle Projekte liegen neu einheitlich unter `/projects/<slug>/`. Jede alte Adresse bekommt eine
+  Umleitungsseite, die der Build automatisch aus den Importdaten erzeugt (GitHub Pages kann keine Server-Redirects).
+  `/?p=128` per kleinem JavaScript auf der Startseite. Weggefallene Seiten (`basics`, `service`, `inspiration`, `calendar`) → `/makerspace/`.
 
 ## Design
 
