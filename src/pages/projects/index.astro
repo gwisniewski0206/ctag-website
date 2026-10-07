@@ -3,10 +3,14 @@ import { getCollection, getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Arrow from '../../components/Arrow.astro';
+import Sequencer from '../../components/Sequencer.astro';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort((a, b) => a.data.order - b.data.order);
 const page = (await getEntry('projectsPage', 'projects')).data;
 const accents = ['var(--amber)', 'var(--blue)', 'var(--red)'];
+// Der Sequencer steht zwischen zwei Hälften der Liste; geteilt auf ein Vielfaches von 12, damit bei 2, 3 und 4 Spalten keine Reihe halb leer bleibt
+const half = Math.ceil(projects.length / 2 / 12) * 12;
+const halves = [projects.slice(0, half), projects.slice(half)];
 ---
 <Base title="Projects">
   <PageHero title="Projects" color="sky" />
@@ -16,17 +20,25 @@ const accents = ['var(--amber)', 'var(--blue)', 'var(--red)'];
       <input id="q" type="search" placeholder="e.g. Eurorack, JUCE, Space Game" autocomplete="off">
     </div>
 
-    <div class="grid projects-grid" id="project-grid">
-      {projects.map((p, i) => (
-        <a href={`/projects/${p.id}/`} class="card-link" style={`box-shadow: inset 0 8px 0 ${accents[i % 3]}; padding-top: 26px`} data-title={p.data.title.toLowerCase()}>
-          <span class="card-top">
-            <span class="num">{String(i + 1).padStart(2, '0')}</span>
-            <Arrow />
-          </span>
-          <span class="card-title">{p.data.title}</span>
-        </a>
-      ))}
-    </div>
+    {halves.map((list, h) => (
+      <>
+        <div class="grid projects-grid">
+          {list.map((p, j) => {
+            const i = h * half + j;
+            return (
+              <a href={`/projects/${p.id}/`} class="card-link" style={`box-shadow: inset 0 8px 0 ${accents[i % 3]}; padding-top: 26px`} data-title={p.data.title.toLowerCase()}>
+                <span class="card-top">
+                  <span class="num">{String(i + 1).padStart(2, '0')}</span>
+                  <Arrow />
+                </span>
+                <span class="card-title">{p.data.title}</span>
+              </a>
+            );
+          })}
+        </div>
+        {h === 0 && <Sequencer />}
+      </>
+    ))}
     <p id="q-empty" hidden>Kein Projekt passt zu diesem Filter.</p>
 
     <section class="opportunities">
@@ -41,7 +53,7 @@ const accents = ['var(--amber)', 'var(--blue)', 'var(--red)'];
 
 <script>
   const input = document.getElementById('q') as HTMLInputElement;
-  const cards = [...document.querySelectorAll<HTMLElement>('#project-grid > a')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.projects-grid > a')];
   const count = document.getElementById('q-count')!;
   const empty = document.getElementById('q-empty')!;
   input.addEventListener('input', () => {

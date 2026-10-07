@@ -7,9 +7,9 @@ import legacyIds from '../lib/legacy-ids.json';
 
 const home = (await getEntry('home', 'home')).data;
 const cardIcons = [
-  '<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#F5B700"></rect><path d="M8 32 q8 -28 16 0 t16 0 t16 0" fill="none" stroke="#00305D" stroke-width="5" stroke-linecap="round"></path></svg>',
-  '<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#DCE8F5"></rect><circle cx="23" cy="27" r="10" fill="#FFFFFF" stroke="#00305D" stroke-width="4"></circle><circle cx="41" cy="27" r="10" fill="#F5B700" stroke="#00305D" stroke-width="4"></circle><circle cx="32" cy="41" r="10" fill="#E8452C" stroke="#00305D" stroke-width="4"></circle></svg>',
-  '<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#E8452C"></rect><circle cx="32" cy="32" r="18" fill="#00305D"></circle><line x1="32" y1="32" x2="42" y2="20" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"></line></svg>',
+  '<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#F5B700"></rect><path class="icon-wave" d="M8 32 q8 -28 16 0 t16 0 t16 0" fill="none" stroke="#00305D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+  '<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#DCE8F5"></rect><g class="icon-dots"><circle cx="23" cy="27" r="10" fill="#FFFFFF" stroke="#00305D" stroke-width="4"></circle><circle cx="41" cy="27" r="10" fill="#F5B700" stroke="#00305D" stroke-width="4"></circle><circle cx="32" cy="41" r="10" fill="#E8452C" stroke="#00305D" stroke-width="4"></circle></g></svg>',
+  '<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#E8452C"></rect><circle cx="32" cy="32" r="18" fill="#00305D"></circle><line class="icon-knob" x1="32" y1="32" x2="42" y2="20" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"></line></svg>',
 ];
 ---
 <Base description={home.introDe}>
@@ -66,6 +66,27 @@ const cardIcons = [
     </div>
   </section>
 </Base>
+
+<script>
+  // Kartensymbole laufen beim Scrollen mit: Welle, kreisende Punkte, Poti
+  import { onScrollMotion, reducedMotion } from '../lib/scroll-motion';
+  const wave = document.querySelector<SVGPathElement>('.icon-wave');
+  const dots = document.querySelector<SVGGElement>('.icon-dots');
+  const knob = document.querySelector<SVGLineElement>('.icon-knob');
+  if (!reducedMotion && wave && dots && knob) {
+    onScrollMotion(wave.closest('.home-cards')!, (pos) => {
+      let d = '';
+      for (let x = 8; x <= 56; x += 1.5) {
+        const y = 32 - 13 * Math.sin(((x - 8) / 32) * 2 * Math.PI - pos * 0.03) * (0.75 + 0.25 * Math.sin(pos * 0.01));
+        d += `${d ? ' L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
+      }
+      wave.setAttribute('d', d);
+      // Schwerpunkt der drei Kreise liegt bei (32, 31.7)
+      dots.setAttribute('transform', `rotate(${(pos * 0.4).toFixed(1)} 32 31.7)`);
+      knob.setAttribute('transform', `rotate(${(pos * -0.6).toFixed(1)} 32 32)`);
+    });
+  }
+</script>
 
 <style>
   .home-hero { display: flex; flex-wrap: wrap; border-bottom: var(--line); }

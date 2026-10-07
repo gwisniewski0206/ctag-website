@@ -4,10 +4,12 @@
 import { onScrollMotion, reducedMotion } from './scroll-motion';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const SEGMENTS = 18;
-const GRAVITY = 0.45;
-const DAMPING = 0.985;
-const ITERATIONS = 14;
+const SEGMENTS = 16;
+const GRAVITY = 0.4;
+const DAMPING = 0.96;     // kleiner = schwingt schneller aus
+const ITERATIONS = 24;    // mehr = Kabel dehnt sich weniger
+const BEND = 0.35;        // Biegesteifigkeit 0–1: wie stark sich das Kabel gegen Knicke wehrt
+const BEND_MIN = 1.7;     // Abstand übernächster Punkte mindestens BEND_MIN × Segmentlänge (2 = ganz gerade)
 
 type Pt = { x: number; y: number; px: number; py: number };
 type Jack = { x: number; y: number };
@@ -101,6 +103,19 @@ function initCables(svg: SVGSVGElement) {
           const bFixed = i + 1 === n || (drag?.cable === c && drag.index === i + 1);
           if (!aFixed) { a.x += dx * diff * (bFixed ? 2 : 1); a.y += dy * diff * (bFixed ? 2 : 1); }
           if (!bFixed) { b.x -= dx * diff * (aFixed ? 2 : 1); b.y -= dy * diff * (aFixed ? 2 : 1); }
+        }
+        // Biegesteifigkeit: übernächste Punkte nicht zu nah zusammenkommen lassen
+        for (let i = 0; i < n - 1; i++) {
+          const a = c.pts[i], b = c.pts[i + 2];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy) || 0.001;
+          const min = c.seg * BEND_MIN;
+          if (dist >= min) continue;
+          const diff = ((dist - min) / dist / 2) * BEND;
+          const aFixed = i === 0 || (drag?.cable === c && drag.index === i);
+          const bFixed = i + 2 === n || (drag?.cable === c && drag.index === i + 2);
+          if (!aFixed) { a.x += dx * diff; a.y += dy * diff; }
+          if (!bFixed) { b.x -= dx * diff; b.y -= dy * diff; }
         }
       }
     }
