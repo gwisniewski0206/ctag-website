@@ -1,7 +1,14 @@
 ---
 title: "USB Audio Class 2 / I2S Bridge"
-order: 27
+summary: "Eine USB-Audio-Class-2-Bridge, die einen PC direkt mit dem Codec der Soundkarte face2|4 verbindet."
 year: 2016
+team:
+  - "Florian Haberkorn"
+  - "Thomas Pöffel"
+tags:
+  - "Embedded"
+  - "Hardware"
+order: 27
 legacyPaths:
   - "/linux-based-low-latency-multichannel-audio-system-2/usb-audio-class-2-i2s-bridge/"
 ---

@@ -1,7 +1,11 @@
 ---
 title: "Procedural Generation / Space Game"
-order: 41
+summary: "First steps of the Space Game: the map format for solar systems and how maps are generated, stored and loaded at runtime."
 year: 2015
+tags:
+  - "Game"
+  - "Web"
+order: 41
 legacyPaths:
   - "/procedural-generation/"
 ---

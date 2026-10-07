@@ -1,7 +1,20 @@
 ---
 title: "Teensy audio library extension for CTAG face 2|4 including Freeverb reverb fx"
-order: 22
+summary: "Connects a Teensy 3.6 to the CTAG face2|4 sound card and extends the Teensy audio library, including a Freeverb reverb."
 year: 2018
+tags:
+  - "Embedded"
+  - "DSP"
+links:
+  - label: "Code: ctag-face-2-4"
+    url: "https://github.com/ctag-fh-kiel/ctag-face-2-4"
+  - label: "Code: ad1938_codec"
+    url: "https://github.com/yasmeensultana/ad1938_codec"
+  - label: "Code: freeverb"
+    url: "https://github.com/yasmeensultana/freeverb"
+  - label: "Dokument (PDF)"
+    url: "/uploads/2018/01/Open-Source-Audio-Platform-for-Embedded-Systems.pdf"
+order: 22
 legacyPaths:
   - "/teensy-audio-library-extension-for-ctag-face-24-including-freeverb-reverb-fx/"
 ---

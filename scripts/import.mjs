@@ -22,6 +22,8 @@ const write = async (f, s) => { await mkdir(path.dirname(f), { recursive: true }
 const pages = await readJson(path.join(RAW, 'pages.json'));
 const projectList = await readJson('content/projects.json');
 const partnerList = await readJson('content/partners.json');
+// Nachgepflegte Felder (Kurzfassung, Team, Themen, Titelbild …) – siehe content/project-meta.json
+const projectMeta = await readJson('content/project-meta.json');
 const byId = new Map(pages.map((p) => [p.id, p]));
 
 // ---------- Adressen ----------
@@ -165,10 +167,33 @@ async function toMarkdown(html) {
 }
 
 const yamlStr = (s) => JSON.stringify(s);
+const yamlItem = (x) => typeof x === 'object'
+  ? '  - ' + Object.entries(x).map(([k, v]) => `${k}: ${yamlStr(v)}`).join('\n    ')
+  : `  - ${yamlStr(x)}`;
 const frontmatter = (obj) => '---\n' + Object.entries(obj)
-  .filter(([, v]) => v !== undefined && !(Array.isArray(v) && v.length === 0))
-  .map(([k, v]) => Array.isArray(v) ? `${k}:\n${v.map((x) => `  - ${yamlStr(x)}`).join('\n')}` : `${k}: ${typeof v === 'string' ? yamlStr(v) : v}`)
+  .filter(([, v]) => v !== undefined && v !== null && !(Array.isArray(v) && v.length === 0))
+  .map(([k, v]) => Array.isArray(v) ? `${k}:\n${v.map(yamlItem).join('\n')}` : `${k}: ${typeof v === 'string' ? yamlStr(v) : v}`)
   .join('\n') + '\n---\n\n';
+
+// Links für die Infobox aus dem Beitrag: eigene Code-Repositorys und hochgeladene PDFs.
+// Fremde Bibliotheken, auf die nur verwiesen wird, gehören nicht dazu.
+const FOREIGN_REPOS = /^(github\.com\/(NVlabs|jordipons|beagleboard|bondagit|felixpalmer|borgestrand)\/)/i;
+function linksFromBody(md) {
+  const links = [];
+  const repos = [...new Set([...md.matchAll(/https?:\/\/(github\.com|gitlab\.[a-z.-]+)\/([\w.-]+)\/([\w.-]+)/g)]
+    .map((m) => `${m[1]}/${m[2]}/${m[3].replace(/\.git$/, '')}`))].filter((r) => !FOREIGN_REPOS.test(r));
+  for (const r of repos.slice(0, 4)) {
+    const [host, , repo] = r.split('/');
+    links.push({ label: `Code: ${repo}${host.startsWith('gitlab') ? ' (GitLab)' : ''}`, url: `https://${r}` });
+  }
+  const pdfs = [...new Set([...md.matchAll(/\]\((\/uploads\/[^)\s]+\.pdf)\)/gi)].map((m) => m[1]))];
+  for (const pdf of pdfs.slice(0, 3)) {
+    const name = decodeURI(pdf.split('/').pop());
+    const kind = /present|defen[cs]e|vortrag/i.test(name) ? 'Präsentation' : /thesis|bachelor|master|bericht|report|projekt/i.test(name) ? 'Bericht' : 'Dokument';
+    links.push({ label: `${kind} (PDF)`, url: pdf });
+  }
+  return links;
+}
 const decodeEntities = (s) => s.replace(/&#8211;/g, '–').replace(/&#8212;/g, '—').replace(/&#038;|&amp;/g, '&')
   .replace(/&#8220;|&#8221;/g, '"').replace(/&#8216;|&#8217;/g, '’').replace(/&#8230;/g, '…').replace(/&nbsp;/g, ' ')
   .replace(/&#(\d+);/g, (m, n) => String.fromCodePoint(Number(n)));
@@ -229,10 +254,19 @@ await rm(path.join(PUBLIC, 'demos'), { recursive: true, force: true });
 
 const redirects = [];
 for (const p of projects) {
+  const meta = projectMeta[p.slug] ?? {};
+  const body = await toMarkdown(p.page.content.rendered);
   const fm = {
     title: p.title,
-    order: p.order,
+    summary: meta.summary,
+    semester: meta.semester,
     year: Number(p.page.date.slice(0, 4)),
+    team: meta.team ?? [],
+    supervisor: meta.supervisor,
+    tags: meta.tags ?? [],
+    cover: meta.cover,
+    links: meta.links ?? linksFromBody(body),
+    order: p.order,
     legacyPaths: legacyFor(p.page, `/projects/${p.slug}/`),
   };
   if (DEMOS[p.page.slug]) {
@@ -240,9 +274,11 @@ for (const p of projects) {
     fm.demo = demo.path;
     console.log(`  Demo ${demo.path} (${demo.width}×${demo.height}, ${demo.demoLength} Zeichen)`);
   }
-  await write(path.join(OUT, 'projects', `${p.slug}.md`), frontmatter(fm) + await toMarkdown(p.page.content.rendered));
+  await write(path.join(OUT, 'projects', `${p.slug}.md`), frontmatter(fm) + body);
 }
 console.log(`${projects.length} Projekte`);
+const unknownMeta = Object.keys(projectMeta).filter((k) => !k.startsWith('_') && !projects.some((p) => p.slug === k));
+if (unknownMeta.length) console.warn('  ! project-meta.json: unbekannte Projekte ' + unknownMeta.join(', '));
 
 for (const [np, id] of Object.entries(KEEP_PAGES)) {
   const page = byId.get(id);

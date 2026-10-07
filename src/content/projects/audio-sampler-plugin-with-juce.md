@@ -1,7 +1,16 @@
 ---
 title: "Open Source Drum Sampler based on JUCE, learn how to use JUCE"
-order: 19
+summary: "CTAG Drum Sampler: a VST plugin built with JUCE that plays drum samples in five modes – a hands-on way to learn the framework."
 year: 2018
+team:
+  - "Niklas Wantrupp"
+tags:
+  - "Plugin"
+  - "DSP"
+links:
+  - label: "Code: CTAG-JUCE-Sampler"
+    url: "https://github.com/NiklasWan/CTAG-JUCE-Sampler"
+order: 19
 legacyPaths:
   - "/audio-sampler-plugin-with-juce/"
 ---

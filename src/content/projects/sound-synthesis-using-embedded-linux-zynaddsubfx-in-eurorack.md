@@ -1,7 +1,14 @@
 ---
 title: "Sound Synthesis using Embedded Linux: zynaddsubfx in Eurorack"
-order: 26
+summary: "An Odroid U3 with a real-time kernel runs the ZynAddSubFX synthesizer with under 10 ms latency – packed into a Eurorack module."
 year: 2016
+tags:
+  - "Eurorack"
+  - "Embedded"
+  - "Linux"
+  - "Synthesis"
+cover: "/uploads/2016/10/IMG_0019.jpg"
+order: 26
 legacyPaths:
   - "/sound-synthesis-using-embedded-linux-zynaddsubfx-in-eurorack/"
 ---

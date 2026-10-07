@@ -1,7 +1,13 @@
 ---
 title: "House of Haus"
-order: 14
+summary: "A painted house whose twelve windows are touch sensors in conductive paint: touching them starts loops in Ableton Live, so visitors build an electronic track together."
 year: 2020
+tags:
+  - "Interactive"
+  - "Music"
+  - "Hardware"
+cover: "/uploads/2020/01/DSCF0742.jpg"
+order: 14
 ---
 
 ### Introduction

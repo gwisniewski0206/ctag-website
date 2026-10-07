@@ -1,7 +1,21 @@
 ---
 title: "Beagle Boom, a Eurorack Sampler based on Beaglebone SBC with Freesound.org online access"
-order: 20
+summary: "A Eurorack sampler based on the BeagleBone that searches, downloads and plays sounds from freesound.org, controlled by MIDI or CV/gate."
 year: 2018
+team:
+  - "Torben Hartmann"
+  - "Lasse Kathke"
+  - "Friedemann Stoffregen"
+tags:
+  - "Eurorack"
+  - "Embedded"
+  - "Sampler"
+links:
+  - label: "Code: beagle-boom"
+    url: "https://github.com/ctag-fh-kiel/beagle-boom"
+  - label: "Alle Repositorys (GitHub)"
+    url: "https://github.com/BeagleBoom"
+order: 20
 ---
 
 Beagle Boom is a Eurorack Sampler based on the Beaglebone single-board computer.

@@ -1,7 +1,20 @@
 ---
 title: "Setup and evaluation of a media IP real-time system"
-order: 1
+summary: "Setting up an audio-over-IP chain on standard Ethernet hardware and measuring how close to real time it gets."
 year: 2021
+team:
+  - "Anton Bracke"
+tags:
+  - "Audio over IP"
+  - "Linux"
+links:
+  - label: "Code: aes67-test-suite"
+    url: "https://github.com/anbraten/aes67-test-suite"
+  - label: "Code: beagle-bone-builder"
+    url: "https://github.com/anbraten/beagle-bone-builder"
+  - label: "Bericht (PDF)"
+    url: "/uploads/2021/09/ThesisBracke2021.pdf"
+order: 1
 legacyPaths:
   - "/setup-and-evaluation-of-an-media-ip-real-time-system/"
 ---

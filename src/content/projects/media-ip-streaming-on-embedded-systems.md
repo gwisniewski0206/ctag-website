@@ -1,7 +1,19 @@
 ---
 title: "Media IP Streaming on Embedded Systems"
-order: 9
+summary: "Real-time audio streaming over Ethernet for BeagleBone AI and Black, implementing parts of the AVB protocol – a Google Summer of Code 2020 project."
 year: 2020
+team:
+  - "Niklas Wantrupp"
+tags:
+  - "Audio over IP"
+  - "Embedded"
+  - "Linux"
+links:
+  - label: "Code: linux"
+    url: "https://github.com/NiklasWan/linux"
+  - label: "Dokument (PDF)"
+    url: "/uploads/2020/10/Wantrupp_928817_PROMIE.pdf"
+order: 9
 legacyPaths:
   - "/media-ip-streaming-on-embedded-systems/"
 ---

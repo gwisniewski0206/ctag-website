@@ -58,7 +58,7 @@ collections:
         label: Themen
         widget: list
         required: false
-        hint: 'Stichworte, z. B. Eurorack, DSP, Embedded, Game, KI, Web.'
+        hint: 'Vorhandene Themen bevorzugen: Embedded, Web, Hardware, Game, DSP, Linux, AI, Open Source, Audio over IP, Eurorack, Synthesis, Light, Visuals, Plugin, Robotics, Sampler. Ab 2 Projekten erscheint ein Thema im Filter der Projektliste.'
         field: { name: tag, label: Thema, widget: string }
       - { name: cover, label: Titelbild, widget: image, required: false, hint: 'Querformat, mind. 1600 px breit.' }
       - name: links

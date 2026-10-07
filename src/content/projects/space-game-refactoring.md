@@ -1,7 +1,16 @@
 ---
 title: "Space-game refactoring"
-order: 24
+summary: "Mehrere getrennte Space-Game-Projekte zusammengeführt, aktualisiert und um eine KI sowie ein Ressourcensystem erweitert."
 year: 2018
+tags:
+  - "Game"
+  - "AI"
+  - "Web"
+cover: "/uploads/2017/11/main_view.png"
+links:
+  - label: "Code: space-refactor (GitLab)"
+    url: "https://gitlab.iue.fh-kiel.de/ctag/space-refactor"
+order: 24
 legacyPaths:
   - "/space-game-refactoring/"
 ---

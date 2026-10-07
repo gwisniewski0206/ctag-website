@@ -1,7 +1,23 @@
 ---
 title: "Synchronized real time audio streaming over ethernet (AVB on Beaglebone)"
-order: 23
+summary: "Study, implementation and evaluation of AVB for synchronised real-time audio streaming over Ethernet on BeagleBoard hardware and Linux."
 year: 2018
+tags:
+  - "Audio over IP"
+  - "Embedded"
+  - "Linux"
+links:
+  - label: "Code: gPTPd"
+    url: "https://github.com/induarun9086/gPTPd"
+  - label: "Code: beagleboard-linux"
+    url: "https://github.com/induarun9086/beagleboard-linux"
+  - label: "Code: avbtest"
+    url: "https://github.com/induarun9086/avbtest"
+  - label: "Dokument (PDF)"
+    url: "/uploads/2018/01/Synchronized_real_time_audio_streaming_over_Ethernet_in_embedded_systems-33.pdf"
+  - label: "Präsentation (PDF)"
+    url: "/uploads/2018/01/Master-Defence-4.pdf"
+order: 23
 legacyPaths:
   - "/synchronized-real-time-audio-streaming-over-ethernet/"
 ---

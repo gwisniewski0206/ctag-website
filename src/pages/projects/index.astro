@@ -2,13 +2,16 @@
 import { getCollection, getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import Arrow from '../../components/Arrow.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 import Sequencer from '../../components/Sequencer.astro';
 import Playground from '../../components/Playground.astro';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort((a, b) => a.data.order - b.data.order);
 const page = (await getEntry('projectsPage', 'projects')).data;
-const accents = ['var(--amber)', 'var(--blue)', 'var(--red)'];
+// Themen für den Filter, nach Häufigkeit (nur Themen mit mindestens 2 Projekten)
+const tagCount = new Map<string, number>();
+for (const p of projects) for (const t of p.data.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+const filterTags = [...tagCount].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([t]) => t);
 // Der Sequencer steht zwischen zwei Hälften der Liste; geteilt auf ein Vielfaches von 12, damit bei 2, 3 und 4 Spalten keine Reihe halb leer bleibt
 const half = Math.ceil(projects.length / 2 / 12) * 12;
 const halves = [projects.slice(0, half), projects.slice(half)];
@@ -21,39 +24,23 @@ const halves = [projects.slice(0, half), projects.slice(half)];
         <label for="q">Filter projects (<span id="q-count">{projects.length}</span> of {projects.length})</label>
         <input id="q" type="search" placeholder="e.g. Eurorack, JUCE, Space Game" autocomplete="off">
       </div>
-    <div class="grid projects-grid">
-      {halves[0].map((p, j) => {
-        const i = j;
-        return (
-              <a href={`/projects/${p.id}/`} class="card-link" style={`box-shadow: inset 0 8px 0 ${accents[i % 3]}; padding-top: 26px`} data-title={p.data.title.toLowerCase()}>
-                <span class="card-top">
-                  <span class="num">{String(i + 1).padStart(2, '0')}</span>
-                  <Arrow />
-                </span>
-                <span class="card-title">{p.data.title}</span>
-              </a>
-        );
-      })}
-    </div>
+      {filterTags.length > 0 && (
+        <div class="tagfilter" role="group" aria-label="Nach Thema filtern">
+          <button type="button" class="tagchip" aria-pressed="true" data-tag="">All</button>
+          {filterTags.map((t) => <button type="button" class="tagchip" aria-pressed="false" data-tag={t}>{t} <small>{tagCount.get(t)}</small></button>)}
+        </div>
+      )}
+      <div class="grid projects-grid">
+        {halves[0].map((p, j) => <ProjectCard project={p} number={j + 1} />)}
+      </div>
     </div>
 
     <Playground><Sequencer /></Playground>
 
     <div class="wrap projects-part">
-    <div class="grid projects-grid">
-      {halves[1].map((p, j) => {
-        const i = half + j;
-        return (
-              <a href={`/projects/${p.id}/`} class="card-link" style={`box-shadow: inset 0 8px 0 ${accents[i % 3]}; padding-top: 26px`} data-title={p.data.title.toLowerCase()}>
-                <span class="card-top">
-                  <span class="num">{String(i + 1).padStart(2, '0')}</span>
-                  <Arrow />
-                </span>
-                <span class="card-title">{p.data.title}</span>
-              </a>
-        );
-      })}
-    </div>
+      <div class="grid projects-grid">
+        {halves[1].map((p, j) => <ProjectCard project={p} number={half + j + 1} />)}
+      </div>
       <p id="q-empty" hidden>Kein Projekt passt zu diesem Filter.</p>
 
       <section class="opportunities">
@@ -68,21 +55,32 @@ const halves = [projects.slice(0, half), projects.slice(half)];
 </Base>
 
 <script>
+  // Filter: Suchtext (Titel, Kurzfassung, Themen, Team) und ein Thema; beides zusammen
   const input = document.getElementById('q') as HTMLInputElement;
   const cards = [...document.querySelectorAll<HTMLElement>('.projects-grid > a')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('.tagchip')];
   const count = document.getElementById('q-count')!;
   const empty = document.getElementById('q-empty')!;
-  input.addEventListener('input', () => {
+  let tag = '';
+  function apply() {
     const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
     let n = 0;
     for (const c of cards) {
-      const hit = words.every((w) => c.dataset.title!.includes(w));
+      const hit = words.every((w) => c.dataset.search!.includes(w)) && (!tag || c.dataset.tags!.split('|').includes(tag));
       c.hidden = !hit;
       if (hit) n++;
     }
     count.textContent = String(n);
     empty.hidden = n > 0;
-  });
+  }
+  input.addEventListener('input', apply);
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      tag = chip.dataset.tag === tag ? '' : chip.dataset.tag!;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.tag === tag)));
+      apply();
+    });
+  }
 </script>
 
 <style>
@@ -95,6 +93,19 @@ const halves = [projects.slice(0, half), projects.slice(half)];
     border: var(--line); border-radius: var(--r-tag); font-family: inherit; font-size: 17px;
   }
   .projects-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+  .tagfilter { display: flex; flex-wrap: wrap; gap: 8px; margin-top: -12px; }
+  .tagchip {
+    font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 36px; padding: 2px 12px;
+    background: #fff; color: var(--blue); border: var(--line); border-radius: var(--r-tag);
+  }
+  .tagchip small { font-weight: 600; opacity: 0.6; }
+  /* Handy: eine wischbare Zeile statt vieler Reihen */
+  @media (max-width: 640px) {
+    .tagfilter { flex-wrap: nowrap; overflow-x: auto; margin-right: -24px; padding-right: 24px; padding-bottom: 4px; scrollbar-width: none; }
+    .tagchip { flex: 0 0 auto; }
+  }
+  .tagchip:hover { background: var(--sky); }
+  .tagchip[aria-pressed='true'] { background: var(--blue); color: #fff; }
   .projects-grid [hidden] { display: none; }
   .opportunities { margin-top: 24px; padding: clamp(24px, 4vw, 44px); background: var(--amber); border: var(--line); border-radius: var(--r-card); display: flex; flex-direction: column; gap: 20px; }
   .opportunities h2 { font-size: clamp(28px, 4vw, 48px); line-height: 1; }

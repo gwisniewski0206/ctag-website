@@ -1,7 +1,12 @@
 ---
 title: "Modular Web Synth"
-order: 42
+summary: "Ein modularer Synthesizer im Browser auf Basis der Web Audio API, der externe Geräte über einen Node.js-Server per WebSocket einbindet."
 year: 2013
+tags:
+  - "Web"
+  - "Synthesis"
+cover: "/uploads/2013/12/Bildschirmfoto-2013-12-09-um-03.09.32.png"
+order: 42
 ---
 
 Ziel des Projektes ist, die Möglichkeiten der WebAudioApi zu testen und leicht zugänglich zu machen. Dabei werden(oder sollen bald) viele verschiedene Eingabequellen für Audio und Steuersignale unterstützt werden.

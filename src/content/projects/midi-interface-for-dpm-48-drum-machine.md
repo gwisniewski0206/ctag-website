@@ -1,7 +1,16 @@
 ---
 title: "MIDI-Interface for DPM-48 Drum-Machine"
-order: 6
+summary: "A MIDI interface for the 1984 Sakata DPM-48 drum machine, so its EPROM drum sounds can be played from any MIDI device – plus extended sound banks."
 year: 2021
+tags:
+  - "Hardware"
+  - "Embedded"
+  - "Retro"
+cover: "/uploads/2021/02/DPM-48-front-rz.png"
+links:
+  - label: "Bericht (PDF)"
+    url: "/uploads/2021/02/Projektbericht-BI119_CFeyer.pdf"
+order: 6
 legacyPaths:
   - "/midi-interface-for-dpm-48-drum-machine/"
 ---

@@ -1,7 +1,17 @@
 ---
 title: "LiteSolder, an extension to LitePlacer for solder paste dispensing"
-order: 18
+summary: "An extension for the LitePlacer pick-and-place machine that dispenses solder paste precisely onto rectangular and circular PCB pads."
 year: 2019
+team:
+  - "C. Locht"
+  - "J. Berlinski"
+tags:
+  - "Hardware"
+  - "Maker"
+links:
+  - label: "Code: LiteSolder"
+    url: "https://github.com/Carinalo93/LiteSolder"
+order: 18
 legacyPaths:
   - "/litesolder/"
 ---

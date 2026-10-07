@@ -1,7 +1,16 @@
 ---
 title: "Compressor Plugin for JUCE"
-order: 13
+summary: "A good-sounding VST3/AU dynamic range compressor with a minimal interface, built with JUCE to dig into the DSP behind compression."
 year: 2020
+team:
+  - "Phillip Lamp"
+tags:
+  - "Plugin"
+  - "DSP"
+links:
+  - label: "Code: CTAGDRC"
+    url: "https://github.com/p-hlp/CTAGDRC"
+order: 13
 legacyPaths:
   - "/compressor-plugin-with-juce/"
 ---

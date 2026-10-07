@@ -1,7 +1,16 @@
 ---
 title: "Ravenna Audio IP Streaming"
-order: 8
+summary: "A virtual ALSA driver for Linux that streams audio according to the AES67 audio-over-IP standard used in broadcast."
 year: 2020
+tags:
+  - "Audio over IP"
+  - "Linux"
+links:
+  - label: "Code: ALSA-AES67-Streaming"
+    url: "https://github.com/neufst/ALSA-AES67-Streaming"
+  - label: "Bericht (PDF)"
+    url: "/uploads/2020/10/Thesis.pdf"
+order: 8
 legacyPaths:
   - "/ravenna-audio-ip-streaming/"
 ---

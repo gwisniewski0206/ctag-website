@@ -1,7 +1,11 @@
 ---
 title: "Robotik-Eye Prototype"
-order: 33
+summary: "A Raspberry Pi with a servo-mounted camera that detects faces with OpenCV and follows them."
 year: 2016
+tags:
+  - "Robotics"
+  - "Embedded"
+order: 33
 legacyPaths:
   - "/robotic-eye/"
 ---

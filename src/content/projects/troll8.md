@@ -1,7 +1,15 @@
 ---
 title: "TROLL8 µSynth / µMidiController"
-order: 32
+summary: "An Arduino-based micro synth and MIDI controller as an open-source development platform."
 year: 2016
+tags:
+  - "Synthesis"
+  - "Embedded"
+  - "Open Source"
+links:
+  - label: "Code: troll-8"
+    url: "https://github.com/ctag-fh-kiel/troll-8"
+order: 32
 legacyPaths:
   - "/troll8/"
 ---

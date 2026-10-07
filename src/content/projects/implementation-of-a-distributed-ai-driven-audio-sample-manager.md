@@ -1,7 +1,24 @@
 ---
 title: "Distributed AI driven Audio Sample Manager for Drum Sound Tagging, Clustering and Recommendations"
-order: 3
+summary: "A distributed sample manager that tags, clusters and recommends drum sounds with machine learning – for producers drowning in sample libraries."
 year: 2021
+team:
+  - "Niklas Wantrupp"
+tags:
+  - "AI"
+  - "Web"
+links:
+  - label: "Code: DrumsampModels"
+    url: "https://github.com/NiklasWan/DrumsampModels"
+  - label: "Code: DrumsampleTaggerTrain"
+    url: "https://github.com/NiklasWan/DrumsampleTaggerTrain"
+  - label: "Code: DrumsamplerBackend"
+    url: "https://github.com/NiklasWan/DrumsamplerBackend"
+  - label: "Code: DrumsamplerFrontend"
+    url: "https://github.com/NiklasWan/DrumsamplerFrontend"
+  - label: "Dokument (PDF)"
+    url: "/uploads/2021/07/AI-Driven-Audio-Sample-Manager.pdf"
+order: 3
 legacyPaths:
   - "/implementation-of-a-distributed-ai-driven-audio-sample-manager/"
 ---

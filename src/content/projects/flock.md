@@ -1,7 +1,15 @@
 ---
 title: "Bird Flocking / Artificial Intelligence"
-order: 39
+summary: "Interactive flocking simulation: bees steer by separation, alignment and cohesion and fly towards flowers you place."
 year: 2015
+tags:
+  - "Simulation"
+  - "Processing"
+  - "Web"
+links:
+  - label: "Code: processingjs-ctag (GitLab)"
+    url: "https://gitlab.iue.fh-kiel.de/ctag/processingjs-ctag"
+order: 39
 legacyPaths:
   - "/flock/"
 demo: "/demos/flock/"

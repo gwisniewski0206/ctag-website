@@ -1,7 +1,11 @@
 ---
 title: "Auction System for Space Game"
-order: 38
+summary: "Ein Auktionssystem für das browserbasierte Space Game, über das Spielerinnen und Spieler Waren handeln."
 year: 2015
+tags:
+  - "Game"
+  - "Web"
+order: 38
 legacyPaths:
   - "/auction-system-for-space-game/"
 ---

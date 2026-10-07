@@ -1,7 +1,13 @@
 ---
 title: "Light Table"
-order: 4
+summary: "Ein Tisch, dessen Platte von unten mit RGB-LEDs leuchtet und zugleich per Infrarotsensoren als „Touchscreen“ funktioniert – modular aufgebaut."
 year: 2021
+tags:
+  - "Light"
+  - "Hardware"
+  - "Embedded"
+cover: "/uploads/2021/06/WhatsApp-Image-2021-06-01-at-21.02.12.jpeg"
+order: 4
 legacyPaths:
   - "/light-table/"
 ---

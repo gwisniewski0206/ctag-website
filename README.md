@@ -54,8 +54,8 @@ Infobox und aus den Überschriften das Inhaltsverzeichnis in der Seitenleiste.
 | **Semester** / **Jahr** | empfohlen | Infobox | „WiSe 2025/26“ |
 | **Team** | empfohlen | Infobox – statt eines Abschnitts „Author“ im Text | eine Person pro Eintrag |
 | **Betreuung** | optional | Infobox | |
-| **Themen** | empfohlen | Infobox (später Filter) | Eurorack, DSP, Embedded, Game, KI, Web |
-| **Titelbild** | empfohlen | Vorschau (später in der Liste) | Querformat, ≥ 1600 px breit |
+| **Themen** | empfohlen | Infobox, Kachel und Filter der Projektliste – vorhandene Themen bevorzugen | Embedded, Web, Hardware, Game, DSP, AI, Eurorack … |
+| **Titelbild** | empfohlen | Kachel in der Projektliste – ein Foto, kein Diagramm | Querformat, ≥ 1600 px breit |
 | **Links** | empfohlen | Infobox – Code, Video, Bericht | „Code auf GitHub“ → `https://github.com/…` |
 | **Beschreibung** | ja | der eigentliche Beitrag | siehe Gliederung |
 

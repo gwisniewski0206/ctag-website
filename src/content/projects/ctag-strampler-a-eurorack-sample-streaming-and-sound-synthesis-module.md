@@ -1,7 +1,21 @@
 ---
 title: "CTAG Strämpler, an open source eurorack sample streaming and sound synthesis module"
-order: 17
+summary: "Half streamer, half sampler: an open-source Eurorack module that streams large audio files from SD card and connects to freesound.org."
 year: 2019
+team:
+  - "Robert Manzke"
+  - "Phillip Lamp"
+  - "Niklas Wantrupp"
+tags:
+  - "Eurorack"
+  - "Embedded"
+  - "Sampler"
+  - "Open Source"
+cover: "/uploads/2019/04/Image2.jpg"
+links:
+  - label: "Code: ctag-straempler"
+    url: "https://github.com/ctag-fh-kiel/ctag-straempler"
+order: 17
 legacyPaths:
   - "/ctag-strampler-a-eurorack-sample-streaming-and-sound-synthesis-module/"
 ---

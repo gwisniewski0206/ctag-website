@@ -1,7 +1,15 @@
 ---
 title: "Browser Game Controller Backend"
-order: 28
+summary: "A backend that turns smartphones into game controllers, using their touchscreen, accelerometer and gyroscope as input for browser games."
 year: 2016
+tags:
+  - "Game"
+  - "Web"
+cover: "/uploads/2016/07/vcController.png"
+links:
+  - label: "Code: virtual-console"
+    url: "https://github.com/ChrisHaPunkt/virtual-console"
+order: 28
 legacyPaths:
   - "/browser-game-controller-backend/"
 ---

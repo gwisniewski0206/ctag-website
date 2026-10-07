@@ -1,0 +1,419 @@
+{
+  "_info": "Nachgepflegte Felder für die 42 Altprojekte (08.10.2026). import.mjs übernimmt sie ins Frontmatter; der Beitragstext bleibt unverändert. Team nur, wo Namen im Beitrag stehen. Nach dem Livegang wird im CMS gepflegt. cover: aus den Bildern des Beitrags ausgewählt (Fotos statt Diagramme). links: automatisch aus dem Text, außer wo hier angegeben.",
+  "a-data-driven-approach-to-wavetable-synthesis": {
+    "summary": "A GAN generates single-cycle wavetables from your own sounds and aligns them automatically, so they can be morphed smoothly in a dedicated oscillator framework.",
+    "team": [
+      "Niklas Wantrupp"
+    ],
+    "tags": [
+      "AI",
+      "DSP",
+      "Synthesis"
+    ]
+  },
+  "ants": {
+    "summary": "Interactive path-following simulation: draw a path and watch ants with individual speed and steering forces follow it.",
+    "tags": [
+      "Simulation",
+      "Processing",
+      "Web"
+    ]
+  },
+  "arduino-guitar-amp": {
+    "summary": "A portable, battery-powered digital guitar amp built around an Arduino Uno, with programmable effects, mounted into an old amp housing.",
+    "team": [
+      "Sönke Beyer"
+    ],
+    "tags": [
+      "Embedded",
+      "DSP",
+      "Hardware"
+    ],
+    "cover": "/uploads/2020/08/picture1.jpeg"
+  },
+  "auction-system-for-space-game": {
+    "summary": "Ein Auktionssystem für das browserbasierte Space Game, über das Spielerinnen und Spieler Waren handeln.",
+    "tags": [
+      "Game",
+      "Web"
+    ]
+  },
+  "audio-sampler-plugin-with-juce": {
+    "summary": "CTAG Drum Sampler: a VST plugin built with JUCE that plays drum samples in five modes – a hands-on way to learn the framework.",
+    "team": [
+      "Niklas Wantrupp"
+    ],
+    "tags": [
+      "Plugin",
+      "DSP"
+    ]
+  },
+  "beagleboom": {
+    "summary": "A Eurorack sampler based on the BeagleBone that searches, downloads and plays sounds from freesound.org, controlled by MIDI or CV/gate.",
+    "team": [
+      "Torben Hartmann",
+      "Lasse Kathke",
+      "Friedemann Stoffregen"
+    ],
+    "tags": [
+      "Eurorack",
+      "Embedded",
+      "Sampler"
+    ],
+    "links": [
+      {
+        "label": "Code: beagle-boom",
+        "url": "https://github.com/ctag-fh-kiel/beagle-boom"
+      },
+      {
+        "label": "Alle Repositorys (GitHub)",
+        "url": "https://github.com/BeagleBoom"
+      }
+    ]
+  },
+  "browser-game-controller-backend": {
+    "summary": "A backend that turns smartphones into game controllers, using their touchscreen, accelerometer and gyroscope as input for browser games.",
+    "tags": [
+      "Game",
+      "Web"
+    ],
+    "cover": "/uploads/2016/07/vcController.png"
+  },
+  "compressor-plugin-with-juce": {
+    "summary": "A good-sounding VST3/AU dynamic range compressor with a minimal interface, built with JUCE to dig into the DSP behind compression.",
+    "team": [
+      "Phillip Lamp"
+    ],
+    "tags": [
+      "Plugin",
+      "DSP"
+    ]
+  },
+  "ctag-strampler-a-eurorack-sample-streaming-and-sound-synthesis-module": {
+    "summary": "Half streamer, half sampler: an open-source Eurorack module that streams large audio files from SD card and connects to freesound.org.",
+    "team": [
+      "Robert Manzke",
+      "Phillip Lamp",
+      "Niklas Wantrupp"
+    ],
+    "tags": [
+      "Eurorack",
+      "Embedded",
+      "Sampler",
+      "Open Source"
+    ],
+    "cover": "/uploads/2019/04/Image2.jpg"
+  },
+  "ctag-tbd-eurorack-open-source": {
+    "summary": "An open-source Eurorack sound module based on the ESP32 with an easy-to-extend plugin architecture – a platform to learn, build and practise.",
+    "tags": [
+      "Eurorack",
+      "Embedded",
+      "DSP",
+      "Open Source"
+    ]
+  },
+  "flock": {
+    "summary": "Interactive flocking simulation: bees steer by separation, alignment and cohesion and fly towards flowers you place.",
+    "tags": [
+      "Simulation",
+      "Processing",
+      "Web"
+    ]
+  },
+  "generative-visualisierung-von-musik-mittels-kunstlicher-intelligenz": {
+    "summary": "Wie lässt sich Musik mit KI visualisieren? Neben Musikmerkmalen fließen auch annotierte Emotionen der Hörenden in die generierten Bilder ein.",
+    "tags": [
+      "AI",
+      "Visuals"
+    ]
+  },
+  "implementation-and-performance-analysis-of-precision-time-protocol-on-linux-based-system-on-chip-platform": {
+    "summary": "Implementation of the Precision Time Protocol (IEEE 1588) on a Linux system-on-chip and analysis of the synchronisation accuracy it reaches.",
+    "tags": [
+      "Audio over IP",
+      "Embedded",
+      "Linux"
+    ]
+  },
+  "implementation-of-a-distributed-ai-driven-audio-sample-manager": {
+    "summary": "A distributed sample manager that tags, clusters and recommends drum sounds with machine learning – for producers drowning in sample libraries.",
+    "team": [
+      "Niklas Wantrupp"
+    ],
+    "tags": [
+      "AI",
+      "Web"
+    ]
+  },
+  "ki-for-space-game": {
+    "summary": "Grundlagen für eine erweiterbare künstliche Intelligenz im Space Game: Ressourcenschiffe und Piraten, die sich wie Mitspieler verhalten.",
+    "tags": [
+      "Game",
+      "AI",
+      "Web"
+    ]
+  },
+  "libdsp-x15": {
+    "summary": "A library for the C66x DSPs on the BeagleBoard-X15 with FFT, filters and real-time examples, focused on audio applications.",
+    "team": [
+      "Henrik Langer"
+    ],
+    "tags": [
+      "DSP",
+      "Embedded",
+      "Open Source"
+    ]
+  },
+  "licht-mal-maschine-limama": {
+    "summary": "Ein fahrender Roboter, der beliebige Grafiken vom PC oder Smartphone Spalte für Spalte in Langzeitbelichtungen malt.",
+    "team": [
+      "Jonas Heinzel",
+      "Philip Herrmann"
+    ],
+    "semester": "WiSe 2019/20",
+    "tags": [
+      "Light",
+      "Robotics",
+      "Hardware"
+    ],
+    "cover": "/uploads/2020/01/2019-20-WS-CTAG-LiMaMa-Handheld-Engel.jpg"
+  },
+  "light-table": {
+    "summary": "Ein Tisch, dessen Platte von unten mit RGB-LEDs leuchtet und zugleich per Infrarotsensoren als „Touchscreen“ funktioniert – modular aufgebaut.",
+    "tags": [
+      "Light",
+      "Hardware",
+      "Embedded"
+    ],
+    "cover": "/uploads/2021/06/WhatsApp-Image-2021-06-01-at-21.02.12.jpeg"
+  },
+  "linux-based-low-latency-multichannel-audio-system-2": {
+    "summary": "CTAG face2|4: a low-latency multichannel audio card for the BeagleBone with up to 8 channels at 96 kHz and an open-source Linux driver.",
+    "team": [
+      "Henrik Langer",
+      "Robert Manzke"
+    ],
+    "tags": [
+      "Embedded",
+      "Hardware",
+      "Linux",
+      "Open Source"
+    ],
+    "cover": "/uploads/2016/02/IMG_02101.jpg"
+  },
+  "litesolder": {
+    "summary": "An extension for the LitePlacer pick-and-place machine that dispenses solder paste precisely onto rectangular and circular PCB pads.",
+    "team": [
+      "C. Locht",
+      "J. Berlinski"
+    ],
+    "tags": [
+      "Hardware",
+      "Maker"
+    ]
+  },
+  "media-ip-streaming-on-embedded-systems": {
+    "summary": "Real-time audio streaming over Ethernet for BeagleBone AI and Black, implementing parts of the AVB protocol – a Google Summer of Code 2020 project.",
+    "team": [
+      "Niklas Wantrupp"
+    ],
+    "tags": [
+      "Audio over IP",
+      "Embedded",
+      "Linux"
+    ]
+  },
+  "midi-interface-for-dpm-48-drum-machine": {
+    "summary": "A MIDI interface for the 1984 Sakata DPM-48 drum machine, so its EPROM drum sounds can be played from any MIDI device – plus extended sound banks.",
+    "tags": [
+      "Hardware",
+      "Embedded",
+      "Retro"
+    ],
+    "cover": "/uploads/2021/02/DPM-48-front-rz.png"
+  },
+  "midifox-is-eurorack-module": {
+    "summary": "A small Eurorack module that turns MIDI over USB into note CV, velocity and gate – with schematics, code and KiCad files.",
+    "tags": [
+      "Eurorack",
+      "Hardware",
+      "Open Source"
+    ],
+    "cover": "/uploads/2021/01/Ebene-1.png"
+  },
+  "mimabox": {
+    "summary": "Eine akkubetriebene Lautsprecherbox mit Verstärker, Subwoofer und Batteriemonitor – für die Party am Strand.",
+    "tags": [
+      "Hardware",
+      "Audio"
+    ],
+    "cover": "/uploads/2016/02/Header2.jpg"
+  },
+  "modularer-web-synthesizer": {
+    "summary": "Ein modularer Synthesizer im Browser auf Basis der Web Audio API, der externe Geräte über einen Node.js-Server per WebSocket einbindet.",
+    "tags": [
+      "Web",
+      "Synthesis"
+    ],
+    "cover": "/uploads/2013/12/Bildschirmfoto-2013-12-09-um-03.09.32.png"
+  },
+  "multiplayer-webracer": {
+    "summary": "A browser racing game in which every player's smartphone becomes controller and second screen – no special hardware needed.",
+    "team": [
+      "Lars Engel",
+      "Lukas Fritsch"
+    ],
+    "tags": [
+      "Game",
+      "Web"
+    ]
+  },
+  "online-multi-player-puzzle-game": {
+    "summary": "A puzzle that everyone solves together on a big screen, each player joining from their smartphone's browser.",
+    "tags": [
+      "Game",
+      "Web"
+    ]
+  },
+  "procedural-generation": {
+    "summary": "First steps of the Space Game: the map format for solar systems and how maps are generated, stored and loaded at runtime.",
+    "tags": [
+      "Game",
+      "Web"
+    ]
+  },
+  "ravenna-audio-ip-streaming": {
+    "summary": "A virtual ALSA driver for Linux that streams audio according to the AES67 audio-over-IP standard used in broadcast.",
+    "tags": [
+      "Audio over IP",
+      "Linux"
+    ]
+  },
+  "rhythmusgenerierung-mit-kunstlicher-intelligenz-machbarkeit-auf-eingebetteten-systemen": {
+    "summary": "Kann ein ESP32 mit wenig Ressourcen per maschinellem Lernen Schlagzeugspuren zu Nutzereingaben erzeugen? Modelle, Messungen und Grenzen.",
+    "team": [
+      "Roman Kravanja"
+    ],
+    "tags": [
+      "AI",
+      "Embedded"
+    ]
+  },
+  "robotic-eye": {
+    "summary": "A Raspberry Pi with a servo-mounted camera that detects faces with OpenCV and follows them.",
+    "tags": [
+      "Robotics",
+      "Embedded"
+    ]
+  },
+  "sequencer-web-frontend": {
+    "summary": "A web interface hosted on an ESP32 that lets anyone control an embedded step sequencer from a browser over Wi-Fi.",
+    "team": [
+      "Roman Kravanja"
+    ],
+    "tags": [
+      "Web",
+      "Embedded"
+    ]
+  },
+  "setup-and-evaluation-of-an-media-ip-real-time-system": {
+    "summary": "Setting up an audio-over-IP chain on standard Ethernet hardware and measuring how close to real time it gets.",
+    "team": [
+      "Anton Bracke"
+    ],
+    "tags": [
+      "Audio over IP",
+      "Linux"
+    ]
+  },
+  "sound-synthesis-using-embedded-linux-zynaddsubfx-in-eurorack": {
+    "summary": "An Odroid U3 with a real-time kernel runs the ZynAddSubFX synthesizer with under 10 ms latency – packed into a Eurorack module.",
+    "tags": [
+      "Eurorack",
+      "Embedded",
+      "Linux",
+      "Synthesis"
+    ],
+    "cover": "/uploads/2016/10/IMG_0019.jpg"
+  },
+  "sound-visualizer-mask": {
+    "summary": "An LED mask with about 420 RGB LEDs for live performances, showing visuals that react to MIDI and audio from Ableton Live in real time.",
+    "team": [
+      "Henrik Langer"
+    ],
+    "tags": [
+      "Light",
+      "Visuals",
+      "Hardware"
+    ],
+    "cover": "/uploads/2015/08/DSC2256.jpg"
+  },
+  "space-game-refactoring": {
+    "summary": "Mehrere getrennte Space-Game-Projekte zusammengeführt, aktualisiert und um eine KI sowie ein Ressourcensystem erweitert.",
+    "tags": [
+      "Game",
+      "AI",
+      "Web"
+    ],
+    "cover": "/uploads/2017/11/main_view.png"
+  },
+  "space-game-visualization-engine": {
+    "summary": "The 3D engine of the multiplayer Space Game: spaceships, galaxy and interaction rendered in the browser with Three.js.",
+    "team": [
+      "Torben Hartmann",
+      "Gero Baron",
+      "Andre Rother",
+      "Ole Wagenknecht"
+    ],
+    "tags": [
+      "Game",
+      "Web",
+      "Visuals"
+    ],
+    "cover": "/uploads/2016/05/sp.png"
+  },
+  "synchronized-real-time-audio-streaming-over-ethernet": {
+    "summary": "Study, implementation and evaluation of AVB for synchronised real-time audio streaming over Ethernet on BeagleBoard hardware and Linux.",
+    "tags": [
+      "Audio over IP",
+      "Embedded",
+      "Linux"
+    ]
+  },
+  "teensy-audio-library-extension-for-ctag-face-24-including-freeverb-reverb-fx": {
+    "summary": "Connects a Teensy 3.6 to the CTAG face2|4 sound card and extends the Teensy audio library, including a Freeverb reverb.",
+    "tags": [
+      "Embedded",
+      "DSP"
+    ]
+  },
+  "the-house-haus": {
+    "summary": "A painted house whose twelve windows are touch sensors in conductive paint: touching them starts loops in Ableton Live, so visitors build an electronic track together.",
+    "tags": [
+      "Interactive",
+      "Music",
+      "Hardware"
+    ],
+    "cover": "/uploads/2020/01/DSCF0742.jpg"
+  },
+  "troll8": {
+    "summary": "An Arduino-based micro synth and MIDI controller as an open-source development platform.",
+    "tags": [
+      "Synthesis",
+      "Embedded",
+      "Open Source"
+    ]
+  },
+  "usb-audio-class-2-i2s-bridge": {
+    "summary": "Eine USB-Audio-Class-2-Bridge, die einen PC direkt mit dem Codec der Soundkarte face2|4 verbindet.",
+    "team": [
+      "Florian Haberkorn",
+      "Thomas Pöffel"
+    ],
+    "tags": [
+      "Embedded",
+      "Hardware"
+    ]
+  }
+}

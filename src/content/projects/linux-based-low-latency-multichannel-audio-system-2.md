@@ -1,7 +1,24 @@
 ---
 title: "Linux-Based Low-Latency Multichannel Audio System (CTAG face2|4)"
-order: 31
+summary: "CTAG face2|4: a low-latency multichannel audio card for the BeagleBone with up to 8 channels at 96 kHz and an open-source Linux driver."
 year: 2016
+team:
+  - "Henrik Langer"
+  - "Robert Manzke"
+tags:
+  - "Embedded"
+  - "Hardware"
+  - "Linux"
+  - "Open Source"
+cover: "/uploads/2016/02/IMG_02101.jpg"
+links:
+  - label: "Code: ctag-face-2-4"
+    url: "https://github.com/ctag-fh-kiel/ctag-face-2-4"
+  - label: "Code: beagle-linux"
+    url: "https://github.com/henrix/beagle-linux"
+  - label: "Dokument (PDF)"
+    url: "/uploads/2016/02/Linuxbasiertes_Mehrkanal-Audiosystem_mit_niedriger_Latenz.pdf"
+order: 31
 legacyPaths:
   - "/linux-based-low-latency-multichannel-audio-system-2/"
 ---

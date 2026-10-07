@@ -1,7 +1,18 @@
 ---
 title: "Arduino Guitar Amp"
-order: 10
+summary: "A portable, battery-powered digital guitar amp built around an Arduino Uno, with programmable effects, mounted into an old amp housing."
 year: 2020
+team:
+  - "Sönke Beyer"
+tags:
+  - "Embedded"
+  - "DSP"
+  - "Hardware"
+cover: "/uploads/2020/08/picture1.jpeg"
+links:
+  - label: "Code: Arduino-Guitar-Amp"
+    url: "https://github.com/stinkfuhl/Arduino-Guitar-Amp"
+order: 10
 legacyPaths:
   - "/arduino-guitar-amp/"
 ---

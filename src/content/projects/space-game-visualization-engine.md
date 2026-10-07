@@ -1,7 +1,18 @@
 ---
 title: "Space Game Visualization Engine"
-order: 29
+summary: "The 3D engine of the multiplayer Space Game: spaceships, galaxy and interaction rendered in the browser with Three.js."
 year: 2016
+team:
+  - "Torben Hartmann"
+  - "Gero Baron"
+  - "Andre Rother"
+  - "Ole Wagenknecht"
+tags:
+  - "Game"
+  - "Web"
+  - "Visuals"
+cover: "/uploads/2016/05/sp.png"
+order: 29
 legacyPaths:
   - "/space-game-visualization-engine/"
 ---

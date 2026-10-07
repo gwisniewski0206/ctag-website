@@ -1,7 +1,19 @@
 ---
 title: "A Data-Driven Approach to Wavetable-Synthesis"
-order: 16
+summary: "A GAN generates single-cycle wavetables from your own sounds and aligns them automatically, so they can be morphed smoothly in a dedicated oscillator framework."
 year: 2019
+team:
+  - "Niklas Wantrupp"
+tags:
+  - "AI"
+  - "DSP"
+  - "Synthesis"
+links:
+  - label: "Code: A-Data-Driven-Approach-to-Wavetable-Oscillator-Design"
+    url: "https://github.com/NiklasWan/A-Data-Driven-Approach-to-Wavetable-Oscillator-Design"
+  - label: "Bericht (PDF)"
+    url: "/uploads/2019/09/Bachelor_Thesis_Wantrupp_Niklas.pdf"
+order: 16
 legacyPaths:
   - "/a-data-driven-approach-to-wavetable-synthesis/"
 ---

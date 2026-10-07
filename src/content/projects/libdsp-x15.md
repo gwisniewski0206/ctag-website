@@ -1,7 +1,17 @@
 ---
 title: "libdsp-x15 – C66x DSP library for BeagleBoard-X15 focusing on audio applications"
-order: 25
+summary: "A library for the C66x DSPs on the BeagleBoard-X15 with FFT, filters and real-time examples, focused on audio applications."
 year: 2017
+team:
+  - "Henrik Langer"
+tags:
+  - "DSP"
+  - "Embedded"
+  - "Open Source"
+links:
+  - label: "Code: libdsp-x15"
+    url: "https://github.com/henrix/libdsp-x15"
+order: 25
 legacyPaths:
   - "/libdsp-x15/"
 ---

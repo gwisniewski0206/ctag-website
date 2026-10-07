@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
 import { embedsPlugin } from './src/lib/embeds.mjs';
 import rebase from './src/lib/rebase.mjs';
+import thumbs from './src/lib/thumbs.mjs';
 
 // Vorschau auf GitHub Pages: SITE_URL=https://<konto>.github.io BASE_PATH=/ctag-website (setzt der Workflow).
 // Mit eigener Domain beide weglassen.
@@ -14,5 +15,5 @@ export default defineConfig({
   markdown: {
     processor: satteri({ mdastPlugins: [embedsPlugin] }),
   },
-  integrations: [rebase(base)],
+  integrations: [thumbs(), rebase(base)],
 });

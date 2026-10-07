@@ -1,7 +1,16 @@
 ---
 title: "MidiFox Eurorack Module"
-order: 5
+summary: "A small Eurorack module that turns MIDI over USB into note CV, velocity and gate – with schematics, code and KiCad files."
 year: 2021
+tags:
+  - "Eurorack"
+  - "Hardware"
+  - "Open Source"
+cover: "/uploads/2021/01/Ebene-1.png"
+links:
+  - label: "Code: midiFox"
+    url: "https://github.com/Felan7/midiFox"
+order: 5
 legacyPaths:
   - "/midifox-is-eurorack-module/"
 ---

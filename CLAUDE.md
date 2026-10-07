@@ -98,12 +98,17 @@ solange das Repo persönlich ist). **Offen:** GitHub-Knopf braucht `sveltia-cms-
 
 **Projektbeiträge (Analyse 08.10.2026):** kein einheitliches Format – 14 von 42 ohne Überschrift, Ebenen wild gemischt (h1–h5),
 Länge 26–4001 Wörter (Median 503), 32 Englisch / 10 Deutsch, „Author“ als Abschnitt in 7 Beiträgen. Daraus:
-- Neue optionale Felder `summary`, `team`, `supervisor`, `tags`, `cover`, `links` (Schema + CMS); bei den 42 Altbeiträgen noch leer.
+- Neue optionale Felder `summary`, `team`, `supervisor`, `tags`, `cover`, `links` (Schema + CMS). **Für die 42 Altbeiträge nachgepflegt**
+  (08.10.2026) in `content/project-meta.json`, das `import.mjs` ins Frontmatter übernimmt – Haupttexte bytegleich geprüft.
+  Kurzfassung/Themen von Hand geschrieben, Team nur aus Namen im Beitrag, Titelbild nur Fotos (15 von 42), Links automatisch
+  (eigene Repos + PDFs; fremde Bibliotheken ausgeschlossen, Liste `FOREIGN_REPOS`). Betreuung überall leer (steht nirgends).
+- Projektliste: Kacheln mit Titelbild (sonst gezeichnete Welle in der Akzentfarbe), Themen, Themenfilter (ab 2 Projekten je Thema),
+  Suche auch in Kurzfassung/Themen/Team. Vorschaubilder erzeugt `src/lib/thumbs.mjs` beim Build (WebP 640 px unter /thumbs/).
 - Projektseite mit Seitenleiste: Infobox aus den Feldern + Inhaltsverzeichnis aus den zwei obersten vorhandenen Überschriftsebenen,
   aktueller Abschnitt markiert; auf dem Handy zugeklappt oben.
 - **Projekt-Blueprint** für Studierende im `README.md`; dieselbe Gliederung ist im CMS als Vorlage für neue Projekte vorausgefüllt.
 
-**Nächste Schritte:** Anmeldedienst einrichten, Altbeiträge mit Kurzfassung/Team/Links nachpflegen.
+**Nächste Schritte:** Anmeldedienst (Cloudflare-Konto noch offen, Nutzer: „erstmal nicht“), nachgepflegte Felder durchsehen.
 
 ## Erster Schritt (erledigt)
 

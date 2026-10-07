@@ -1,7 +1,12 @@
 ---
 title: "Battery Powered Amplifier and Sound Speaker System: mimaBox"
-order: 30
+summary: "Eine akkubetriebene Lautsprecherbox mit Verstärker, Subwoofer und Batteriemonitor – für die Party am Strand."
 year: 2016
+tags:
+  - "Hardware"
+  - "Audio"
+cover: "/uploads/2016/02/Header2.jpg"
+order: 30
 ---
 
 ![Header2](/uploads/2016/02/Header2.jpg)

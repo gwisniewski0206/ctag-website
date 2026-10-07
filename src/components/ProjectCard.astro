@@ -1,0 +1,51 @@
+---
+// Kachel in der Projektliste: Titelbild (oder gezeichnete Welle in der Akzentfarbe), Nummer, Titel, Themen.
+import Arrow from './Arrow.astro';
+import { thumbPath } from '../lib/thumbs.mjs';
+
+const { project, number } = Astro.props;
+const d = project.data;
+// Akzentfarbe und Wellenform reihum: Bernstein/Sinus, Blau/Sägezahn, Zinnober/Rechteck
+const style = [
+  { bg: 'var(--amber)', ink: '#00305D', wave: 'M0 50 q25 -50 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0' },
+  { bg: 'var(--blue)', ink: '#F5B700', wave: 'M0 75 l50 -50 v50 l50 -50 v50 l50 -50 v50 l50 -50 v50 l50 -50 v50 l50 -50 v50 l50 -50 v50' },
+  { bg: 'var(--red)', ink: '#FFFFFF', wave: 'M0 75 v-50 h25 v50 h25 v-50 h25 v50 h25 v-50 h25 v50 h25 v-50 h25 v50 h25 v-50 h25 v50 h25 v-50 h25 v50 h25 v-50 h25 v50 h25 v-50 h25 v50' },
+][(number - 1) % 3];
+const img = d.cover && (import.meta.env.PROD ? thumbPath(d.cover) : d.cover);
+const search = [d.title, d.summary, ...d.tags, ...d.team].filter(Boolean).join(' ').toLowerCase();
+---
+<a href={`/projects/${project.id}/`} class="pcard" style={`--accent: ${style.bg}`} data-search={search} data-tags={d.tags.join('|')}>
+  <span class="pcard-media">
+    {img
+      ? <img src={img} alt="" loading="lazy" decoding="async">
+      : <svg viewBox="0 0 350 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d={style.wave} fill="none" stroke={style.ink} stroke-width="7" stroke-linecap="round" stroke-linejoin="round" transform="translate(-4 0)"></path></svg>}
+    <span class="pcard-num">{String(number).padStart(2, '0')}</span>
+  </span>
+  <span class="pcard-body">
+    <span class="pcard-title">{d.title}</span>
+    {d.tags.length > 0 && <span class="pcard-tags">{d.tags.slice(0, 3).map((t) => <span>{t}</span>)}</span>}
+    <span class="pcard-arrow"><Arrow /></span>
+  </span>
+</a>
+
+<style>
+  .pcard {
+    display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: var(--blue);
+    background: #fff; border: var(--line); border-radius: var(--r-card);
+  }
+  .pcard:hover { color: var(--blue); }
+  .pcard:hover .pcard-media img { transform: scale(1.04); }
+  .pcard:hover .pcard-body { background: var(--sky); }
+  .pcard-media { position: relative; aspect-ratio: 16 / 9; background: var(--accent); border-bottom: var(--line); overflow: hidden; }
+  .pcard-media img, .pcard-media svg { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 200ms ease-out; }
+  .pcard-num {
+    position: absolute; top: 10px; left: 10px; display: flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; border-radius: var(--r-tag); border: var(--line); background: #fff;
+    font-family: var(--display); font-weight: 800; font-size: 16px; color: var(--blue);
+  }
+  .pcard-body { flex: 1; position: relative; display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; transition: background 120ms; }
+  .pcard-title { font-size: 18px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; padding-right: 26px; }
+  .pcard-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
+  .pcard-tags span { padding: 0 8px; border: 2px solid var(--blue); border-radius: var(--r-tag); font-size: 13px; font-weight: 600; background: #fff; }
+  .pcard-arrow { position: absolute; top: 14px; right: 12px; }
+</style>

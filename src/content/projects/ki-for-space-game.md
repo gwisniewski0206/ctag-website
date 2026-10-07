@@ -1,7 +1,12 @@
 ---
 title: "Artificial Intelligence for Space Game"
-order: 37
+summary: "Grundlagen für eine erweiterbare künstliche Intelligenz im Space Game: Ressourcenschiffe und Piraten, die sich wie Mitspieler verhalten."
 year: 2015
+tags:
+  - "Game"
+  - "AI"
+  - "Web"
+order: 37
 legacyPaths:
   - "/ki-for-space-game/"
 demo: "/demos/ki-for-space-game/"

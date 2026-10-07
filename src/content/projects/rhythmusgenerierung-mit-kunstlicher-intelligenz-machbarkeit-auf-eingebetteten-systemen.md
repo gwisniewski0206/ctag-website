@@ -1,7 +1,16 @@
 ---
 title: "Rhythmusgenerierung mit künstlicher Intelligenz: Machbarkeit auf eingebetteten Systemen"
-order: 7
+summary: "Kann ein ESP32 mit wenig Ressourcen per maschinellem Lernen Schlagzeugspuren zu Nutzereingaben erzeugen? Modelle, Messungen und Grenzen."
 year: 2021
+team:
+  - "Roman Kravanja"
+tags:
+  - "AI"
+  - "Embedded"
+links:
+  - label: "Bericht (PDF)"
+    url: "/uploads/2021/01/thesis.pdf"
+order: 7
 legacyPaths:
   - "/rhythmusgenerierung-mit-kunstlicher-intelligenz-machbarkeit-auf-eingebetteten-systemen/"
 ---

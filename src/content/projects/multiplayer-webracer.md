@@ -1,7 +1,17 @@
 ---
 title: "Multiplayer Webracer Game"
-order: 34
+summary: "A browser racing game in which every player's smartphone becomes controller and second screen – no special hardware needed."
 year: 2015
+team:
+  - "Lars Engel"
+  - "Lukas Fritsch"
+tags:
+  - "Game"
+  - "Web"
+links:
+  - label: "Code: webracer"
+    url: "https://github.com/larsengel/webracer"
+order: 34
 legacyPaths:
   - "/multiplayer-webracer/"
 ---

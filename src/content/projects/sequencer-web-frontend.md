@@ -1,7 +1,13 @@
 ---
 title: "Sequencer Web Frontend for Embedded System"
-order: 11
+summary: "A web interface hosted on an ESP32 that lets anyone control an embedded step sequencer from a browser over Wi-Fi."
 year: 2020
+team:
+  - "Roman Kravanja"
+tags:
+  - "Web"
+  - "Embedded"
+order: 11
 legacyPaths:
   - "/sequencer-web-frontend/"
 ---

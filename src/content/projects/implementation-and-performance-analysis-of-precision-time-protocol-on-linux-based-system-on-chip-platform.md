@@ -1,7 +1,17 @@
 ---
 title: "Implementation and Performance Analysis of Precision Time Protocol on Linux based System-On-Chip Platform"
-order: 21
+summary: "Implementation of the Precision Time Protocol (IEEE 1588) on a Linux system-on-chip and analysis of the synchronisation accuracy it reaches."
 year: 2018
+tags:
+  - "Audio over IP"
+  - "Embedded"
+  - "Linux"
+links:
+  - label: "Bericht (PDF)"
+    url: "/uploads/2018/05/Master_Project__PTP_1588.pdf"
+  - label: "Präsentation (PDF)"
+    url: "/uploads/2018/05/Presentation_MasterProject_FH_Kiel.pdf"
+order: 21
 legacyPaths:
   - "/implementation-and-performance-analysis-of-precision-time-protocol-on-linux-based-system-on-chip-platform/"
 ---

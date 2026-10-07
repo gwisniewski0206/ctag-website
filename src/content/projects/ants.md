@@ -1,7 +1,15 @@
 ---
 title: "Ants Walking Path/ Artificial Intelligence"
-order: 40
+summary: "Interactive path-following simulation: draw a path and watch ants with individual speed and steering forces follow it."
 year: 2015
+tags:
+  - "Simulation"
+  - "Processing"
+  - "Web"
+links:
+  - label: "Code: processingjs-ctag (GitLab)"
+    url: "https://gitlab.iue.fh-kiel.de/ctag/processingjs-ctag"
+order: 40
 legacyPaths:
   - "/ants/"
 demo: "/demos/ants/"

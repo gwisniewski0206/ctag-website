@@ -1,7 +1,17 @@
 ---
 title: "Licht-Mal-Maschine (Light Painting Machine)"
-order: 15
+summary: "Ein fahrender Roboter, der beliebige Grafiken vom PC oder Smartphone Spalte für Spalte in Langzeitbelichtungen malt."
+semester: "WiSe 2019/20"
 year: 2020
+team:
+  - "Jonas Heinzel"
+  - "Philip Herrmann"
+tags:
+  - "Light"
+  - "Robotics"
+  - "Hardware"
+cover: "/uploads/2020/01/2019-20-WS-CTAG-LiMaMa-Handheld-Engel.jpg"
+order: 15
 legacyPaths:
   - "/licht-mal-maschine-limama/"
 ---

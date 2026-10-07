@@ -1,7 +1,14 @@
 ---
 title: "Generative Visualisierung von Musik mittels künstlicher Intelligenz"
-order: 2
+summary: "Wie lässt sich Musik mit KI visualisieren? Neben Musikmerkmalen fließen auch annotierte Emotionen der Hörenden in die generierten Bilder ein."
 year: 2021
+tags:
+  - "AI"
+  - "Visuals"
+links:
+  - label: "Code: ai-music-visuals (GitLab)"
+    url: "https://gitlab.iue.fh-kiel.de/robert.manzke/ai-music-visuals"
+order: 2
 legacyPaths:
   - "/generative-visualisierung-von-musik-mittels-künstlicher-intelligenz/"
 ---

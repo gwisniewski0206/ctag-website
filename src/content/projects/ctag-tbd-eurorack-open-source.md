@@ -1,7 +1,16 @@
 ---
 title: "CTAG TBD Open Source Eurorack Audio Processor"
-order: 12
+summary: "An open-source Eurorack sound module based on the ESP32 with an easy-to-extend plugin architecture – a platform to learn, build and practise."
 year: 2020
+tags:
+  - "Eurorack"
+  - "Embedded"
+  - "DSP"
+  - "Open Source"
+links:
+  - label: "Code: ctag-tbd"
+    url: "https://github.com/ctag-fh-kiel/ctag-tbd"
+order: 12
 legacyPaths:
   - "/ctag-tbd-eurorack-open-source/"
 ---

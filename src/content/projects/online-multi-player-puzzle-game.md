@@ -1,7 +1,11 @@
 ---
 title: "Online Multi-Player Puzzle Game"
-order: 35
+summary: "A puzzle that everyone solves together on a big screen, each player joining from their smartphone's browser."
 year: 2015
+tags:
+  - "Game"
+  - "Web"
+order: 35
 legacyPaths:
   - "/online-multi-player-puzzle-game/"
 ---

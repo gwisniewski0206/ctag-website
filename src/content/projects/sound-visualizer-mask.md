@@ -1,7 +1,15 @@
 ---
 title: "Sound Visualizer Mask"
-order: 36
+summary: "An LED mask with about 420 RGB LEDs for live performances, showing visuals that react to MIDI and audio from Ableton Live in real time."
 year: 2015
+team:
+  - "Henrik Langer"
+tags:
+  - "Light"
+  - "Visuals"
+  - "Hardware"
+cover: "/uploads/2015/08/DSC2256.jpg"
+order: 36
 legacyPaths:
   - "/sound-visualizer-mask/"
 ---
