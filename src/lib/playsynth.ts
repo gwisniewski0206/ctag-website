@@ -180,19 +180,34 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     if (arpCurrent !== null) { voiceOff(arpCurrent); unmarkArp(arpCurrent); arpCurrent = null; }
   }
 
+  // Hold (Latch): gehaltene Noten laufen nach dem Loslassen weiter; ein neuer Anschlag, nachdem alle Tasten
+  // losgelassen sind, ersetzt den Akkord. Wirkt nur mit eingeschaltetem Arpeggiator.
+  let hold = false;
+  const down = new Set<number>();   // Tasten, die gerade wirklich gedrückt sind
+  const arpHoldBtn = root.querySelector<HTMLButtonElement>('.psy-arp-hold')!;
+  const unmark = (n: number) => keyEls.get(n)?.classList.remove('on');
+
   function press(note: number) {
+    if (arp.on && hold && down.size === 0) { held.forEach(unmark); held.clear(); }
+    down.add(note);
     keyEls.get(note)?.classList.add('on');
     if (arp.on) { held.add(note); startArp(); }
     else voiceOn(note);
   }
   function release(note: number) {
-    keyEls.get(note)?.classList.remove('on');
-    if (arp.on) { held.delete(note); if (!held.size) stopArp(); }
-    else voiceOff(note);
+    down.delete(note);
+    if (arp.on) {
+      if (hold) return;
+      unmark(note);
+      held.delete(note);
+      if (!held.size) stopArp();
+    } else { unmark(note); voiceOff(note); }
   }
   function releaseAll() {
-    [...held].forEach(release);
-    for (const n of [...voices.keys()]) { keyEls.get(n)?.classList.remove('on'); voiceOff(n); }
+    down.clear();
+    held.forEach(unmark);
+    held.clear();
+    for (const n of [...voices.keys()]) { unmark(n); voiceOff(n); }
     stopArp();
   }
 
@@ -201,6 +216,15 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-playsynth]')) {
     arp.on = !arp.on;
     arpToggle.setAttribute('aria-pressed', String(arp.on));
     arpToggle.textContent = arp.on ? 'An' : 'Aus';
+  });
+  arpHoldBtn.addEventListener('click', () => {
+    hold = !hold;
+    arpHoldBtn.setAttribute('aria-pressed', String(hold));
+    if (!hold) {
+      // Nur losgelassene Noten beenden, gedrückte spielen weiter
+      for (const n of [...held]) if (!down.has(n)) { unmark(n); held.delete(n); }
+      if (!held.size) stopArp();
+    }
   });
   arpModeBtn.addEventListener('click', () => {
     const i = (MODES.findIndex((m) => m.id === arp.mode) + 1) % MODES.length;
