@@ -1,0 +1,212 @@
+[
+  {
+    "order": 1,
+    "title": "Setup and evaluation of a media IP real-time system",
+    "url": "https://www.creative-technologies.de/setup-and-evaluation-of-an-media-ip-real-time-system"
+  },
+  {
+    "order": 2,
+    "title": "Generative Visualisierung von Musik mittels künstlicher Intelligenz",
+    "url": "https://www.creative-technologies.de/generative-visualisierung-von-musik-mittels-ku%cc%88nstlicher-intelligenz"
+  },
+  {
+    "order": 3,
+    "title": "Distributed AI driven Audio Sample Manager for Drum Sound Tagging, Clustering and Recommendations",
+    "url": "https://www.creative-technologies.de/implementation-of-a-distributed-ai-driven-audio-sample-manager"
+  },
+  {
+    "order": 4,
+    "title": "Light Table",
+    "url": "https://www.creative-technologies.de/light-table/"
+  },
+  {
+    "order": 5,
+    "title": "MidiFox Eurorack Module",
+    "url": "https://www.creative-technologies.de/midifox-is-eurorack-module"
+  },
+  {
+    "order": 6,
+    "title": "MIDI-Interface for DPM-48 Drum-Machine",
+    "url": "https://www.creative-technologies.de/midi-interface-for-dpm-48-drum-machine"
+  },
+  {
+    "order": 7,
+    "title": "Rhythmusgenerierung mit künstlicher Intelligenz: Machbarkeit auf eingebetteten Systemen",
+    "url": "https://www.creative-technologies.de/rhythmusgenerierung-mit-kunstlicher-intelligenz-machbarkeit-auf-eingebetteten-systemen"
+  },
+  {
+    "order": 8,
+    "title": "Ravenna Audio IP Streaming",
+    "url": "https://www.creative-technologies.de/ravenna-audio-ip-streaming/"
+  },
+  {
+    "order": 9,
+    "title": "Media IP Streaming on Embedded Systems",
+    "url": "https://www.creative-technologies.de/media-ip-streaming-on-embedded-systems/"
+  },
+  {
+    "order": 10,
+    "title": "Arduino Guitar Amp",
+    "url": "https://www.creative-technologies.de/arduino-guitar-amp/"
+  },
+  {
+    "order": 11,
+    "title": "Sequencer Web Frontend for Embedded System",
+    "url": "https://www.creative-technologies.de/sequencer-web-frontend/"
+  },
+  {
+    "order": 12,
+    "title": "CTAG TBD Open Source Eurorack Audio Processor",
+    "url": "https://www.creative-technologies.de/ctag-tbd-eurorack-open-source/"
+  },
+  {
+    "order": 13,
+    "title": "Compressor Plugin for JUCE",
+    "url": "https://www.creative-technologies.de/compressor-plugin-with-juce/"
+  },
+  {
+    "order": 14,
+    "title": "House of Haus",
+    "url": "https://www.creative-technologies.de/projects/the-house-haus/"
+  },
+  {
+    "order": 15,
+    "title": "Licht-Mal-Maschine (Light Painting Machine)",
+    "url": "https://www.creative-technologies.de/licht-mal-maschine-limama/"
+  },
+  {
+    "order": 16,
+    "title": "A Data-Driven Approach to Wavetable-Synthesis",
+    "url": "https://www.creative-technologies.de/a-data-driven-approach-to-wavetable-synthesis/"
+  },
+  {
+    "order": 17,
+    "title": "CTAG Strämpler, an open source eurorack sample streaming and sound synthesis module",
+    "url": "https://www.creative-technologies.de/ctag-strampler-a-eurorack-sample-streaming-and-sound-synthesis-module/"
+  },
+  {
+    "order": 18,
+    "title": "LiteSolder, an extension to LitePlacer for solder paste dispensing",
+    "url": "https://www.creative-technologies.de/litesolder/"
+  },
+  {
+    "order": 19,
+    "title": "Open Source Drum Sampler based on JUCE, learn how to use JUCE",
+    "url": "https://www.creative-technologies.de/audio-sampler-plugin-with-juce/"
+  },
+  {
+    "order": 20,
+    "title": "Beagle Boom, a Eurorack Sampler based on Beaglebone SBC with Freesound.org online access",
+    "url": "https://www.creative-technologies.de/projects/beagleboom/"
+  },
+  {
+    "order": 21,
+    "title": "Implementation and Performance Analysis of Precision Time Protocol on Linux based System-On-Chip Platform",
+    "url": "https://www.creative-technologies.de/implementation-and-performance-analysis-of-precision-time-protocol-on-linux-based-system-on-chip-platform/"
+  },
+  {
+    "order": 22,
+    "title": "Teensy audio library extension for CTAG face 2|4 including Freeverb reverb fx",
+    "url": "https://www.creative-technologies.de/teensy-audio-library-extension-for-ctag-face-24-including-freeverb-reverb-fx/"
+  },
+  {
+    "order": 23,
+    "title": "Synchronized real time audio streaming over ethernet (AVB on Beaglebone)",
+    "url": "https://www.creative-technologies.de/synchronized-real-time-audio-streaming-over-ethernet/"
+  },
+  {
+    "order": 24,
+    "title": "Space-game refactoring",
+    "url": "https://www.creative-technologies.de/space-game-refactoring/"
+  },
+  {
+    "order": 25,
+    "title": "libdsp-x15 – C66x DSP library for BeagleBoard-X15 focusing on audio applications",
+    "url": "https://www.creative-technologies.de/libdsp-x15/"
+  },
+  {
+    "order": 26,
+    "title": "Sound Synthesis using Embedded Linux: zynaddsubfx in Eurorack",
+    "url": "https://www.creative-technologies.de/sound-synthesis-using-embedded-linux-zynaddsubfx-in-eurorack/"
+  },
+  {
+    "order": 27,
+    "title": "USB Audio Class 2 / I2S Bridge",
+    "url": "https://www.creative-technologies.de/linux-based-low-latency-multichannel-audio-system-2/usb-audio-class-2-i2s-bridge/"
+  },
+  {
+    "order": 28,
+    "title": "Browser Game Controller Backend",
+    "url": "https://www.creative-technologies.de/browser-game-controller-backend/"
+  },
+  {
+    "order": 29,
+    "title": "Space Game Visualization Engine",
+    "url": "https://www.creative-technologies.de/space-game-visualization-engine/"
+  },
+  {
+    "order": 30,
+    "title": "Battery Powered Amplifier and Sound Speaker System: mimaBox",
+    "url": "https://www.creative-technologies.de/projects/mimabox/"
+  },
+  {
+    "order": 31,
+    "title": "Linux-Based Low-Latency Multichannel Audio System (CTAG face2|4)",
+    "url": "https://www.creative-technologies.de/linux-based-low-latency-multichannel-audio-system-2/"
+  },
+  {
+    "order": 32,
+    "title": "TROLL8 µSynth / µMidiController",
+    "url": "https://www.creative-technologies.de/troll8/"
+  },
+  {
+    "order": 33,
+    "title": "Robotik-Eye Prototype",
+    "url": "https://www.creative-technologies.de/robotic-eye/"
+  },
+  {
+    "order": 34,
+    "title": "Multiplayer Webracer Game",
+    "url": "https://www.creative-technologies.de/multiplayer-webracer/"
+  },
+  {
+    "order": 35,
+    "title": "Online Multi-Player Puzzle Game",
+    "url": "https://www.creative-technologies.de/online-multi-player-puzzle-game/"
+  },
+  {
+    "order": 36,
+    "title": "Sound Visualizer Mask",
+    "url": "https://www.creative-technologies.de/sound-visualizer-mask/"
+  },
+  {
+    "order": 37,
+    "title": "Artificial Intelligence for Space Game",
+    "url": "https://www.creative-technologies.de/ki-for-space-game/"
+  },
+  {
+    "order": 38,
+    "title": "Auction System for Space Game",
+    "url": "https://www.creative-technologies.de/auction-system-for-space-game/"
+  },
+  {
+    "order": 39,
+    "title": "Bird Flocking / Artificial Intelligence",
+    "url": "https://www.creative-technologies.de/flock/"
+  },
+  {
+    "order": 40,
+    "title": "Ants Walking Path/ Artificial Intelligence",
+    "url": "https://www.creative-technologies.de/ants/"
+  },
+  {
+    "order": 41,
+    "title": "Procedural Generation / Space Game",
+    "url": "https://www.creative-technologies.de/?p=128"
+  },
+  {
+    "order": 42,
+    "title": "Modular Web Synth",
+    "url": "https://www.creative-technologies.de/projects/modularer-web-synthesizer/"
+  }
+]

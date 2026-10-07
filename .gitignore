@@ -1,0 +1,4 @@
+# Rohdaten aus scripts/scrape.mjs (470 MB), jederzeit neu erzeugbar
+content/raw/
+node_modules/
+.DS_Store

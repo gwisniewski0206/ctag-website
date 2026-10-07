@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Instruments of Things",
+    "url": "https://instrumentsofthings.com/",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/Logo-lang-300x45.png"
+  },
+  {
+    "name": "Bela",
+    "url": "https://bela.io",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/bela-300x147.png"
+  },
+  {
+    "name": "Google Summer of Code 2016",
+    "url": "http://elinux.org/BeagleBoard/GSoC/2016_Projects#Project:_Porting_the_CTAG_face2.7C4_multichannel_soundcard_drivers_to_BeagleBoard-X15_.28AM5728_SoC.29._Create_library_to_make_use_of_AM5728_DSPs_.28C66x.29.",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2016/04/GSoC-logo-vertical-200.png"
+  },
+  {
+    "name": "BeagleBoard.org",
+    "url": "http://beagleboard.org/project/multichannel-audio-system/",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/beagleboard_logo.jpg-300x53.png"
+  },
+  {
+    "name": "Hafenmusik – DJ & Producer School",
+    "url": "https://www.facebook.com/HAFENMUSIK/",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2018/09/hafenmusik-logo-300x126.png"
+  },
+  {
+    "name": "Doepfer",
+    "url": "http://www.doepfer.de",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2018/05/logo2.jpg"
+  },
+  {
+    "name": "Premium Lyrics",
+    "url": "https://www.premiumlyrics.com",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/premium_lyrics.png"
+  },
+  {
+    "name": "FabLab.SH",
+    "url": "http://www.fablab.sh/",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2016/02/fablab.png"
+  },
+  {
+    "name": "eXpand Stretch Covers",
+    "url": "http://www.expand-cover.de/",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2015/03/jtlshoplogo.jpg"
+  },
+  {
+    "name": "Augmented Instruments Laboratory",
+    "url": "http://instrumentslab.org/",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/augmented-instruments-labs-logo.png"
+  },
+  {
+    "name": "IEM – Institut für Elektronische Musik und Akustik",
+    "url": "http://iem.kug.ac.at/institut-fuer-elektronische-musik-und-akustik-iem",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/iem_logo-schriftzug-300x63.jpg"
+  },
+  {
+    "name": "Eisenberg Audio",
+    "url": "http://www.eisenberg-audio.de/",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/Eisenberg_Logo-300x86.png"
+  },
+  {
+    "name": "opencampus.sh",
+    "url": "http://www.opencampus.sh",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/open-campus_black-300x43.png"
+  },
+  {
+    "name": "EDGE",
+    "url": "http://www.getanedge.de",
+    "logo": "https://www.creative-technologies.de/wp-content/uploads/2013/12/EDGE-Logo-258x300.png"
+  }
+]
