@@ -35,8 +35,16 @@ console.log(`   Repository access: nur ${repo} · Permissions → Contents: Read
 const token = await askHidden('Token: ');
 const res = await fetch(`https://api.github.com/repos/${repo}`, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } });
 if (!res.ok) throw new Error(`GitHub lehnt den Token ab (HTTP ${res.status}).`);
-const info = await res.json();
-if (!info.permissions?.push) throw new Error('Der Token hat kein Schreibrecht auf das Repository (Contents: Read and write).');
+// Schreibrecht des Tokens selbst prüfen (repo.permissions zeigt nur die Rechte des Kontos, nicht die des Tokens):
+// ein Git-Blob ohne Verweis anlegen – braucht "Contents: Read and write", ändert nichts am Repository und wird von GitHub aufgeräumt.
+const probe = await fetch(`https://api.github.com/repos/${repo}/git/blobs`, {
+  method: 'POST',
+  headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+  body: JSON.stringify({ content: 'ctag-admin-kennwort-pruefung', encoding: 'utf-8' }),
+});
+if (probe.status !== 201) {
+  throw new Error(`Der Token darf nicht schreiben (HTTP ${probe.status}). Auf GitHub beim Token unter Permissions → „Add permissions“ → Contents: Read and write setzen.`);
+}
 console.log('   ✓ Token gültig, Schreibrecht vorhanden.\n');
 
 console.log(`2. Master-Kennwort – mindestens ${MIN_LENGTH} Zeichen, am besten 4–5 zufällige Wörter.`);

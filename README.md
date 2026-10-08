@@ -33,8 +33,9 @@ Ist ein Master-Kennwort eingerichtet, fragt `/admin` zuerst danach – ohne GitH
 Alle Änderungen erscheinen dann unter dem Namen der Person, deren Token hinterlegt ist.
 
 **Einrichten (einmalig, durch eine verantwortliche Person):**
-1. Auf GitHub einen *Fine-grained token* erzeugen: *Repository access* = nur dieses Repository,
-   *Permissions → Contents* = **Read and write**, Ablaufdatum z. B. 1 Jahr.
+1. Auf GitHub einen *Fine-grained token* erzeugen: *Repository access* = *Only select repositories* und dieses Repository
+   auswählen – erst dann wird **„+ Add permissions“** aktiv → **Contents** → **Read and write**. Ablaufdatum z. B. 1 Jahr.
+   (Rechte eines bestehenden Tokens lassen sich nachträglich über *Edit* ändern; der Token bleibt dabei gleich.)
 2. Im **eigenen Terminal** (nicht in Chats oder Logs) im Projektordner: `npm run admin:kennwort`.
    Das Skript prüft den Token, fragt das Kennwort verdeckt ab (mindestens 16 Zeichen, am besten 4–5 zufällige Wörter)
    und schreibt `public/admin/vault.json`.
