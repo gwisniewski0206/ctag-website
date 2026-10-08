@@ -99,7 +99,7 @@ solange das Repo persönlich ist). **Offen:** GitHub-Knopf braucht `sveltia-cms-
 **Master-Kennwort (08.10.2026):** `/admin` fragt ein Kennwort ab, wenn `public/admin/vault.json` existiert. Darin liegt ein GitHub-Token
 (Fine-grained, nur dieses Repo, Contents RW) verschlüsselt (PBKDF2-SHA256 600k → AES-256-GCM); das Kennwort entschlüsselt ihn im Browser,
 danach wird er als Sveltia-Token-Anmeldung gespeichert (`localStorage['sveltia-cms.user']`). Einrichten: `npm run admin:kennwort` im
-eigenen Terminal. **Noch nicht eingerichtet** – Nutzer muss Token erzeugen und das Skript ausführen. Mechanik mit Test-Tresor geprüft
+eigenen Terminal. **Eingerichtet am 08.10.2026** (Fine-grained Token von gwisniewski0206, nur ctag-website). Mechanik mit Test-Tresor geprüft
 (falsches Kennwort abgelehnt, richtiges → Sveltia ruft GET /user mit dem Token). Ohne vault.json startet /admin wie bisher.
 
 **Projektbeiträge (Analyse 08.10.2026):** kein einheitliches Format – 14 von 42 ohne Überschrift, Ebenen wild gemischt (h1–h5),
