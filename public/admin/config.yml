@@ -4,9 +4,8 @@ backend:
   name: github
   repo: gwisniewski0206/ctag-website
   branch: main
-  # GitHub-Login per Knopf braucht einen kleinen Anmeldedienst (siehe README, Abschnitt "Anmeldung").
-  # Bis dahin: "Mit Zugangstoken anmelden" (persönlicher GitHub-Token).
-  # base_url: https://ctag-cms-auth.<konto>.workers.dev
+  # „Mit GitHub anmelden“ läuft über den Anmeldedienst in auth/ (Cloudflare Worker). Zugelassen: Mitarbeitende des Repositorys.
+  base_url: https://ctag-cms-auth.ctag-cms-auth.workers.dev
   commit_messages:
     create: 'Neu: {{collection}} „{{slug}}“'
     update: 'Geändert: {{collection}} „{{slug}}“'

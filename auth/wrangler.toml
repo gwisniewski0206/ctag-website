@@ -1,0 +1,9 @@
+# Anmeldedienst für die Redaktion der CTAG-Website (sveltia-cms-auth, Stand 4fd08b5 vom 21.09.2026)
+name = "ctag-cms-auth"
+main = "src/index.js"
+compatibility_date = "2023-03-24"
+workers_dev = true
+
+[vars]
+# Nur diese Seiten dürfen die Anmeldung nutzen. Eigene Domain hier ergänzen, sobald sie aufgeschaltet ist.
+ALLOWED_DOMAINS = "gwisniewski0206.github.io"
