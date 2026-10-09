@@ -96,7 +96,9 @@ npm run dev                # http://localhost:4321
 **GitHub-Knopf (09.10.2026):** Anmeldedienst `sveltia-cms-auth` als Worker `ctag-cms-auth` im persönlichen Cloudflare-Konto des Nutzers
 (Therealrangoe@gmail.com's Account), Code und Anleitung in `auth/`, `base_url` in `config.yml` gesetzt. Wrangler-Anmeldung dafür
 **getrennt** in `XDG_CONFIG_HOME=~/.config/ctag-cloudflare` (die normale wrangler-Anmeldung gehört zu t2consult – nicht vermischen).
-**Offen:** GitHub-OAuth-App anlegen und `GITHUB_CLIENT_ID`/`GITHUB_CLIENT_SECRET` als Secrets im Worker hinterlegen (Nutzer).
+Zugangsdaten einer **GitHub App** (nicht OAuth-App – die hätte Zugriff auf alle Repos und Organisationen der Anmeldenden verlangt),
+nur Contents RW, nur auf `ctag-website` installiert; als Secrets im Worker (09.10.2026). Weiterleitung mit App-Client-ID geprüft;
+vollständiger Login vom Nutzer zu testen.
 
 **Master-Kennwort (08.10.2026):** `/admin` fragt ein Kennwort ab, wenn `public/admin/vault.json` existiert. Darin liegt ein GitHub-Token
 (Fine-grained, nur dieses Repo, Contents RW) verschlüsselt (PBKDF2-SHA256 600k → AES-256-GCM); das Kennwort entschlüsselt ihn im Browser,
@@ -122,7 +124,7 @@ Länge 26–4001 Wörter (Median 503), 32 Englisch / 10 Deutsch, „Author“ al
 (Bereiche Ansprechpartner/Team/Ehemalige; angelegt nur Prof. Dr. Robert Manzke als Ansprechpartner laut Impressum – wer sonst zum Team gehört,
 weiß nur der Nutzer). Darunter automatisch „Aus den Projekten“: alle Namen aus dem Projektfeld `team` mit Links zu ihren Projekten.
 
-**Nächste Schritte:** OAuth-App + Worker-Secrets (Nutzer), weitere Team-Mitglieder eintragen, nachgepflegte Felder durchsehen.
+**Nächste Schritte:** GitHub-Login einmal durchtesten, weitere Team-Mitglieder eintragen, nachgepflegte Felder durchsehen.
 
 ## Erster Schritt (erledigt)
 
