@@ -34,9 +34,9 @@ const accents = ['var(--amber)', 'var(--red)', 'var(--sky)', 'var(--mid)'];
       <section class="team-group" aria-labelledby={`g-${g.title}`}>
         <h2 id={`g-${g.title}`} class="display">{g.title}</h2>
         <div class="people">
-          {g.members.map((p, i) => (
+          {g.members.map((p) => (
             <article class="person">
-              <div class="person-photo" style={`--accent: ${accents[i % accents.length]}`}>
+              <div class="person-photo" style={`--accent: ${accents[people.indexOf(p) % accents.length]}`}>
                 {p.photo ? <img src={p.photo} alt="" loading="lazy"> : <span aria-hidden="true">{initials(p.name)}</span>}
               </div>
               <div class="person-body">
@@ -46,7 +46,7 @@ const accents = ['var(--amber)', 'var(--red)', 'var(--sky)', 'var(--mid)'];
                 {(p.email || p.website) && (
                   <p class="person-links">
                     {p.email && <a href={`mailto:${p.email}`}>{p.email}</a>}
-                    {p.website && <a href={p.website}>Website <Arrow size={16} /></a>}
+                    {p.website && <a href={p.website}>Profil <Arrow size={16} /></a>}
                   </p>
                 )}
                 {projectsOf(p.name).length > 0 && (

@@ -121,8 +121,9 @@ Länge 26–4001 Wörter (Median 503), 32 Englisch / 10 Deutsch, „Author“ al
 - **Projekt-Blueprint** für Studierende im `README.md`; dieselbe Gliederung ist im CMS als Vorlage für neue Projekte vorausgefüllt.
 
 **Team-Seite (09.10.2026):** `/team/` im Menü zwischen Projects und Partners, Titel dunkelblau. Gepflegte Personen in `src/content/team/*.json`
-(Bereiche Ansprechpartner/Team/Ehemalige; angelegt nur Prof. Dr. Robert Manzke als Ansprechpartner laut Impressum – wer sonst zum Team gehört,
-weiß nur der Nutzer). Darunter automatisch „Aus den Projekten“: alle Namen aus dem Projektfeld `team` mit Links zu ihren Projekten.
+(Bereiche Ansprechpartner/Team/Ehemalige). Festes Team laut Nutzer (09.10.2026): Prof. Dr. Robert Manzke (Gründer, Ansprechpartner),
+Prof. Dr. Gunnar Eisenberg, Prof. Dr. Steffen Prochnow – Titel, Rollen und Texte aus den offiziellen HAW-Profilen. **Keine Fotos übernommen**:
+Manzkes HAW-Foto ist „© M. Hanke“, Eisenberg/Prochnow haben dort keins → Fotos bei den Personen erfragen. Darunter automatisch „Aus den Projekten“: alle Namen aus dem Projektfeld `team` mit Links zu ihren Projekten.
 
 **Nächste Schritte:** Collaborators einladen, weitere Team-Mitglieder eintragen, nachgepflegte Felder durchsehen.
 
