@@ -1,0 +1,117 @@
+---
+// Team: gepflegte Personen (Sammlung "team") und – automatisch – alle Personen aus den Team-Feldern der Projekte.
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Arrow from '../components/Arrow.astro';
+
+const people = (await getCollection('team')).map((e) => e.data).sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
+const groups = (['Ansprechpartner', 'Team', 'Ehemalige'] as const)
+  .map((g) => ({ title: g, members: people.filter((p) => p.group === g) }))
+  .filter((g) => g.members.length);
+
+// Personen aus Projekten: Name → Projekte (in Listenreihenfolge)
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort((a, b) => a.data.order - b.data.order);
+const plain = (n: string) => n.replace(/^(Prof\.\s*)?(Dr\.\s*)?/, '').trim();
+const listed = new Set(people.map((p) => plain(p.name)));
+const byPerson = new Map<string, { id: string; title: string }[]>();
+for (const p of projects) for (const n of p.data.team) {
+  if (!byPerson.has(n)) byPerson.set(n, []);
+  byPerson.get(n)!.push({ id: p.id, title: p.data.title });
+}
+// Projekte der gepflegten Personen für ihre Karten
+const projectsOf = (name: string) => byPerson.get(plain(name)) ?? [];
+const contributors = [...byPerson].filter(([n]) => !listed.has(n))
+  .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+
+const initials = (n: string) => plain(n).split(/\s+/).map((w) => w[0]).slice(0, 2).join('');
+const accents = ['var(--amber)', 'var(--red)', 'var(--sky)', 'var(--mid)'];
+---
+<Base title="Team" description="Die Menschen hinter Creative Technologies (CTAG) an der HAW Kiel.">
+  <PageHero title="Team" color="blue" />
+  <main class="wrap team-main">
+    {groups.map((g) => (
+      <section class="team-group" aria-labelledby={`g-${g.title}`}>
+        <h2 id={`g-${g.title}`} class="display">{g.title}</h2>
+        <div class="people">
+          {g.members.map((p, i) => (
+            <article class="person">
+              <div class="person-photo" style={`--accent: ${accents[i % accents.length]}`}>
+                {p.photo ? <img src={p.photo} alt="" loading="lazy"> : <span aria-hidden="true">{initials(p.name)}</span>}
+              </div>
+              <div class="person-body">
+                <h3>{p.name}</h3>
+                <p class="person-role">{p.role}</p>
+                {p.bio && <p class="person-bio">{p.bio}</p>}
+                {(p.email || p.website) && (
+                  <p class="person-links">
+                    {p.email && <a href={`mailto:${p.email}`}>{p.email}</a>}
+                    {p.website && <a href={p.website}>Website <Arrow size={16} /></a>}
+                  </p>
+                )}
+                {projectsOf(p.name).length > 0 && (
+                  <ul class="chips">{projectsOf(p.name).map((pr) => <li><a href={`/projects/${pr.id}/`}>{pr.title}</a></li>)}</ul>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {contributors.length > 0 && (
+      <section class="team-group" aria-labelledby="g-projekte">
+        <h2 id="g-projekte" class="display">Aus den Projekten</h2>
+        <p class="team-lead">Studierende und Mitwirkende, die in der CTAG Projekte umgesetzt haben – {contributors.length} Personen.</p>
+        <ul class="contributors">
+          {contributors.map(([name, list]) => (
+            <li>
+              <span class="contributor-name">{name}</span>
+              <ul class="chips">{list.map((pr) => <li><a href={`/projects/${pr.id}/`}>{pr.title}</a></li>)}</ul>
+            </li>
+          ))}
+        </ul>
+        <p class="team-note">Die Liste entsteht automatisch aus dem Feld „Team“ der Projekte. Wer fehlt oder anders genannt werden möchte: Projekt in der Redaktion ergänzen.</p>
+      </section>
+    )}
+  </main>
+</Base>
+
+<style>
+  .team-main { padding-top: clamp(40px, 6vw, 64px); padding-bottom: 88px; display: flex; flex-direction: column; gap: clamp(48px, 7vw, 80px); }
+  .team-group { display: flex; flex-direction: column; gap: 22px; }
+  .team-group h2 { font-size: clamp(28px, 4vw, 44px); line-height: 1; }
+  .team-lead { margin: -8px 0 0; max-width: 760px; font-size: 19px; }
+  .team-note { margin: 0; font-size: 15px; color: var(--mid); }
+
+  .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 22px; }
+  .person { display: flex; gap: 22px; padding: 22px; border: var(--line); border-radius: var(--r-card); background: #fff; }
+  .person-photo {
+    flex: 0 0 120px; height: 120px; border-radius: var(--r-card); border: var(--line); overflow: hidden;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+  }
+  .person-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .person-photo span { font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 40px; color: var(--blue); }
+  .person-body { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .person h3 { margin: 0; font-family: var(--display); font-weight: 800; font-stretch: 125%; font-size: 22px; line-height: 1.15; color: var(--blue); }
+  .person-role { margin: 0; font-weight: 700; color: var(--mid); }
+  .person-bio { margin: 4px 0 0; }
+  .person-links { margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-weight: 600; overflow-wrap: anywhere; }
+  .person-links a { display: inline-flex; align-items: center; gap: 4px; }
+
+  .chips { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips a {
+    display: inline-block; padding: 2px 10px; border: 2px solid var(--blue); border-radius: var(--r-tag);
+    background: #fff; font-size: 14px; font-weight: 600; text-decoration: none; line-height: 1.4;
+  }
+  .chips a:hover { background: var(--sky); color: var(--blue); }
+
+  .contributors { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 14px; }
+  .contributors > li { padding: 16px 18px; border: var(--line); border-radius: var(--r-card); background: var(--sky); }
+  .contributor-name { font-weight: 700; font-size: 18px; color: var(--blue); }
+
+  @media (max-width: 520px) {
+    .person { flex-direction: column; }
+    .person-photo { flex-basis: auto; width: 96px; height: 96px; }
+  }
+</style>

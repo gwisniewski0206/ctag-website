@@ -127,6 +127,30 @@ collections:
       - { name: logo, label: Logo, widget: image, required: false }
       - { name: order, label: Position, widget: number, value_type: int }
 
+  # ---------------------------------------------------------------- Team
+  - name: team
+    label: Team
+    label_singular: Person
+    description: >-
+      Personen auf der Team-Seite. Wer nur in Projekten mitgearbeitet hat, erscheint dort automatisch (Feld „Team“ im Projekt).
+    folder: src/content/team
+    create: true
+    extension: json
+    format: json
+    slug: '{{slug}}'
+    identifier_field: name
+    summary: '{{group}} · {{name}}'
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Name, widget: string, hint: 'Mit Titel, z. B. „Prof. Dr. …“ – Projekte werden trotzdem zugeordnet.' }
+      - { name: role, label: Rolle, widget: string, hint: 'z. B. Leitung, Wissenschaftliche Mitarbeit, Tutor:in' }
+      - { name: group, label: Bereich, widget: select, options: [Ansprechpartner, Team, Ehemalige], default: Team }
+      - { name: photo, label: Foto, widget: image, required: false, hint: 'Quadratisch wirkt am besten. Ohne Foto erscheinen die Initialen.' }
+      - { name: bio, label: Kurztext, widget: text, required: false, hint: '1–3 Sätze.' }
+      - { name: email, label: E-Mail, widget: string, required: false }
+      - { name: website, label: Website, widget: string, required: false }
+      - { name: order, label: Position, widget: number, value_type: int, default: 100 }
+
   # ---------------------------------------------------------------- Seiten
   - name: pages
     label: Seiten

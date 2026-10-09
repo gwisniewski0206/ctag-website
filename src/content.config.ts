@@ -67,4 +67,18 @@ const projectsPage = defineCollection({
   }),
 });
 
-export const collections = { projects, pages, partners, home, projectsPage };
+const team = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/team' }),
+  schema: z.object({
+    name: z.string(),
+    role: z.string(),                           // z. B. "Leitung", "Wissenschaftliche Mitarbeit"
+    group: z.enum(['Ansprechpartner', 'Team', 'Ehemalige']).default('Team'),
+    photo: z.string().optional(),               // /uploads/… – quadratisch wirkt am besten
+    bio: z.string().optional(),                 // 1–3 Sätze
+    email: z.string().optional(),
+    website: z.string().optional(),
+    order: z.number().default(100),
+  }),
+});
+
+export const collections = { projects, pages, partners, home, projectsPage, team };

@@ -116,6 +116,10 @@ Länge 26–4001 Wörter (Median 503), 32 Englisch / 10 Deutsch, „Author“ al
   aktueller Abschnitt markiert; auf dem Handy zugeklappt oben.
 - **Projekt-Blueprint** für Studierende im `README.md`; dieselbe Gliederung ist im CMS als Vorlage für neue Projekte vorausgefüllt.
 
+**Team-Seite (09.10.2026):** `/team/` im Menü zwischen Projects und Partners, Titel dunkelblau. Gepflegte Personen in `src/content/team/*.json`
+(Bereiche Ansprechpartner/Team/Ehemalige; angelegt nur Prof. Dr. Robert Manzke als Ansprechpartner laut Impressum – wer sonst zum Team gehört,
+weiß nur der Nutzer). Darunter automatisch „Aus den Projekten“: alle Namen aus dem Projektfeld `team` mit Links zu ihren Projekten.
+
 **Nächste Schritte:** Anmeldedienst (Cloudflare-Konto noch offen, Nutzer: „erstmal nicht“), nachgepflegte Felder durchsehen.
 
 ## Erster Schritt (erledigt)

@@ -73,6 +73,9 @@ a:hover { color: var(--hover); }
 .bg-sky { background: var(--sky); }
 .bg-red { background: var(--red); }
 .bg-white { background: #fff; }
+.bg-blue { background: var(--blue); }
+.hero.bg-blue h1 { color: #fff; }
+.hero.bg-blue .hero-art { background: var(--mid); }
 
 main { flex: 1 0 auto; width: 100%; }
 
